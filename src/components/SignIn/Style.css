@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;200;300;500;700;900&display=swap');
+
+.login{
+     height: 100vh;
+}
+.homeLogin{
+    background-color: white;
+   
+
+}
+
+#form{
+    margin: 0%;
+    padding: 0%;
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+#login-head{
+    margin: -12px;
+    display: flex;
+    justify-content: space-between;
+}
+#login-title{
+    font-size: 30px;
+    font-weight: 700;
+    color: #0a66c2;
+}
+#login-logo{
+    font-size: 42px;
+    margin-left: -2px;
+    color: #0a66c2;
+}
+.login-nav{
+    display: flex;
+    justify-content: center;
+    /*  */
+    
+    font-family: 'Roboto', sans-serif;
+    align-items: center;
+}
+
+.login-left{
+    margin: 9px;
+}
+#joinUs{
+    color: #797474;
+    padding: 15px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#signUp-btn{
+    padding: 12px;
+    border-radius: 30px;
+    color: #0a66c2;
+    border: 1px solid #0a66c2;
+    background: white;
+    font-weight: 900;
+    cursor: pointer;
+    
+}
+@media screen and (max-width:420px) {
+    
+    #signUp-btn{
+        font-size: 12px;
+        padding: 8px;
+    }
+    #joinUs{
+        font-size: 13px;
+        padding: 10px;
+    }
+    #login-title{
+        font-size: 24px;
+    }
+    #login-logo{
+        font-size: 33px;
+    }
+    
+}
+.link-txt{
+    text-decoration: none;
+}
+#signUp-btn:hover{
+    background-color: #f3f3f3;
+}
+#joinUs:hover{
+    background-color: #f3f3f3;
+    
+}
+#login-main-content{
+    display: flex;
+}
+.main{
+    font-family: 'Roboto', sans-serif;
+}
+#welcome{
+    font-size: 50px;
+    color: #b24020;
+    font-weight: 300;
+}
+.form-element{
+    display: block;
+    padding: 14px 0;
+}
+.label-login{
+    color: rgba(0, 0, 0, 0.75);
+    font-weight: 400;
+    font-size: small;
+}
+.input-login{
+    padding: 15px;
+    width: 60%;
+}
+.login-btn{
+    width: 66%;
+    padding: 15px;
+    font-weight: 700;
+    border-radius: 30px;
+    border: none;
+    background-color: #0a66c2;
+    color: white;
+    margin-top: 18px;
+    cursor: pointer;
+}
+.login-btn:hover{
+    background-color: #0f3963;
+}
+#login-main-right{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    
+}
+#LinkedIn-left-logo{
+    margin-top: 65px;
+    width: 100%;
+    height: auto;
+object-fit: cover;
+}
+#passShow{
+    margin-left: 57%;
+    margin-top: -46px;
+    border: none;
+    background: white;
+    cursor: pointer;
+}

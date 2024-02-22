@@ -1,0 +1,40 @@
+
+.cardBox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+}
+
+.head-details{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.companies-Info{
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+.jobs{
+    display:flex;
+    justify-content: center !important;
+    width: 100%;
+}
+.networkBg{
+    background: url(/src/Icons/maintenance.gif);
+    background-repeat: no-repeat;
+    background-position: center;
+    object-fit: contain;
+    width: 100%;
+    height: 410px;
+}
+.normalIcon{
+    background: url(/src/Icons/person.gif);
+    background-repeat: no-repeat;
+    width: 100px;
+    height: 100px;
+}
+
+
