@@ -27,7 +27,7 @@ export default function Nav() {
   const [isMenu, setIsMenu] = useState(false);
   const { setSearchData, search, setSearch, mode, setMode } = useContext(Context);
   const navigate = useNavigate();
-  const userData = JSON.parse(localStorage.getItem("userData"))
+  const userData = JSON.parse(localStorage.getItem("userData"))||{}
   // const token = localStorage.getItem("token");
   const color = document.querySelector('body')
   const customTheme= createTheme({
@@ -179,7 +179,7 @@ export default function Nav() {
                             {userData.name.toUpperCase().charAt(0)}
                           </Avatar>}
                           <h3>
-                            {userData.name}
+                            {userData && userData.name}
                           </h3>
 
                         </div>
