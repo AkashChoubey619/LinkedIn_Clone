@@ -163,7 +163,7 @@ export default function Nav() {
                 </Stack>)}
                 <Divider orientation="vertical" flexItem />
                 <div className='icon meIcon'>
-                  <Avatar src={userData.profileImage} sx={{ width: 25, height: 25, ml: '-7px' }}>{userData.name.toUpperCase().charAt(0)}</Avatar>
+                {userData&&<Avatar src={userData.profileImage} sx={{ width: 25, height: 25, ml: '-7px' }}>{userData.name.toUpperCase().charAt(0)}</Avatar>}
                   <div id='profile'>
                     <Dropdown>
 
@@ -175,9 +175,9 @@ export default function Nav() {
                       <Menu slots={{ listbox: Listbox }} >
                         <div id='menuProfileIcon' className={mode ? 'mode' : ''}>
 
-                          <Avatar src={userData.profileImage} sx={{ width: 28, height: 28, fontSize: '12px' }}>
+                          {userData&&<Avatar src={userData.profileImage} sx={{ width: 28, height: 28, fontSize: '12px' }}>
                             {userData.name.toUpperCase().charAt(0)}
-                          </Avatar>
+                          </Avatar>}
                           <h3>
                             {userData.name}
                           </h3>
