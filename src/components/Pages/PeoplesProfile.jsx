@@ -34,7 +34,7 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function MyProfile() {
-  const { getId } = useContext(Context);
+  const  getId  = localStorage.getItem('getId');
   const [userData, setUserData] = React.useState([])
   const theme = useTheme();
   const isMdScreen = useMediaQuery(theme.breakpoints.up('md'));

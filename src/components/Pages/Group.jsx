@@ -59,17 +59,12 @@ export default function Group() {
   const [myName, setMyName] = React.useState("")
   const [description, setDescription] = React.useState("")
   const { mode } = React.useContext(Context);
-  const id = userData._id;
+  const id = localStorage.getItem('getId');
+
+  const [ownerId, setOwnerId] = React.useState('');
 
   const theme = useTheme();
   const isMdScreen = useMediaQuery(theme.breakpoints.up('md'));
-  let ownerId = [{}]
-  ownerId = userData.owner
-
-  // console.log(userData,'data')
-
-
-
 
 
   const [openAddImg, setOpenAddImg] = React.useState(false);
@@ -82,7 +77,7 @@ export default function Group() {
 
   const myInfo = async function () {
     try {
-      const res = await fetch(`https://academics.newtonschool.co/api/v1/linkedin/channel/65cd073b6585f4196962ac88`, {
+      const res = await fetch(`https://academics.newtonschool.co/api/v1/linkedin/channel/${id}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -104,10 +99,19 @@ export default function Group() {
 
   }
 
+  React.useEffect(() => {
+    if (userData && userData.owner && userData.owner._id) {
+      setOwnerId(userData.owner._id);
+      console.log(userData._id, 'info');
+      // Any other logic that depends on ownerId should be placed here
+    } else {
+      console.error('Owner data is missing or invalid:', userData);
+    }
+  }, [userData]);
 
   const fetchPosts = async () => {
     try {
-      const res = await fetch(`https://academics.newtonschool.co/api/v1/linkedin/channel/64e33c653a5ba93801812ed6/posts`, {
+      const res = await fetch(`https://academics.newtonschool.co/api/v1/linkedin/channel/${id}/posts`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -133,6 +137,7 @@ export default function Group() {
 
   React.useEffect(() => {
     myInfo()
+    window.scrollTo(0, 0)
   }, [])
   // console.log('Updated authors:', authors);
 
@@ -142,45 +147,56 @@ export default function Group() {
     { id: 3, name: 'Alice Johnson', occupation: 'Product Manager' },
     // Add more suggestions as needed
   ];
+  const [file, setFile] = React.useState('');
+const handleFileChange = (event) => {
+  const selectedFile = event.target.files[0];
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+  if (!selectedFile) return;
 
-    const fileReader = new FileReader();
-    fileReader.onload = () => {
-      setPreviewUrl(file);
-    };
-    fileReader.readAsDataURL(file);
-    setPreviewUrl('')
+  const fileReader = new FileReader();
+  fileReader.onload = () => {
+    console.log('FileReader onload triggered');
+    setPreviewUrl(fileReader.result);
   };
+  fileReader.onerror = (error) => {
+    console.error('FileReader error:', error);
+  };
+  fileReader.readAsDataURL(selectedFile);
+  setFile(selectedFile);
+  console.log('Reading file...');
+};
 
   const handleSubmitAddImg = async (event) => {
     event.preventDefault();
+    if (!file) {
+      console.error('No file selected.');
+      return;
+    }
     const formData = new FormData();
-    formData.append("profileImage", previewUrl)
+    formData.append("image", file);
     try {
-      const res = await fetch(`https://academics.newtonschool.co/api/v1/linkedin/user/${id}`, {
+      const res = await fetch(`https://academics.newtonschool.co/api/v1/linkedin/channel/${id}`, {
         method: 'PATCH',
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           projectID: 'ut1dy4576cd1'
-
         },
         body: formData,
-      })
+      });
 
       if (res.ok) {
-        const profileImagData = await res.json()
-        // setUserData(addData)
-        console.log('GroupImage:', profileImagData);
-        window.location.reload();
+        const profileImagData = await res.json();
+        console.log('GroupImage:', profileImagData); 
+        setOpenAddImg(!openAddImg);
+        setFile('');
+        window.location.reload(false);
+      } else {
+        console.error('Failed to update profile image:', res.statusText);
       }
-
     } catch (error) {
-      console.error('profileImagError:', error);
+      console.error('Error updating profile image:', error);
+      // Handle network errors or exceptions
     }
-
   };
 
 
@@ -194,7 +210,6 @@ export default function Group() {
       const res = await fetch(`https://academics.newtonschool.co/api/v1/linkedin/channel/${id}`, {
         method: 'PATCH',
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
           projectID: 'ut1dy4576cd1'
 
@@ -207,7 +222,11 @@ export default function Group() {
         console.log('educationData:', myData);
         setMyName('')
         setDescription('')
+        setOpenInfo(!openInfo)
         myInfo()
+      }
+      else{
+        console.log(myName,description,'infoData')
       }
 
     } catch (error) {
@@ -298,9 +317,9 @@ export default function Group() {
                               width: { xs: 80, sm: 110, md: 156 }, height: { xs: 80, sm: 110, md: 156 }
                             }}>
                             A</Avatar>
-                          {<TriggerButton 
-                          sx={{ ml: '-28px', zIndex: '20', borderRadius: '50%' }}
-                           type="button" onClick={handleOpenAddImg}>
+                          {ownerId === myId && <TriggerButton
+                            sx={{ ml: '-28px', zIndex: '20', borderRadius: '50%' }}
+                            type="button" onClick={handleOpenAddImg}>
                             <AddImage />
                           </TriggerButton>}
 
@@ -354,10 +373,10 @@ export default function Group() {
                           </Modal>
                         </Box>
 
-                        <Typography my={1} sx={{ ml: {  md: '16px' }, textAlign: 'left' }} variant={'h5'}>
+                        <Typography my={1} sx={{ ml: { md: '16px' }, textAlign: 'left' }} variant={'h5'}>
                           {userData.name}
 
-                          {<TriggerButton onClick={handleOpenInfo} sx={{ padding: 0, margin: 0, ml: '20px', }}>
+                          {ownerId === myId && <TriggerButton onClick={handleOpenInfo} sx={{ padding: 0, margin: 0, ml: '20px', }}>
                             <EditIcon />
                           </TriggerButton>}
                         </Typography>
@@ -411,7 +430,7 @@ export default function Group() {
                           </ModalContent>
                         </Modal>
 
-                        <Typography sx={{ fontWeight: 700, color: "grey",ml: { xs:'4px',  md: '16px' }, textAlign: 'left'}} variant={'p'}>
+                        <Typography sx={{ fontWeight: 700, color: "grey", ml: { xs: '4px', md: '16px' }, textAlign: 'left' }} variant={'p'}>
                           {userData.description}</Typography>
                       </Box>
                       <Stack alignItems={'center'} justifyContent={'space-between'} flexDirection={'row'}>
@@ -468,78 +487,78 @@ export default function Group() {
                     <Grid spacing={2}>
                       {
                         groupPostData ?
-                        groupPostData.map((post, index) => (
-                          <Grid key={post._id}>
-                            <Card sx={{mb:2}}>
-                              <CardContent >
-                                <Stack direction={'row'} spacing={2} alignItems={'center'} mb={1}>
-                                  <Avatar>S</Avatar>
-                                  <Typography variant="body2" component="h1">User_Someone</Typography>
-                                </Stack>
-                                <Typography mb={1} variant="h6" component="h4">
-                                  {post.title}
-                                </Typography>
-                                <Typography mb={1} variant="body2" color="textSecondary" component="h6">
-                                  {post.content}
-                                </Typography>
+                          groupPostData.map((post, index) => (
+                            <Grid key={post._id}>
+                              <Card sx={{ mb: 2 }}>
+                                <CardContent >
+                                  <Stack direction={'row'} spacing={2} alignItems={'center'} mb={1}>
+                                    <Avatar>S</Avatar>
+                                    <Typography variant="body2" component="h1">User_Someone</Typography>
+                                  </Stack>
+                                  <Typography mb={1} variant="h6" component="h4">
+                                    {post.title}
+                                  </Typography>
+                                  <Typography mb={1} variant="body2" color="textSecondary" component="h6">
+                                    {post.content}
+                                  </Typography>
 
-                                {post.images && (
-                                  <CardMedia
-                                    component="img"
-                                    image={post.images[0]} // Assuming the first image is displayed
-                                    alt={post.title}
-                                  />
-                                )}
-                                <Divider sx={mode ? { bgcolor: 'white', m: 2 } : { m: 2 }} />
-                                {/* like,share,repost,send */}
-                                <div className='interactiveIcons' style={{ display: 'flex', alignItems: 'center' }}>
+                                  {post.images && (
+                                    <CardMedia
+                                      component="img"
+                                      image={post.images[0]} // Assuming the first image is displayed
+                                      alt={post.title}
+                                    />
+                                  )}
+                                  <Divider sx={mode ? { bgcolor: 'white', m: 2 } : { m: 2 }} />
+                                  {/* like,share,repost,send */}
+                                  <div className='interactiveIcons' style={{ display: 'flex', alignItems: 'center' }}>
 
-                                  {/* <<======================Like===============================>> */}
+                                    {/* <<======================Like===============================>> */}
 
-                                  <div className='like' style={{ marginRight: '10px' }}>
-                                    <label htmlFor={`like` + index} style={{ cursor: 'pointer' }}
-                                      className='interactiveIcons_custom'>
-                                      <Checkbox sx={mode ? { color: 'white' } : ''} id={`like` + index} icon={<Like />}
-                                        checkedIcon={<FilledLike />} />
-                                      {isMdScreen && (<p className='icon_text'>Like</p>)}
-                                    </label>
-                                  </div>
-                                  {/* <<======================Comment===============================>> */}
-                                  <label htmlFor={`comment` + index} className='comment'>
-                                    <div id={post._id} style={{ cursor: 'pointer' }} className='interactiveIcons_custom'>
-                                      <Checkbox sx={mode ? { color: 'white' } : ''} id={`comment` + index}
-                                        icon={<Comment />} checkedIcon={<FilledComment />} />
-                                      {isMdScreen && (<p className='icon_text'>Comment</p>)}
+                                    <div className='like' style={{ marginRight: '10px' }}>
+                                      <label htmlFor={`like` + index} style={{ cursor: 'pointer' }}
+                                        className='interactiveIcons_custom'>
+                                        <Checkbox sx={mode ? { color: 'white' } : ''} id={`like` + index} icon={<Like />}
+                                          checkedIcon={<FilledLike />} />
+                                        {isMdScreen && (<p className='icon_text'>Like</p>)}
+                                      </label>
                                     </div>
-
-                                  </label>
-
-
-                                  {/* <<======================repost===============================>> */}
-
-                                  <label htmlFor={`repost` + index} className='repost'>
-                                    <div style={{ cursor: 'pointer' }} className='interactiveIcons_custom'>
-                                      <Checkbox sx={mode ? { color: 'white' } : ''} id={`repost` + index}
-                                        icon={<Repost />} checkedIcon={<FilledRepost />} />
-                                      {isMdScreen && (<p className='icon_text'>Repost</p>)}
+                                    {/* <<======================Comment===============================>> */}
+                                    <label htmlFor={`comment` + index} className='comment'>
+                                      <div id={post._id} style={{ cursor: 'pointer' }} className='interactiveIcons_custom'>
+                                        <Checkbox sx={mode ? { color: 'white' } : ''} id={`comment` + index}
+                                          icon={<Comment />} checkedIcon={<FilledComment />} />
+                                        {isMdScreen && (<p className='icon_text'>Comment</p>)}
                                       </div>
-                                  </label>
-                                  <div id={post._id} className='share'>
 
-                                    {/* <<======================Send===============================>> */}
-
-                                    <label htmlFor={`send` + index} style={{ cursor: 'pointer' }} className='interactiveIcons_custom'>
-                                      <Checkbox sx={mode ? { color: 'white' } : ''}
-                                        id={`send` + index} icon={<Send />} checkedIcon={<FilledSend />} />
-                                      {isMdScreen && (<p className='icon_text'>Send</p>)}
                                     </label>
+
+
+                                    {/* <<======================repost===============================>> */}
+
+                                    <label htmlFor={`repost` + index} className='repost'>
+                                      <div style={{ cursor: 'pointer' }} className='interactiveIcons_custom'>
+                                        <Checkbox sx={mode ? { color: 'white' } : ''} id={`repost` + index}
+                                          icon={<Repost />} checkedIcon={<FilledRepost />} />
+                                        {isMdScreen && (<p className='icon_text'>Repost</p>)}
+                                      </div>
+                                    </label>
+                                    <div id={post._id} className='share'>
+
+                                      {/* <<======================Send===============================>> */}
+
+                                      <label htmlFor={`send` + index} style={{ cursor: 'pointer' }} className='interactiveIcons_custom'>
+                                        <Checkbox sx={mode ? { color: 'white' } : ''}
+                                          id={`send` + index} icon={<Send />} checkedIcon={<FilledSend />} />
+                                        {isMdScreen && (<p className='icon_text'>Send</p>)}
+                                      </label>
+                                    </div>
                                   </div>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          </Grid>
-                        )):<Typography sx={{ margin: 'auto', my: 2, color: 'grey' }} variant="h5">
-                        <i>No Post</i></Typography>
+                                </CardContent>
+                              </Card>
+                            </Grid>
+                          )) : <Typography sx={{ textAlign: 'center', my: 2, color: 'grey' }} variant="h5">
+                            <i>No Post</i></Typography>
                       }
                     </Grid>
                   </Paper>

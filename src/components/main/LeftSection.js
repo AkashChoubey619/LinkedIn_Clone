@@ -30,9 +30,9 @@ export default function LeftSection(prop) {
               sx={{ width: 56, height: 56,bgcolor:randomColor } }
   
             >
-              {userData.name.toUpperCase().charAt(0)}
+              {userData.name&&userData.name.toUpperCase().charAt(0)}
             </Avatar></Link></div>
-            <h3 style={mode?{color:'white'}:{color:'black'}} >{userData.name}</h3>
+            <h3 style={mode?{color:'white'}:{color:'black'}} >{userData.name&&userData.name}</h3>
             
             <p>Add Description about yourself</p>
           </div>

@@ -46,7 +46,7 @@ export default function Main() {
   const [editPostId, setEditPostId] = useState('');
   const [editComment, setEditComment] = useState('');
   const [editCommentId, setEditCommentId] = useState('');
-  const { card, setCard, setGetId, mode } = useContext(Context);
+  const { card, setCard, mode } = useContext(Context);
   const [postContent, setPostContent] = useState('');
   const [likeCount, setLikeCount] = useState({})
   const [countComment, setCountComment] = useState({})
@@ -56,12 +56,12 @@ export default function Main() {
   const theme = useTheme();
   const isMdScreen = useMediaQuery(theme.breakpoints.up('md'));
   const isSmScreen = useMediaQuery(theme.breakpoints.up('sm'))
-  const [like, setLike] = useState(false);
+  const [showComm, setShowComm] = useState({});
   const userData = JSON.parse(localStorage.getItem("userData"))
 
   const token = localStorage.getItem("token");
 
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   let randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
 
   const handleComment = (e) => {
@@ -313,6 +313,15 @@ export default function Main() {
   };
   const isEditingComment = (commentId) => commentId === editCommentId;
 
+// <--------------------------display Comment for particular post------------------------->
+
+  const toggleComment=(postId)=>{
+    setShowComm(prev =>
+      ({...prev,[postId]:!prev[postId]})
+    )
+    console.log(showComm);
+  }
+
   // <--------------------------handelComment------------------------->
 
   const handleRenderComment = async (id) => {
@@ -419,7 +428,7 @@ export default function Main() {
     } catch (error) {
       console.log('Error', error);
     } finally {
-      console.log('fetch successfully')
+      console.log('fetch successfully ',page)
     }
   }
 
@@ -541,8 +550,13 @@ export default function Main() {
                   <div id={item._id} className='user_info'>
                     {isLoading ?
                       <Skeleton sx={mode ? { bgcolor: 'white' } : ''} variant="circular" width={45} height={45} /> :
-                      <Link id={item._id} onClick={() => setGetId(item.author._id)}
-                        to={'/userProfile'}>
+                      <Link id={item._id} to={'/userProfile'} onClick={() =>
+                        {
+                          item.author._id&&
+                            localStorage.setItem('getId', item.author._id);
+                            console.log(item.author._id);
+                          }}
+                        >
                         <Avatar className='userLogo' alt='user_profile' src={item.author.profileImage}>
                         </Avatar>
                       </Link>}
@@ -551,7 +565,11 @@ export default function Main() {
                         <Skeleton variant="text" sx={mode ? { bgcolor: 'white', fontSize: '1rem' } :
                           { fontSize: '1rem' }} width={75} /> :
                         <h2 id={item._id} className='userName'>
-                          <Link onClick={() => { setGetId(item.author._id) }} to={`/userProfile?=${item.author._id}`}
+                          <Link onClick={() => {
+                          item.author._id&&
+                            localStorage.setItem('getId', item.author._id);
+                            console.log(item.author._id);
+                          }} to={`/userProfile?=${item.author._id}`}
                             className={mode ? 'userNameDark' : 'userNameLink'}>
                             {item.author.name}
                           </Link>
@@ -682,11 +700,11 @@ export default function Main() {
                         </label>
                       </div>
                       {/* <<======================Comment===============================>> */}
-                      <label htmlFor={`comment` + index} className='comment'>
-                        <div id={item._id} style={{ cursor: 'pointer' }} className='interactiveIcons_custom'>
+                      <label htmlFor={`comment` + index} onClick={()=>toggleComment(item._id)} className='comment'>
+                        <div id={item._id} style={{ cursor: 'pointer' }}  className='interactiveIcons_custom'>
                           <Checkbox sx={mode ? { color: 'white' } : ''} id={`comment` + index}
                             icon={<Comment />} checkedIcon={<FilledComment />} />
-                          {isSmScreen && (<p className='icon_text'>Comment</p>)}
+                          {isSmScreen && (<p onClick={()=>toggleComment(item._id)} className='icon_text'>Comment</p>)}
                         </div>
 
                       </label>
@@ -715,7 +733,7 @@ export default function Main() {
 
                   {/* <============ Comments box ============> */}
 
-                  <Box id={item._id} className='commentSection'>
+                  {showComm[item._id]&&(<Box id={item._id} className='commentSection'>
                     <Typography variant='h6' id={item._id}>
                       Comments
                     </Typography>
@@ -776,7 +794,7 @@ export default function Main() {
                                     {dateVisible(comment.createdAt)}&nbsp;
                                     {
                                       userData._id === comment.author?
-                                        <Dropdown id={comment._id}>
+                                        <Dropdown key={comment._id}>
                                           <MenuButton sx={mode ? { bgcolor: 'darkslategray', color: 'white' } : { bgcolor: '#f1e2e2' }}
                                             id={comment._id}>
                                             <ThreeDotsIcon sx={mode ? { bgcolor: 'darkslategray', color: '#white', fontSize: '18px' }
@@ -855,7 +873,7 @@ export default function Main() {
                       }
                       )
                     }
-                  </Box>
+                  </Box>)}
 
 
                 </div>
@@ -867,7 +885,7 @@ export default function Main() {
 
         </section>
       </div>
-      {isMdScreen && (<RightSection className='rightPosition' />)}
+      {isSmScreen && (<RightSection className='rightPosition' />)}
 
     </Stack>
   )

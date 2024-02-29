@@ -117,7 +117,7 @@ export default function Nav() {
             <Stack display="flex" direction="row" alignItems="center">
               
               <div >
-                <LinkedInIcon sx={{ width: "4rem", height: "45px", color: "#0a66c2" }} />
+                <Link to='/home'><LinkedInIcon sx={{ width: "4rem", height: "45px", color: "#0a66c2" }} /></Link>
                 </div>
                 
               <Box className='search'>
@@ -183,7 +183,7 @@ export default function Nav() {
                           </h3>
 
                         </div>
-                        <Link to='myProfile'>
+                        <Link to='/myProfile'>
                           <button style={mode ? { background: 'black', color: 'white' } : {}}
                             id='viewProfile-btn'>View Profile</button>
                         </Link>
@@ -192,6 +192,11 @@ export default function Nav() {
                         <MenuItem><Link className='menuText' to='/updatePassword'>Update password</Link></MenuItem>
                         <MenuItem><Link className='menuText' to='/notAvailable'>Help</Link></MenuItem>
                         <MenuItem><Link className='menuText' to='/notAvailable'>Language</Link></MenuItem>
+                        
+                        <MenuItem className='extraMsg'><Link className='menuText extraMsg' to='/network'>Network</Link></MenuItem>
+                        <MenuItem className='extraMsg'><Link className='menuText extraMsg' to='/message'>Message</Link></MenuItem>
+                        <MenuItem className='extraMsg'><Link className='menuText extraMsg' to='/jobs'>Jobs</Link></MenuItem>
+                        <MenuItem className='extraMsg'><Link className='menuText extraMsg' to='/notify'>Notifications</Link></MenuItem>
                         <Divider />
                         <Typography ml={1}>Manage</Typography>
                         <MenuItem><Link className='menuText' to='/notAvailable'>Post & Activity</Link></MenuItem>

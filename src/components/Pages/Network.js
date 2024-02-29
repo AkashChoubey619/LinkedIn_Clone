@@ -173,12 +173,14 @@ export default function Network() {
         <Nav />
         <Stack direction={isSmallScreen ? 'column' : 'row'} mx={isSmallScreen ? 1 : 3} mt={8}>
           <Box width={isSmallScreen ? '100%' : '40%'} mr={isSmallScreen ? 0 : 1}>
-            <Paper elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
-              <Typography variant="h5" gutterBottom>
+            <Paper sx={mode ? { bgcolor: 'black', padding: 2, marginBottom: 2, boxShadow: '0px 0px 3px lightgrey' }
+              : { padding: 2, marginBottom: 2 }} elevation={3} >
+              <Typography sx={mode && { color: 'white' }} variant="h5" gutterBottom>
                 Groups
               </Typography>
               {groups && groups.map((group) => (
-                <Paper key={group._id} elevation={3} sx={{ padding: 2, marginBottom: 2 }}>
+                <Paper key={group._id} elevation={3} sx={mode ? { padding: 2, marginBottom: 2, bgcolor: 'darkslategray', color: 'white', boxShadow: '0px 0px 5px white' }
+                  : { padding: 2, marginBottom: 2 }}>
                   <Box sx={{ display: 'flex', width: '100%', alignItems: 'center' }}>
                     <Avatar src={group.image} />
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
@@ -188,17 +190,19 @@ export default function Network() {
 
                       <Box id={group._id}>
                         {userData._id === group.owner._id && (
-                          <Dropdown sx={mode ? { bgcolor: 'darkslategray', color: 'white' } : 
-                          { bgcolor: 'white' }} id={group._id}>
-                            <MenuButton  id={group._id} sx={mode ? { bgcolor: 'darkslategray', color: 'white' } : 
-                          { bgcolor: 'white' }}>
-                              <ThreeDotsIcon sx={mode ? { bgcolor: 'darkslategray',
-                               color: '#white', fontSize: '18px' } : { fontSize: '18px', bgcolor: 'white' }} />
+                          <Dropdown sx={mode ? { bgcolor: 'darkslategray', color: 'white' } :
+                            { bgcolor: 'white' }} id={group._id}>
+                            <MenuButton id={group._id} sx={mode ? { bgcolor: 'darkslategray', color: 'white' } :
+                              { bgcolor: 'white' }}>
+                              <ThreeDotsIcon sx={mode ? {
+                                bgcolor: 'darkslategray',
+                                color: '#white', fontSize: '18px'
+                              } : { fontSize: '18px', bgcolor: 'white' }} />
                             </MenuButton>
-                            <Menu slots={{ listbox: Listbox }} sx={mode ? { bgcolor: 'grey', color: 'white' } : {bgcolor: 'white'}}>
+                            <Menu slots={{ listbox: Listbox }} sx={mode ? { bgcolor: 'grey', color: 'white' } : { bgcolor: 'white' }}>
                               <MenuItem
-                              onClick={()=>deleteGroup(group._id)}
-                               id={group._id}>delete</MenuItem>
+                                onClick={() => deleteGroup(group._id)}
+                                id={group._id}>delete</MenuItem>
                             </Menu>
                           </Dropdown>
                         )}
@@ -214,10 +218,12 @@ export default function Network() {
                     </Box>
 
                   </Grid>
-                  <Link to='group' onClick={() => {
-                    setGetId(group._id);
+                  <Link to='/group' onClick={() => {
+                    group._id && localStorage.setItem('getId', group._id);
                   }}>
-                    <Typography sx={{ textAlign: 'center', textDecoration: 'underline', fontStyle: 'italic' }} variant='body2' component={'h4'}>
+                    <Typography sx={mode ? { textAlign: 'center', textDecoration: 'underline', fontStyle: 'italic', color: 'lightblue' }
+                      : { textAlign: 'center', textDecoration: 'underline', fontStyle: 'italic' }}
+                      variant='body2' component={'h4'}>
                       View  Group
                     </Typography>
                   </Link>
@@ -225,8 +231,9 @@ export default function Network() {
               ))}
 
               <TriggerButton type='button' onClick={handleOpenGroup}
-                sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                <AddIcon />
+                sx={mode ? { display: 'flex', justifyContent: 'center', width: '100%', bgcolor: 'darkslategray' }
+                  : { display: 'flex', justifyContent: 'center', width: '100%', color: 'white' }}>
+                <AddIcon sx={mode && { color: 'white' }} />
               </TriggerButton>
               <Modal
                 aria-labelledby="unstyled-modal-title"
@@ -235,11 +242,18 @@ export default function Network() {
                 onClose={handleCloseGroup}
                 slots={{ backdrop: StyledBackdrop }}
               >
-                <ModalContent sx={{ width: 400 }}>
-                  <Paper style={{ padding: '16px', marginBottom: '16px' }}>
+                <ModalContent sx={mode ? { width: 400, bgcolor: 'black' } : { width: 400 }}>
+                  <Paper style={mode ? { padding: '16px', marginBottom: '16px', background: 'darkslategray', color: 'white', boxShadow: '0px 0px 5px white' }
+                    : { padding: '16px', marginBottom: '16px' }}>
                     <Typography variant="h6">Add Profile Image</Typography>
                     <form onSubmit={createGroup}>
                       <TextField
+                        InputProps={{
+                          sx: mode && { color: 'white ! important',}
+                        }}
+                        InputLabelProps={{
+                          sx: mode && { color: 'white',outline:'white' }
+                        }}
                         required
                         name="name"
                         label="name"
@@ -247,6 +261,12 @@ export default function Network() {
                         margin="normal"
                       />
                       <TextField
+                       InputProps={{
+                        sx: mode && { color: 'white ! important',}
+                      }}
+                      InputLabelProps={{
+                        sx: mode && { color: 'white',outline:'white' }
+                      }}
                         required
                         type="text"
                         id='name'
@@ -258,6 +278,12 @@ export default function Network() {
                         margin="normal"
                       />
                       <TextField
+                       InputProps={{
+                        sx: mode && { color: 'white ! important'}
+                      }}
+                      InputLabelProps={{
+                        sx: mode && { color: 'white' }
+                      }}
                         required
                         type="text"
                         id='description'
@@ -291,21 +317,22 @@ export default function Network() {
             </Paper>
           </Box>
           <Box width={isSmallScreen ? '100%' : '60%'}>
-            <Paper elevation={3} sx={{ padding: 2, marginInline: 1 }}>
+            <Paper elevation={3} sx={mode?{ padding: 2, marginInline: 1,background:'black',color:'white', boxShadow: '0px 0px 3px white' }:{ padding: 2, marginInline: 1 }}>
               <Typography variant="h6" gutterBottom>
                 Suggested People
               </Typography>
               <Grid container spacing={2}>
                 {suggestedPeople.map((person, index) => (
                   <Grid item xs={6} sm={4} md={3} key={index}>
-                    <Paper elevation={3} sx={{ padding: 2, backgroundColor: '#f0f0f0', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
+                    <Paper elevation={3} sx={mode?{ padding: 2, backgroundColor: 'darkslategray', boxShadow: '0px 0px 5px white',color:'white', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }:
+                  { padding: 2, backgroundColor: '#f0f0f0', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
                       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                         <Avatar src={person.avatar} alt={person.name} sx={{ width: 80, height: 80 }} />
                         <Typography variant="subtitle1" sx={{ marginTop: 1 }}>
                           {person.name}
                         </Typography>
                         <FollowGroup />
-                        <Typography variant="body2" sx={{ color: 'text.secondary', marginTop: 1 }}>
+                        <Typography variant="body2" sx={mode?{ color: 'white', marginTop: 1, }:{ color: 'text.secondary', marginTop: 1 }}>
                           Mutual Connections: {person.mutualConnections}
                         </Typography>
                       </Box>
