@@ -17,6 +17,7 @@ import UpdatePassword from './components/Pages/UpdatePassword.jsx'
 import Premium from './components/Pages/Premium.jsx'
 import NotAvailable from './components/Pages/NotAvailable.jsx'
 import Group from './components/Pages/Group.jsx'
+import LoginHead from './components/SignIn/LoginHead.js'
 
 
 

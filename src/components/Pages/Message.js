@@ -4,11 +4,14 @@ import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
+import RightSection from '../main/RightSection';
+import { useTheme } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import { messageExamples } from './Store';
-import { Typography } from '@mui/material';
+import { Paper, Stack, Typography, useMediaQuery } from '@mui/material';
 import Nav from '../Header/Navigation';
 import Context from '../ContextApi/MainContext';
+import { Link } from 'react-router-dom';
 
 
 function refreshMessages() {
@@ -24,35 +27,60 @@ export default function Message() {
   const ref = React.useRef(null);
   const { mode } = useContext(Context)
   const [messages, setMessages] = React.useState(() => refreshMessages());
+  const theme = useTheme();
+    const isSmScreen = useMediaQuery(theme.breakpoints.up('sm'))
 
   React.useEffect(() => {
-    ref.current.ownerDocument.body.scrollTop = 0;
     setMessages(refreshMessages());
   }, [value, setMessages]);
 
   return (
     <>
       <Nav />
-      <div style={{ position: 'absolute', padding: '15px', top: '6%', left: '8%' }} >
-        <Box sx={{ pb: 7 }} ref={ref}>
-          <Typography 
-          sx={{ textShadow: ' 3px 3px 20px #ff99cc,-2px 1px 30px #ff99cc', textAlign: 'center', color: 'white' }} mt={2} variant='h3'>
-            ---Inbox---
-          </Typography>
-          <List >
+      <Stack gap={'20px'} flexDirection={'row'} className='jobs' sx={{ position: 'absolute', top: '55px' }}>
+
+        <Box width={'800px'} >
+          <Paper
+            sx={mode ? {
+              backgroundColor: 'black',
+              padding: 2,
+              borderRadius: 2,
+              color: 'white',
+              boxShadow: '0px 0px 4px gray',
+              mt: 2 // Adjust the maximum width to fit within the viewport
+            } : {
+              backgroundColor: 'white',
+              boxShadow: (theme) => theme.shadows[3],
+              padding: 2,
+              borderRadius: 2,
+              mt: 2 // Adjust the maximum width to fit within the viewport
+            }}
+          >
+            <Typography variant='h6'>
+              All Messages
+            </Typography>
+          </Paper>
+          {<List >
             {messages.map(({ primary, secondary, person }, index) => (
-              <ListItemButton key={index + person}
-                sx={mode ? { bgcolor: 'black', color: 'white', mb: '5px', borderRadius: '6px' } :
-                  { bgcolor: 'white', mb: '5px', borderRadius: '6px' }} >
+              <Link to='/viewMessage'><Box key={index + person}
+                sx={mode ? { bgcolor: 'black', color: 'white', borderRadius: '6px',display:'flex',p:2,'&:hover':{bgcolor:'grey'}  } :
+                  { bgcolor: 'white',color:'black', borderRadius: '6px',display:'flex',p:2,'&:hover':{bgcolor:'lightblue'} }} >
                 <ListItemAvatar >
                   <Avatar alt="Profile Picture" src={person} />
                 </ListItemAvatar>
-                <ListItemText primary={primary} secondary={secondary} />
-              </ListItemButton>
+                <Box>
+                <Typography display={'block'} variant='body1'>{primary}</Typography>
+                
+                <Typography display={'block'} variant='body2'>{secondary}</Typography>
+                </Box>
+              </Box>
+              </Link>
             ))}
           </List>
+          }
         </Box>
-      </div>
+        {isSmScreen && <RightSection />}
+      </Stack>
     </>
   )
 }

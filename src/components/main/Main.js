@@ -23,6 +23,7 @@ import PublicIcon from '@mui/icons-material/Public';
 import Emoji from '@mui/icons-material/InsertEmoticon';
 import { styled, css } from '@mui/system';
 import { Modal as BaseModal } from '@mui/base/Modal';
+import Modal from '@mui/material/Modal';
 import PropTypes from 'prop-types';
 import Skeleton from '@mui/material/Skeleton';
 import clsx from 'clsx';
@@ -39,9 +40,15 @@ import { useTheme } from '@mui/material/styles';
 export default function Main() {
   // const [card, setCard] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [openRepost, setOpenRepost] = React.useState(false);
+  const [openShare, setOpenShare] = React.useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const handleOpenRepost = () => setOpenRepost(true);
+  const handleCloseRepost = () => setOpenRepost(false);
+  const handleOpenShare = () => setOpenShare(true);
+  const handleCloseShare = () => setOpenShare(false);
   const [editPost, setEditPost] = useState('');
   const [editPostId, setEditPostId] = useState('');
   const [editComment, setEditComment] = useState('');
@@ -53,6 +60,7 @@ export default function Main() {
   const [postImage, setPostImage] = useState(null)
   const [commentData, setCommentData] = useState({});
   const [comment, setComment] = useState({})
+  const [isLiked, setIsLiked] = useState({})
   const theme = useTheme();
   const isMdScreen = useMediaQuery(theme.breakpoints.up('md'));
   const isSmScreen = useMediaQuery(theme.breakpoints.up('sm'))
@@ -193,7 +201,8 @@ export default function Main() {
   };
 
 
-  const handelLike = async (id) => {
+  const handelLike = async (id, isLiked) => {
+    const updatedIsLiked = !isLiked;
     try {
       const res = await fetch(`https://academics.newtonschool.co/api/v1/linkedin/like/${id}`, {
         method: 'POST',
@@ -207,6 +216,11 @@ export default function Main() {
         setLikeCount(prevLike =>
           ({ ...prevLike, [id]: prevLike[id] + 1 })
         )
+        setIsLiked(prevLike => ({
+          ...prevLike,
+          [id]: updatedIsLiked,
+        }));
+        console.log('item liked', isLiked)
       }
       else {
         const response = await fetch(`https://academics.newtonschool.co/api/v1/linkedin/like/${id}`, {
@@ -221,6 +235,7 @@ export default function Main() {
           setLikeCount(prevLike =>
             ({ ...prevLike, [id]: prevLike[id] - 1 })
           )
+          console.log('item disliked', isLiked)
         }
       }
     }
@@ -313,16 +328,16 @@ export default function Main() {
   };
   const isEditingComment = (commentId) => commentId === editCommentId;
 
-// <--------------------------display Comment for particular post------------------------->
+  // <--------------------------display Comment for particular post------------------------->
 
-  const toggleComment=(postId)=>{
+  const toggleComment = (postId) => {
     setShowComm(prev =>
-      ({...prev,[postId]:!prev[postId]})
+      ({ ...prev, [postId]: !prev[postId] })
     )
     console.log(showComm);
   }
 
-  // <--------------------------handelComment------------------------->
+  // <--------------------------handleComment------------------------->
 
   const handleRenderComment = async (id) => {
 
@@ -399,6 +414,7 @@ export default function Main() {
       setIsLoading(true)
       const response = await fetch(url, {
         headers: {
+          Authorization: `Bearer ${token}`,
           projectId: 'ut1dy4576cd1'
         }
       });
@@ -417,6 +433,10 @@ export default function Main() {
             ...prevLikeCount,
             [post._id]: parseInt(post.likeCount),
           }));
+          setIsLiked(prevLike => ({
+            ...prevLike,
+            [post._id]: post.isLiked,
+          }));
           setCountComment(prevCount => ({
             ...prevCount,
             [post._id]: parseInt(post.commentCount),
@@ -428,7 +448,7 @@ export default function Main() {
     } catch (error) {
       console.log('Error', error);
     } finally {
-      console.log('fetch successfully ',page)
+      console.log('fetch successfully ', page)
     }
   }
 
@@ -478,7 +498,7 @@ export default function Main() {
         <section className='mainPosition' >
           <section id='mainInfo' className={mode ? 'darkModeMain' : ''}>
             <div className='mainHead1'>
-              {userData&&<Avatar src={userData.profileImage} sx={{ bgcolor: randomColor }}>
+              {userData && <Avatar src={userData.profileImage} sx={{ bgcolor: randomColor }}>
                 {userData.name.toUpperCase().charAt(0)}</Avatar>}
               <div id='mainSearch'>
                 <TriggerButton type="button" sx={{ borderRadius: '20px', p: 0, border: 'none', flex: 'start', width: '100%' }}
@@ -489,11 +509,15 @@ export default function Main() {
               </div>
             </div>
 
-            <div className='mainHead2'>
-              <div className='mainIconData' style={{ cursor: "pointer" }}><PhotoIcon /><p className='IconData'>Photo</p></div>
-              <div className='mainIconData' style={{ cursor: "pointer" }}><Video /><p className='IconData'>Video</p></div>
-              <div className='mainIconData' style={{ cursor: "pointer" }}><Event /><p className='IconData'>Event</p></div>
-              <div className='mainIconData' style={{ cursor: "pointer" }}><Article /><p className='IconData'>Article</p></div>
+            <div className='mainHead2' >
+              <div className='mainIconData' onClick={handleOpen} style={{ cursor: "pointer" }}>
+                <PhotoIcon /><p className='IconData'>Photo</p></div>
+              <div className='mainIconData' onClick={handleOpen} style={{ cursor: "pointer" }}>
+                <Video /><p className='IconData'>Video</p></div>
+              <div className='mainIconData' onClick={handleOpen} style={{ cursor: "pointer" }}>
+                <Event /><p className='IconData'>Event</p></div>
+              <div className='mainIconData' onClick={handleOpen} style={{ cursor: "pointer" }}>
+                <Article /><p className='IconData'>Article</p></div>
             </div>
           </section>
           <Box>
@@ -505,15 +529,17 @@ export default function Main() {
               onClose={handleClose}
               slots={{ backdrop: StyledBackdrop }}
             >
-              <ModalContent sx={{ width: 550 }}>
+              <ModalContent sx={mode ? { width: 550, background: 'black', color: 'white' } : { width: 550 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
                   <h2 id="unstyled-modal-title" className="modal-title">
                     Add post
                   </h2>
-                  <CloseIcon onClick={handleClose} />
+                  <CloseIcon sx={mode && { color: 'white' }} onClick={handleClose} />
                 </Box>
                 <form onSubmit={creatingPost}>
-                  <textarea type='text' style={{ border: 'none', outline: 'none', width: '100%', fontFamily: 'inherit' }}
+                  <textarea type='text'
+                    style={mode ? { border: 'none', outline: 'none', width: '100%', fontFamily: 'inherit', background: 'black', color: 'white' } :
+                      { border: 'none', outline: 'none', width: '100%', fontFamily: 'inherit' }}
                     rows={6} id="unstyled-modal-description" placeholder='What do you want to talk about...?'
                     value={postContent}
                     onChange={(e) => { setPostContent(e.target.value) }}
@@ -532,12 +558,54 @@ export default function Main() {
                     ) : null}
                   </Button>
                   <Box sx={{ margin: 'left', display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button type='submit' sx={{ borderRadius: '20px', width: '80px' }}
+                    <Button type='submit' sx={mode ? { borderRadius: '20px', width: '80px', background: 'darkslategray' } : { borderRadius: '20px', width: '80px' }}
                       variant="contained">Post</Button>
                   </Box>
                 </form>
               </ModalContent>
             </Modaal>
+
+
+            <Modal
+              open={openRepost}
+              onClose={handleCloseRepost}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={mode?darkStyle:style} >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                  <h2 id="unstyled-modal-title" className="modal-title">
+                    Can't find the content you are looking for?
+                  </h2>
+                  <CloseIcon sx={mode && { color: 'white' }} onClick={handleCloseRepost} />
+                </Box>
+                <Typography id="modal-modal-title" variant="body2" component="h2">
+                  There might be some issue  with your post, but don’t worry! You can try after after sometime
+                </Typography>
+                <Typography id="modal-modal-description" variant="body1"  sx={{ mt: 2 }}>
+                  Sorry for the issue
+                </Typography>
+              </Box>
+            </Modal>
+
+            <Modal
+              open={openShare}
+              onClose={handleCloseShare}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={mode?darkStyle:style} >
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                  <h2 id="unstyled-modal-title" className="modal-title">
+                    No  sharing yet! Make connections
+                  </h2>
+                  <CloseIcon sx={mode && { color: 'white' }} onClick={handleCloseShare} />
+                </Box>
+                <Typography id="modal-modal-title" variant="body1" component="h2">
+                 may  take a while to show up here. But don’t worry, we will notify you as soon as it is ready.
+                </Typography>
+              </Box>
+            </Modal>
 
           </Box>
         </section>
@@ -550,13 +618,12 @@ export default function Main() {
                   <div id={item._id} className='user_info'>
                     {isLoading ?
                       <Skeleton sx={mode ? { bgcolor: 'white' } : ''} variant="circular" width={45} height={45} /> :
-                      <Link id={item._id} to={'/userProfile'} onClick={() =>
-                        {
-                          item.author._id&&
-                            localStorage.setItem('getId', item.author._id);
-                            console.log(item.author._id);
-                          }}
-                        >
+                      <Link id={item._id} to={'/userProfile'} onClick={() => {
+                        item.author._id &&
+                          localStorage.setItem('getId', item.author._id);
+                        console.log(item.author._id);
+                      }}
+                      >
                         <Avatar className='userLogo' alt='user_profile' src={item.author.profileImage}>
                         </Avatar>
                       </Link>}
@@ -566,8 +633,8 @@ export default function Main() {
                           { fontSize: '1rem' }} width={75} /> :
                         <h2 id={item._id} className='userName'>
                           <Link onClick={() => {
-                          item.author._id&&
-                            localStorage.setItem('getId', item.author._id);
+                            item.author._id &&
+                              localStorage.setItem('getId', item.author._id);
                             console.log(item.author._id);
                           }} to={`/userProfile?=${item.author._id}`}
                             className={mode ? 'userNameDark' : 'userNameLink'}>
@@ -690,21 +757,23 @@ export default function Main() {
                       <div className='like'
 
                       >
-                        <label htmlFor={`like` + index} style={{ cursor: 'pointer' }}
+                        <label htmlFor={`like ${index}`} style={{ cursor: 'pointer' }}
                           className='interactiveIcons_custom'>
-                          <Checkbox sx={mode ? { color: 'white' } : ''} id={`like` + index} icon={<Like />}
-                            onClick={() => handelLike(item._id)
+                          <Checkbox sx={mode ? { color: 'white' } : ''} id={`like ${index}`} icon={<Like />}
+                            onClick={() => handelLike(item._id, item.isLiked)
                             }
-                            checkedIcon={<FilledLike />} />
+                            checked={isLiked[item._id]}
+                            checkedIcon={<FilledLike />}
+                          />
                           {isSmScreen && (<p className='icon_text'>Like</p>)}
                         </label>
                       </div>
                       {/* <<======================Comment===============================>> */}
-                      <label htmlFor={`comment` + index} onClick={()=>toggleComment(item._id)} className='comment'>
-                        <div id={item._id} style={{ cursor: 'pointer' }}  className='interactiveIcons_custom'>
+                      <label htmlFor={`comment` + index} onClick={() => toggleComment(item._id)} className='comment'>
+                        <div id={item._id} style={{ cursor: 'pointer' }} className='interactiveIcons_custom'>
                           <Checkbox sx={mode ? { color: 'white' } : ''} id={`comment` + index}
                             icon={<Comment />} checkedIcon={<FilledComment />} />
-                          {isSmScreen && (<p onClick={()=>toggleComment(item._id)} className='icon_text'>Comment</p>)}
+                          {isSmScreen && (<p onClick={() => toggleComment(item._id)} className='icon_text'>Comment</p>)}
                         </div>
 
                       </label>
@@ -712,20 +781,27 @@ export default function Main() {
 
                       {/* <<======================repost===============================>> */}
 
-                      <label htmlFor={`repost` + index} className='repost'>
+                      <label htmlFor={`repost` + index} onClick={handleOpenRepost} className='repost'>
                         <div style={{ cursor: 'pointer' }} className='interactiveIcons_custom'>
                           <Checkbox sx={mode ? { color: 'white' } : ''} id={`repost` + index}
+                            checked={openRepost}
+                            onChange={handleOpenRepost}
                             icon={<Repost />} checkedIcon={<FilledRepost />} />
                           {isSmScreen && (<p className='icon_text'>Repost</p>)}
                         </div>
                       </label>
                       <div id={item._id} className='share'>
 
+
+
                         {/* <<======================Send===============================>> */}
 
-                        <label htmlFor={`send` + index} style={{ cursor: 'pointer' }} className='interactiveIcons_custom'>
+                        <label htmlFor={`send` + index} onClick={handleOpenShare}
+                          style={{ cursor: 'pointer' }} className='interactiveIcons_custom'>
                           <Checkbox sx={mode ? { color: 'white' } : ''}
-                            id={`send` + index} icon={<Send />} checkedIcon={<FilledSend />} />
+                            id={`send` + index} icon={<Send />}
+                            checked={openShare}
+                             checkedIcon={<FilledSend />} />
                           {isSmScreen && (<p className='icon_text'>Send</p>)}
                         </label>
                       </div>
@@ -733,7 +809,7 @@ export default function Main() {
 
                   {/* <============ Comments box ============> */}
 
-                  {showComm[item._id]&&(<Box id={item._id} className='commentSection'>
+                  {showComm[item._id] && (<Box id={item._id} className='commentSection'>
                     <Typography variant='h6' id={item._id}>
                       Comments
                     </Typography>
@@ -793,7 +869,7 @@ export default function Main() {
                                     variant='body'>
                                     {dateVisible(comment.createdAt)}&nbsp;
                                     {
-                                      userData._id === comment.author?
+                                      userData._id === comment.author ?
                                         <Dropdown key={comment._id}>
                                           <MenuButton sx={mode ? { bgcolor: 'darkslategray', color: 'white' } : { bgcolor: '#f1e2e2' }}
                                             id={comment._id}>
@@ -885,7 +961,8 @@ export default function Main() {
 
         </section>
       </div>
-      {isSmScreen && (<RightSection className='rightPosition' />)}
+
+      {isSmScreen && (<RightSection />)}
 
     </Stack>
   )
@@ -1010,6 +1087,31 @@ const TriggerButton = styled('button')(
     }
   `,
 );
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  borderRadius:'8px'
+};
+const darkStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'black',
+  color:'white',
+  border: '2px solid #000',
+  boxShadow: '0px 0px 14px white',
+  p: 4,
+  borderRadius:'8px'
+}
 
 const Listbox = styled('ul')(
   ({ theme }) => `

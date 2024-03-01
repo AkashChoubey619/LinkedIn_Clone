@@ -13,6 +13,7 @@ import Link from '@mui/material/Link';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import Container from '@mui/material/Container';
 import Nav from '../Header/Navigation';
+import Context from '../ContextApi/MainContext';
 
 function Copyright(props) {
   return (
@@ -96,7 +97,7 @@ const footers = [
 const defaultTheme = createTheme();
 
 export default function Premium() {
- 
+  const { mode } = React.useContext(Context)
   
   return (
      <>
@@ -105,17 +106,18 @@ export default function Premium() {
       <GlobalStyles styles={{ ul: { margin: 0, padding: 0, listStyle: 'none' } }} />
       
       {/* Hero unit */}
-      <Container disableGutters maxWidth="sm" component="main" sx={{ pt: 8, pb: 6 }}>
+      <Container disableGutters maxWidth="sm" component="main" sx={mode?{color:'white',pt: 8, pb: 6 }:{ pt: 8, pb: 6 }}>
         <Typography
           component="h1"
           variant="h2"
           align="center"
+          sx={mode&&{color:'white'}}
           color="text.primary"
           gutterBottom
         >
           Pricing
         </Typography>
-        <Typography variant="h5" align="center" color="text.secondary" component="p">
+        <Typography variant="h5" sx={mode&&{color:'white'}} align="center" color="text.secondary" component="p">
           Quickly build an effective pricing table for your potential customers with
           this layout. It&apos;s built with default MUI components with little
           customization.
@@ -133,7 +135,7 @@ export default function Premium() {
               sm={tier.title === 'Enterprise' ? 12 : 6}
               md={4}
             >
-              <Card>
+              <Card sx={mode&&{color:'white',background:'black',boxShadow:'0px 0px 8px white'}}>
                 <CardHeader
                   title={tier.title}
                   subheader={tier.subheader}
@@ -142,26 +144,35 @@ export default function Premium() {
                   subheaderTypographyProps={{
                     align: 'center',
                   }}
-                  sx={{
+                  sx={mode?
+                    {
+                      backgroundColor: 'darkslategray',color:'white'
+                    }:{
                     backgroundColor: (theme) =>
                       theme.palette.mode === 'light'
                         ? theme.palette.grey[200]
                         : theme.palette.grey[700],
                   }}
                 />
-                <CardContent>
+                <CardContent >
                   <Box
-                    sx={{
+                    sx={mode?
+                      {
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'baseline',
+                        mb: 2,color:'white'
+                      }:{
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'baseline',
                       mb: 2,
                     }}
                   >
-                    <Typography component="h2" variant="h3" color="text.primary">
+                    <Typography component="h2" sx={mode&&{color:'white'}} variant="h3" color="text.primary">
                       ${tier.price}
                     </Typography>
-                    <Typography variant="h6" color="text.secondary">
+                    <Typography variant="h6" sx={mode&&{color:'white'}} color="text.secondary">
                       /mo
                     </Typography>
                   </Box>
@@ -172,6 +183,7 @@ export default function Premium() {
                         variant="subtitle1"
                         align="center"
                         key={line}
+                        sx={mode&&{color:'white'}}
                       >
                         {line}
                       </Typography>
@@ -179,7 +191,7 @@ export default function Premium() {
                   </ul>
                 </CardContent>
                 <CardActions>
-                  <Button fullWidth variant={tier.buttonVariant}>
+                  <Button sx={mode&&{color:'white'}} fullWidth variant={tier.buttonVariant}>
                     {tier.buttonText}
                   </Button>
                 </CardActions>
@@ -192,22 +204,27 @@ export default function Premium() {
       <Container
         maxWidth="md"
         component="footer"
-        sx={{
+        sx={mode?
+          {
+            borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+            mt: 8,
+            py: [3, 6],background:'black',color:'white',borderRadius:'15px'
+          }:{
           borderTop: (theme) => `1px solid ${theme.palette.divider}`,
           mt: 8,
-          py: [3, 6],
+          py: [3, 6],background:'white',borderRadius:'15px'
         }}
       >
         <Grid container spacing={4} justifyContent="space-evenly">
           {footers.map((footer) => (
             <Grid item xs={6} sm={3} key={footer.title}>
-              <Typography variant="h6" color="text.primary" gutterBottom>
+              <Typography variant="h6" sx={mode&&{color:'white'}} color="text.primary" gutterBottom>
                 {footer.title}
               </Typography>
               <ul>
                 {footer.description.map((item) => (
                   <li key={item}>
-                    <Link href="#" variant="subtitle1" color="text.secondary">
+                    <Link href="#" sx={mode&&{color:'white'}} variant="subtitle1" color="text.secondary">
                       {item}
                     </Link>
                   </li>

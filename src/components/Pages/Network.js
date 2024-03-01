@@ -17,7 +17,7 @@ import { MenuItem as BaseMenuItem, menuItemClasses } from '@mui/base/MenuItem';
 export default function Network() {
   const myData = localStorage.getItem('userData')
   const myId = JSON.parse(myData)._id;
-  const { mode, setGetId } = useContext(Context);
+  const { mode } = useContext(Context);
   const userData = JSON.parse(localStorage.getItem("userData"))
   const [groups, setGroups] = useState([]);
 

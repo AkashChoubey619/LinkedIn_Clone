@@ -3,7 +3,7 @@ import Container from '@mui/material/Container';
 import './Style.css'
 import { useNavigate } from 'react-router-dom';
 import Context from '../ContextApi/MainContext';
-import { Grid, Typography, useMediaQuery } from '@mui/material';
+import { Box, Grid, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 // import LoginHead from './LoginHead';
@@ -110,9 +110,11 @@ export default function LoginMain() {
                             </form>
                         </div>
                         </Grid>
-                        {isMdScreen&&(<Grid item xs={false} md={6}>
+                        {isMdScreen&&(<Grid item xs={false} md={6}sx={{display:'flex',alignItems:'center'}}>
+                            <Box >
                             <img src="https://static.licdn.com/aero-v1/sc/h/dxf91zhqd2z6b0bwg85ktm5s4" alt="LinkedIn Logo"
                             style={{ width: '100%', height: 'auto' }} />
+                            </Box>
                         </Grid>)}
                     </Grid>
             </Container>

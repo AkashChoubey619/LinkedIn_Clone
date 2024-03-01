@@ -13,6 +13,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import Nav from '../Header/Navigation';
+import Context from '../ContextApi/MainContext';
 
 function Copyright(props) {
     return (
@@ -38,6 +39,7 @@ export default function UpdatePassword() {
     const [newPass, setNewPass] = React.useState('');
     const [message, setMessage] = React.useState('')
     const token = localStorage.getItem("token");
+    const { mode } = React.useContext(Context)
     const navigate=useNavigate();
 
     const handleSubmit = (event) => {
@@ -75,7 +77,8 @@ export default function UpdatePassword() {
         <Nav/>
         
         <ThemeProvider theme={defaultTheme}>
-            <Container sx={{ bgcolor: 'white', borderRadius: '6px', mb: '5px' }} component="main" maxWidth="xs">
+            <Container sx={mode?{ bgcolor: 'black',color:'white', borderRadius: '6px', mb: '5px' }
+            :{ bgcolor: 'white', borderRadius: '6px', mb: '5px' }} component="main" maxWidth="xs">
                 <Box
                     sx={{
                         marginTop: 8,
@@ -103,6 +106,8 @@ export default function UpdatePassword() {
                                     autoFocus
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
+                                    InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -115,6 +120,8 @@ export default function UpdatePassword() {
                                     autoComplete="email"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
+                                    InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -126,6 +133,8 @@ export default function UpdatePassword() {
                                     name="currentPassword"
                                     value={currPass}
                                     onChange={(e) => setCurrPass(e.target.value)}
+                                    InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -139,6 +148,8 @@ export default function UpdatePassword() {
                                     autoComplete="new-password"
                                     value={newPass}
                                     onChange={(e) => setNewPass(e.target.value)}
+                                    InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 {
                                 message.length !==0?
@@ -147,7 +158,7 @@ export default function UpdatePassword() {
                             <Grid item xs={12}>
 
                                 <FormControlLabel
-                                    control={<Checkbox required value="allowExtraEmails" color="primary" />}
+                                    control={<Checkbox required value="allowExtraEmails" sx={mode&&{color:'white'}} color="primary" />}
                                     label="I want to receive inspiration, marketing promotions and updates via email."
                                 />
                             </Grid>
@@ -156,7 +167,7 @@ export default function UpdatePassword() {
                             type="submit"
                             fullWidth
                             variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
+                            sx={mode?{ mt: 3, mb: 2,background:'#452c2c' }:{ mt: 3, mb: 2 }}
                         >
                             Sign Up
                         </Button>

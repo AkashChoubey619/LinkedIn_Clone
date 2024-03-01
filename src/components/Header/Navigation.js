@@ -19,7 +19,7 @@ import Stack from '@mui/material/Stack';
 import SearchIcon from '@mui/icons-material/Search';
 import Divider from '@mui/material/Divider';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useTheme,createTheme } from '@mui/material/styles';
+import { useTheme, createTheme } from '@mui/material/styles';
 import Context from '../ContextApi/MainContext';
 
 
@@ -30,14 +30,15 @@ export default function Nav() {
   const userData = JSON.parse(localStorage.getItem("userData"))
   // const token = localStorage.getItem("token");
   const color = document.querySelector('body')
-  const customTheme= createTheme({
+  const customTheme = createTheme({
     breakpoints: {
       values: {
         min: 450,
-      }}
-    })
+      }
+    }
+  })
   const theme = useTheme();
-  
+
   const isXsScreen = useMediaQuery(customTheme.breakpoints.down('min'));
   const isMdScreen = useMediaQuery(theme.breakpoints.up('md'));
   const isSmScreen = useMediaQuery(theme.breakpoints.up('sm'));
@@ -115,11 +116,11 @@ export default function Nav() {
           <Box display="flex" direction="row" justifyContent="space-between">
             {/* left section */}
             <Stack display="flex" direction="row" alignItems="center">
-              
+
               <div >
                 <Link to='/home'><LinkedInIcon sx={{ width: "4rem", height: "45px", color: "#0a66c2" }} /></Link>
-                </div>
-                
+              </div>
+
               <Box className='search'>
                 <input type='text' id='search' value={search} onChange={(e) => setSearch(e.target.value)}
                   placeholder='Search' /><SearchIcon onClick={handelSearch} />
@@ -130,40 +131,40 @@ export default function Nav() {
             <Box >
               {/* icon */}
 
-              <Stack direction="row" alignItems='center'  spacing={2} m={0.8}>
-                {isSmScreen&&(
-                <Stack direction="row" alignItems='center' spacing={2} m={0.8}>
-                  <div >
-                    <NavLink to='/home' className={mode ? 'navIcon' : 'icon'} ><HomeIcon />
+              <Stack direction="row" alignItems='center' spacing={2} m={0.8}>
+                {isSmScreen && (
+                  <Stack direction="row" alignItems='center' spacing={2} m={0.8}>
+                    <div >
+                      <NavLink to='/home' className={mode ? 'navIcon' : 'icon'} ><HomeIcon sx={{ fontSize: '26px' }} />
+                        {isMdScreen && (
+                          <div>Home</div>
+                        )}
+                      </NavLink></div>
+                    <div ><Link to='/network' className={mode ? 'navIcon' : 'icon'}><PeopleIcon sx={{ fontSize: '26px' }} />
                       {isMdScreen && (
-                        <div>Home</div>
+                        <div>My Network</div>
                       )}
-                    </NavLink></div>
-                  <div ><Link to='/network' className={mode ? 'navIcon' : 'icon'}><PeopleIcon />
-                    {isMdScreen && (
-                      <div>My Network</div>
-                    )}
-                  </Link></div>
-                  <div ><Link to='/message' className={mode ? 'navIcon' : 'icon'}><MessageIcon />
-                    {isMdScreen && (
-                      <div>Message</div>
-                    )}
-                  </Link></div>
-                  <div ><Link to='/jobs' className={mode ? 'navIcon' : 'icon'}><WorkIcon />
-                    {isMdScreen && (
-                      <div>Jobs</div>
-                    )}
-                  </Link></div>
-                  <div ><Link to='/notify' className={mode ? 'navIcon' : 'icon'}><NotificationsIcon />
-                    {isMdScreen && (
-                      <div>Notifications</div>
-                    )}
-                  </Link>
-                  </div>
-                </Stack>)}
+                    </Link></div>
+                    <div ><Link to='/message' className={mode ? 'navIcon' : 'icon'}><MessageIcon sx={{ fontSize: '26px' }} />
+                      {isMdScreen && (
+                        <div>Message</div>
+                      )}
+                    </Link></div>
+                    <div ><Link to='/jobs' className={mode ? 'navIcon' : 'icon'}><WorkIcon sx={{ fontSize: '26px' }} />
+                      {isMdScreen && (
+                        <div>Jobs</div>
+                      )}
+                    </Link></div>
+                    <div ><Link to='/notify' className={mode ? 'navIcon' : 'icon'}><NotificationsIcon sx={{ fontSize: '26px' }} />
+                      {isMdScreen && (
+                        <div>Notifications</div>
+                      )}
+                    </Link>
+                    </div>
+                  </Stack>)}
                 <Divider orientation="vertical" flexItem />
                 <div className='icon meIcon'>
-                {userData&&<Avatar src={userData.profileImage} sx={{ width: 25, height: 25, ml: '-7px' }}>{userData.name.toUpperCase().charAt(0)}</Avatar>}
+                  {userData && <Avatar src={userData.profileImage} sx={{ width: 25, height: 25, ml: '-7px' }}>{userData.name.toUpperCase().charAt(0)}</Avatar>}
                   <div id='profile'>
                     <Dropdown>
 
@@ -175,7 +176,7 @@ export default function Nav() {
                       <Menu slots={{ listbox: Listbox }} >
                         <div id='menuProfileIcon' className={mode ? 'mode' : ''}>
 
-                          {userData&&<Avatar src={userData.profileImage} sx={{ width: 28, height: 28, fontSize: '12px' }}>
+                          {userData && <Avatar src={userData.profileImage} sx={{ width: 28, height: 28, fontSize: '12px' }}>
                             {userData.name.toUpperCase().charAt(0)}
                           </Avatar>}
                           <h3>
@@ -192,7 +193,7 @@ export default function Nav() {
                         <MenuItem><Link className='menuText' to='/updatePassword'>Update password</Link></MenuItem>
                         <MenuItem><Link className='menuText' to='/notAvailable'>Help</Link></MenuItem>
                         <MenuItem><Link className='menuText' to='/notAvailable'>Language</Link></MenuItem>
-                        
+
                         <MenuItem className='extraMsg'><Link className='menuText extraMsg' to='/network'>Network</Link></MenuItem>
                         <MenuItem className='extraMsg'><Link className='menuText extraMsg' to='/message'>Message</Link></MenuItem>
                         <MenuItem className='extraMsg'><Link className='menuText extraMsg' to='/jobs'>Jobs</Link></MenuItem>

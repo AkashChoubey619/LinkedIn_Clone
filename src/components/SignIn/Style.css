@@ -23,7 +23,7 @@
     justify-content: space-between;
 }
 #login-title{
-    font-size: 30px;
+    font-size: 35px;
     font-weight: 700;
     color: #0a66c2;
 }
@@ -48,6 +48,7 @@
     color: #797474;
     padding: 15px;
     border-radius: 30px;
+    text-transform: none;
     cursor: pointer;
     font-size: 16px;
 }
@@ -147,4 +148,31 @@ object-fit: cover;
     border: none;
     background: white;
     cursor: pointer;
+}
+.navIcon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-left: 5px;
+    transition: all ease 0.7s;
+}
+.navIcon:hover{
+    color: white !important;
+    
+}
+.icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-left: 5px;
+    padding-inline: 13px;
+    transition: all ease 0.7s;
+}
+.icon:hover{
+    color: grey;
+}
+.fontIcon{
+    font-weight: 100;
 }

@@ -52,7 +52,7 @@ export default function SignupMain() {
     const style={visible:{ visibility:'visible',transition: 'all ease 1s'},hide:{ visibility:'hidden'}}
     return (
         <>
-            <Container >
+            <Container mb={6} >
                 <div id='alert-container'>
                     <div style={alterVisible?style.visible:style.hide} id='alert'>
                     < Alert id='alertSignup' severity="error"></Alert>

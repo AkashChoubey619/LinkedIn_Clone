@@ -3,15 +3,19 @@ import { LeftSearchData } from './Store'
 import { Avatar, Box, Typography } from '@mui/material'
 import ThreeDotsIcon from '@mui/icons-material/MoreHoriz';
 import Tooltip from '@mui/material/Tooltip';
+import Context from '../ContextApi/MainContext';
 
 
 function LeftSearchCard() {
+    const {mode}=React.useContext(Context);
     return (
         <section style={{ position: 'static', top: '10%' }}>
             {
                 LeftSearchData.map((item, index) => {
                     return (
-                        <Box key={index} borderRadius={2} mb={1} p={2} bgcolor={'white'} width={'260px'}>
+                        <Box key={index} borderRadius={2} mb={1}
+                         sx={mode&&{background:'black',color:'white',boxShadow:'0px 0px 4px lightgrey'}} 
+                          p={2} bgcolor={'white'} width={'260px'}>
                             <div className='head-details card'>
                                 <div className='companies-Info'>
                                 <Avatar src={item.image}>a</Avatar>

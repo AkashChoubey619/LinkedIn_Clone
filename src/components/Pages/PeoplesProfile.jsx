@@ -36,6 +36,7 @@ const defaultTheme = createTheme();
 export default function MyProfile() {
   const  getId  = localStorage.getItem('getId');
   const [userData, setUserData] = React.useState([])
+  const {mode}=useContext(Context);
   const theme = useTheme();
   const isMdScreen = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -110,10 +111,10 @@ export default function MyProfile() {
     };
 
     return (
-      <Paper elevation={3} sx={{ p: 2, borderRadius: '8px' }}>
+      <Paper elevation={3} sx={mode?{ p: 2, borderRadius: '8px',background:'black',color:'white',boxShadow:"0px 0px 4px white"  }:{ p: 2, borderRadius: '8px' }}>
         <Avatar></Avatar>
         <Typography variant="h6">{suggestion.name}</Typography>
-        <Typography variant="body1" color="textSecondary">
+        <Typography variant="body1" sx={mode&&{color:'white'}} color="textSecondary">
           {suggestion.occupation}
         </Typography>
         <Button
@@ -144,21 +145,22 @@ export default function MyProfile() {
 
   const SkillsSection = ({ skills }) => {
     const listItemStyle = {
-      backgroundColor: '#ffffff',
+      backgroundColor: mode?'darkslategray':'#ffffff',
       borderRadius: '4px',
       marginBottom: '8px',
-      boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+      boxShadow: mode?'0px 0px 4 white':'0px 2px 4px rgba(0, 0, 0, 0.1)',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
-      padding: '8px',
+      padding: '8px',color: mode&& 'white'
     };
 
     return (
 
       <Stack direction={'row'} flexWrap={'wrap'}>
         {skills.map((skill, index) => (
-          <Box sx={{ p: '10px', bgcolor: 'lightpink', color: 'grey', margin: '8px' }} key={index} style={listItemStyle}>
+          <Box sx={mode?{ p: '10px', bgcolor: 'lightpink', color: 'grey', margin: '8px',boxShadow:"0px 0px 4px white" }
+          :{ p: '10px', bgcolor: 'lightpink', color: 'grey', margin: '8px' }} key={index} style={listItemStyle}>
             <Box sx={{ padding: '3px', fontWeight: 700 }} >{skill}</Box>
           </Box>
         ))}
@@ -171,7 +173,8 @@ export default function MyProfile() {
     return (
       <>
         {address && address.map((address, index) => (
-          <Paper key={index} sx={{ mb: 2, p: 2, boxShadow: '0px 0px 5px grey' }}>
+          <Paper key={index} sx={mode?{ mb: 2, p: 2, boxShadow: '0px 0px 5px white',color:'white',background:'darkslategray' }:
+          { mb: 2, p: 2, boxShadow: '0px 0px 5px grey' }}>
             <Typography variant="h6">Address-</Typography>
             <Typography variant="body1"><strong>Street:</strong> {address.street}</Typography>
             <Typography variant="body1"><strong>City:</strong> {address.city}</Typography>
@@ -201,7 +204,8 @@ export default function MyProfile() {
 
               <Stack spacing={3}>
             <Box >
-              <Box sx={{ bgcolor: 'white', borderRadius: '8px', mb: '15px' }}>
+              <Box sx={mode?{ bgcolor: 'darkslategray',color:'white', borderRadius: '8px', mb: '15px',boxShadow:'0px 0px 3px lightgrey' }
+              :{ bgcolor: 'white', borderRadius: '8px', mb: '15px' }}>
                 <div >
                   <img src='https://static.licdn.com/aero-v1/sc/h/55k1z8997gh8dwtihm11aajyq' alt='banner' />
                 </div>
@@ -223,7 +227,7 @@ export default function MyProfile() {
                       {userData.name}
                     </Typography>
 
-                    <Typography sx={{ fontWeight: 700, color: "grey" }} variant={'p'}>{userData.email}</Typography>
+                    <Typography sx={mode?{ fontWeight: 700, color: "white" }:{ fontWeight: 700, color: "grey" }} variant={'p'}>{userData.email}</Typography>
                   </Box>
                   <Stack alignItems={{ xs: 'flex-start', md: 'center' }}
                        justifyContent={{ xs: 'flex-start', sm: 'space-between' }}
@@ -234,12 +238,12 @@ export default function MyProfile() {
                         {userData.isFollowed? <Button
                           onClick={handleClickFollow}
                           variant='outlined'
-                          sx={{ borderRadius: '22px' }}>
+                          sx={mode?{ borderRadius: '22px',color:'white' }:{ borderRadius: '22px' }}>
                           Following
                         </Button> :<Button
                           onClick={handleClickFollow}
                           variant='contained'
-                          sx={{ borderRadius: '22px' }}>
+                          sx={mode?{ borderRadius: '22px',color:'white' }:{ borderRadius: '22px' }}>
                           Follow
                         </Button>}
                         
@@ -251,7 +255,7 @@ export default function MyProfile() {
                           id="demo-customized-button"
                           variant="outlined"
                           disableElevation
-                          sx={{ borderRadius: '20px' }}
+                          sx={mode?{ borderRadius: '20px',color:'white' }:{ borderRadius: '20px' }}
                         >
                           more
                         </Button>
@@ -259,7 +263,7 @@ export default function MyProfile() {
                     </Stack>
                     <Box mx={3} mt={{xs:'12px',md:0}} style={{marginBlock:'14px'}}>
                       {userData.phone ? <Box
-                        sx={{ display: 'flex', alignItems: 'center', bgcolor: '#f3f6f9', px: '8px', borderRadius: '6px' }}>
+                        sx={mode?{ display: 'flex', alignItems: 'center', bgcolor: 'black', px: '8px', borderRadius: '6px' }:{ display: 'flex', alignItems: 'center', bgcolor: '#f3f6f9', px: '8px', borderRadius: '6px' }}>
                         <Typography sx={{ fontWeight: 700 }}
                           variant="h6">
                           Contact-
@@ -286,8 +290,8 @@ export default function MyProfile() {
 
               {/* <================suggestion===================> */}
 
-              <Box className='suggestion' style={{ marginBottom: '20px' }}>
-                <Paper style={{ padding: 20 }}>
+              <Box className='suggestion' style={mode?{ marginBottom: '20px',boxShadow:'0px 0px 4px white',background:'black' }:{ marginBottom: '20px' }}>
+                <Paper style={mode?{ padding: 20 ,background:'black',color:'white'}:{ padding: 20 }}>
                   <Typography variant="h5" component={'h4'} gutterBottom>
                     Suggestions for you
                   </Typography>
@@ -304,17 +308,18 @@ export default function MyProfile() {
 
               {/* <================Experience===================> */}
 
-              <Box className='experience' style={{ marginBottom: '20px' }}>
-                <Paper elevation={3} className="experience-section" style={{ padding: '20px', borderRadius: '8px' }}>
+              <Box className='experience' style={mode?{marginBottom:'20px',boxShadow:'0px 0px 4px white', borderRadius: '8px' }:{ marginBottom: '20px' }}>
+                <Paper elevation={3} className="experience-section" style={mode?{ padding: '20px', borderRadius: '8px',background:'black',color:'white',boxShadow:'0px 0px 4px white' }:
+                { padding: '20px', borderRadius: '8px' }}>
                   <Stack direction="row" alignItems="center" justifyContent={'space-between'} >
-                    <Typography sx={{ textDecoration: 'underline' }} variant="h5" gutterBottom>
+                    <Typography  variant="h5" gutterBottom>
                       Experience</Typography>
                   </Stack>
                   <Grid container spacing={2}>
                     {userData.workExperience ? userData.workExperience.map((experience, index) => (
                       <Grid item xs={12} key={index}>
-                        <Paper elevation={1} style={{ padding: '15px', marginBottom: '15px' }}>
-                          <Paper style={{ background: '#f9f9f9', padding: '9px', borderRadius: '5px' }}>
+                        <Paper elevation={1} style={mode?{ padding: '15px', marginBottom: '15px',background:'darkslategray',color:'white',boxShadow:'0px 0px 4px white' }:{ padding: '15px', marginBottom: '15px' }}>
+                          <Paper style={mode?{background:'#0e3737',color:'white',padding: '9px', borderRadius: '5px' }:{ background: '#f9f9f9', padding: '9px', borderRadius: '5px' }}>
                             <Typography variant="h5">{experience.designation}</Typography>
                             <Typography variant="body1">{experience.companyName}</Typography>
                             <Typography variant="body1">{experience.location}</Typography>
@@ -339,15 +344,16 @@ export default function MyProfile() {
 
               {/* <================Education===================> */}
 
-              <Box className='eduction' style={{ marginBottom: '20px' }}>
-                <Paper style={{ padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
+              <Box className='eduction' style={mode?{marginBottom:'20px',boxShadow:'0px 0px 4px white', borderRadius: '8px'}:{ marginBottom: '20px' }}>
+                <Paper style={mode?{padding: '20px', marginBottom: '20px', borderRadius: '8px' ,background:'black',color:'white',boxShadow:'0px 0px 4px white'}:{ padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
                   <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
-                    <Typography sx={{ textDecoration: 'underline' }} variant="h5" gutterBottom>Education</Typography>
+                    <Typography variant="h5" gutterBottom>Education</Typography>
                   </Stack>
                   <Grid container spacing={2}>
                     {userData.education ? userData.education.map((education, index) => (
                       <Grid item xs={12} key={index}>
-                        <Paper style={{ padding: '15px', backgroundColor: '#f9f9f9', borderRadius: '8px', boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.05)' }}>
+                        <Paper style={mode?{ padding: '15px', backgroundColor: 'darkslategray',color:'white', borderRadius: '8px', boxShadow: '0px 0px 4px white'}:
+                        { padding: '15px', backgroundColor: '#f9f9f9', borderRadius: '8px', boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.05)' }}>
                           <Typography variant="h5" gutterBottom>Degree- {education.degree}</Typography>
                           <Typography variant="subtitle1" gutterBottom>
                             College- {education.schoolName}</Typography>
@@ -367,10 +373,11 @@ export default function MyProfile() {
 
               {/* <================SkillsSkills===================> */}
 
-              <Box className='skills'>
-                <Paper style={{ padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
+              <Box className='skills' sx={mode&&{background:'black',color:'white',boxShadow:'0px 0px 4px white', borderRadius: '8px'}}>
+                <Paper style={mode?{ padding: '20px', marginBottom: '20px', borderRadius: '8px',background:'black',color:'white', }:
+                { padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
                   <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
-                    <Typography sx={{ textDecoration: 'underline' }} variant="h5" gutterBottom>Skills</Typography>
+                    <Typography  variant="h5" gutterBottom>Skills</Typography>
                   </Stack>
 
                   {userData.skills ? <SkillsSection skills={userData.skills} /> :
@@ -381,10 +388,11 @@ export default function MyProfile() {
               </Box>
 
               {/* <================Address===================> */}
-              <Box className='address'>
-                <Paper elevation={3} className="experience-section" style={{ padding: '20px', borderRadius: '8px',marginBottom:'20px' }}>
+              <Box className='address' sx={mode&&{background:'black',color:'white',boxShadow:'0px 0px 4px white', borderRadius: '8px'}}>
+                <Paper elevation={3} className="experience-section"
+                 style={mode?{ background:'black',color:'white',padding: '20px', borderRadius: '8px',marginBottom:'20px' }:{ padding: '20px', borderRadius: '8px',marginBottom:'20px' }}>
                   <Stack direction="row" mb={2} alignItems={'center'} justifyContent={'space-between'}>
-                    <Typography sx={{ textDecoration: 'underline' }} variant="h5" gutterBottom>
+                    <Typography variant="h5" gutterBottom>
                       Address Section
                     </Typography>
 
@@ -396,21 +404,22 @@ export default function MyProfile() {
               </Box>
 
               {/* <================Payment===================> */}
-              <Box className='address'>
-              <Paper elevation={3} className="experience-section" style={{ padding: '20px', borderRadius: '8px',marginBottom:'20px' }}>
+              <Box className='address' sx={mode&&{background:'black',color:'white',boxShadow:'0px 0px 4px white', borderRadius: '8px'}}>
+              <Paper elevation={3} className="experience-section" 
+              style={mode?{background:'black',color:'white', padding: '20px', borderRadius: '8px',marginBottom:'20px' }:{ padding: '20px', borderRadius: '8px',marginBottom:'20px' }}>
                       {userData.paymentDetails &&
                         userData.paymentDetails.map((payment) =>
-                        (<Paper sx={{ mb: 2, p: 2, boxShadow: '0px 0px 5px grey' }} key={payment._id}>
+                        (<Paper sx={mode?{ mb: 2, p: 2, boxShadow: '0px 0px 5px white',background:'darkslategray',color:'white' }:{ mb: 2, p: 2, boxShadow: '0px 0px 5px grey' }} key={payment._id}>
                             <Typography variant="h5" component="h2">
                               Payment Information
                             </Typography>
-                            <Typography variant="body2" color="textSecondary" gutterBottom>
+                            <Typography variant="body2" sx={mode&&{color:'white'}} color="textSecondary" gutterBottom>
                               Card Number: {payment.cardNumber}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary" gutterBottom>
+                            <Typography variant="body2" sx={mode&&{color:'white'}} color="textSecondary" gutterBottom>
                               CVV: *{payment.cvv}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary" gutterBottom>
+                            <Typography variant="body2" sx={mode&&{color:'white'}} color="textSecondary" gutterBottom>
                               Expiration Date: {payment.expirationDate}
                             </Typography>
                         </Paper>)
@@ -432,7 +441,12 @@ export default function MyProfile() {
         <Container
           maxWidth="md"
           component="footer"
-          sx={{
+          sx={mode?
+            {
+              borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+              mt: 8,
+              py: [3, 6], bgcolor: 'black', borderRadius: '0px 28px'
+            }:{
             borderTop: (theme) => `1px solid ${theme.palette.divider}`,
             mt: 8,
             py: [3, 6], bgcolor: 'white', borderRadius: '0px 28px'
@@ -441,13 +455,13 @@ export default function MyProfile() {
           <Grid container spacing={4} justifyContent="space-evenly">
             {footers.map((footer) => (
               <Grid item xs={6} sm={3} key={footer.title}>
-                <Typography variant="h6" color="text.primary" gutterBottom>
+                <Typography variant="h6" sx={mode&&{color:'white'}} color="text.primary" gutterBottom>
                   {footer.title}
                 </Typography>
                 <ul>
                   {footer.description.map((item) => (
                     <li key={item}>
-                      <Link href="#" variant="subtitle1" color="text.secondary">
+                      <Link href="#" sx={mode&&{color:'white'}} variant="subtitle1" color="text.secondary">
                         {item}
                       </Link>
                     </li>
@@ -456,7 +470,7 @@ export default function MyProfile() {
               </Grid>
             ))}
           </Grid>
-          <Copyright sx={{ mt: 5 }} />
+          <Copyright sx={mode?{mt:5,color:'white'}:{ mt: 5 }} />
         </Container>
         {/* End footer */}
       </ThemeProvider >

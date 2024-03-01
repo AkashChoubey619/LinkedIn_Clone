@@ -14,6 +14,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import LeftSearchCard from './LeftSearchCard';
 import PropTypes from 'prop-types';
+import Context from '../ContextApi/MainContext';
 import { css } from '@mui/system';
 import { Modal as BaseModal } from '@mui/base/Modal';
 import Nav from '../Header/Navigation';
@@ -44,6 +45,7 @@ export default function MyProfile() {
   const myData = localStorage.getItem('userData');
   const id = JSON.parse(myData)._id
   const [previewUrl, setPreviewUrl] = React.useState('');
+  const {mode}=React.useContext(Context);
   const theme = useTheme();
   const isMdScreen = useMediaQuery(theme.breakpoints.up('md'));
   const [userData, setUserData] = React.useState([])
@@ -418,10 +420,10 @@ export default function MyProfile() {
     };
 
     return (
-      <Paper elevation={3} sx={{ p: 2, borderRadius: '8px' }}>
+      <Paper elevation={3} sx={mode?{background:'darkslategray',color:'white',p: 2, borderRadius: '8px' }:{ p: 2, borderRadius: '8px' }}>
         <Avatar></Avatar>
         <Typography variant="h6">{suggestion.name}</Typography>
-        <Typography variant="body1" color="textSecondary">
+        <Typography sx={mode&&{color:'whiite'}} variant="body1" color="textSecondary">
           {suggestion.occupation}
         </Typography>
         <Button
@@ -453,10 +455,10 @@ export default function MyProfile() {
   const SkillsSection = ({ skills }) => {
     const Skills = skills[0].split(',')
     const listItemStyle = {
-      backgroundColor: '#ffffff',
+      backgroundColor: mode?'darkslategray':'#ffffff',
       borderRadius: '4px',
       marginBottom: '8px',
-      boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+      boxShadow: mode?'0px 0px 4px lightgrey': '0px 2px 4px rgba(0, 0, 0, 0.1)',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -467,7 +469,8 @@ export default function MyProfile() {
 
       <Stack direction={'row'} flexWrap={'wrap'}>
         {Skills.map((skill, index) => (
-          <Box sx={{ p: '10px', bgcolor: 'lightpink', color: 'grey', margin: '8px' }} key={index} style={listItemStyle}>
+          <Box sx={mode?{ p: '10px', bgcolor: 'darkslategray', color: 'white', margin: '8px' }:{ p: '10px', bgcolor: 'lightpink', color: 'grey', margin: '8px' }}
+           key={index} style={listItemStyle}>
             <Box sx={{ padding: '3px', fontWeight: 700 }} >{skill}</Box>
           </Box>
         ))}
@@ -480,7 +483,8 @@ export default function MyProfile() {
     return (
       <>
         {address && address.map((address, index) => (
-          <Paper key={index} sx={{ mb: 2, p: 2, boxShadow: '0px 0px 5px grey' }}>
+          <Paper key={index} sx={mode?{ mb: 2, p: 2, boxShadow: '0px 0px 5px lightgrey',color:'white',background:'darkslategray' }
+          :{ mb: 2, p: 2, boxShadow: '0px 0px 5px grey' }}>
             <Typography variant="h6">Address-</Typography>
             <Typography variant="body1"><strong>Street:</strong> {address.street}</Typography>
             <Typography variant="body1"><strong>City:</strong> {address.city}</Typography>
@@ -506,13 +510,13 @@ export default function MyProfile() {
             <Grid item xs={12} md={8}>
               <Stack spacing={3}>
                 <Box >
-                  <Box sx={{ bgcolor: 'white', borderRadius: '8px', mb: '15px' }}>
+                  <Box sx={mode?{ bgcolor: 'black', borderRadius: '8px', mb: '15px',color:'white' }:{ bgcolor: 'white', borderRadius: '8px', mb: '15px' }}>
                     <div >
                       <img src='https://static.licdn.com/aero-v1/sc/h/55k1z8997gh8dwtihm11aajyq' alt='banner' />
                     </div>
                     <Box p={'19px'} sx={{ display: 'grid', placeItems: 'left' }} >
                       <Box sx={{ ml: '15px' }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Box sx={mode?{ display: 'flex', alignItems: 'center',bgcolor:'black',color:'white' }:{ display: 'flex', alignItems: 'center' }}>
                           <Avatar alt="Remy Sharp"
                             src={userData.profileImage}
                             sx={{
@@ -521,7 +525,9 @@ export default function MyProfile() {
                               mt: { xs: '-50px', sm: '-75px', md: '-100px' }, bgcolor: '#f3f6f9'
                             }}>
                             A</Avatar>
-                          <TriggerButton sx={{ ml: '-28px', zIndex: '20', borderRadius: '50%' }} type="button" onClick={handleOpenAddImg}>
+                          <TriggerButton sx={mode?{ ml: '-28px', zIndex: '20', borderRadius: '50%',background:'darkslategray',color:'white' }:
+                          { ml: '-28px', zIndex: '20', borderRadius: '50%' }} 
+                          type="button" onClick={handleOpenAddImg}>
                             <AddImage />
                           </TriggerButton>
 
@@ -532,8 +538,9 @@ export default function MyProfile() {
                             onClose={handleCloseAddImg}
                             slots={{ backdrop: StyledBackdrop }}
                           >
-                            <ModalContent sx={{ width: 400 }}>
-                              <Paper style={{ padding: '16px', marginBottom: '16px' }}>
+                            <ModalContent sx={mode?{ width: 400,background:'black',color:'white' }:{ width: 400 }}>
+                              <Paper style={mode?{ padding: '16px', marginBottom: '16px',background:'black',color:'white',boxShadow:'0px 0px 4px grey' }
+                              :{ padding: '16px', marginBottom: '16px' }}>
                                 <Typography variant="h6">Add Profile Image</Typography>
                                 <form onSubmit={handleSubmitAddImg}>
                                   <input
@@ -561,7 +568,7 @@ export default function MyProfile() {
                                     color="primary" >
                                     Save
                                   </Button>
-                                  <Button sx={{ m: 1, height: '30px' }}
+                                  <Button sx={mode?{ m: 1, height: '30px',color:'white' }:{ m: 1, height: '30px' }}
                                     onClick={() => {
                                       setOpenAddImg(false)
                                       setPreviewUrl('')
@@ -576,17 +583,19 @@ export default function MyProfile() {
                         </Box>
                         {isName ?
                           <form onSubmit={handleEditName}>
-                            <input type='text' name='name' style={{ padding: '5px', borderRadius: '12px', border: '1px solid grey' }}
+                            <input type='text' name='name' style={mode?{ padding: '5px', borderRadius: '12px',background:'darkslategray',color:'white', border: '1px solid grey' }
+                            :{ padding: '5px', borderRadius: '12px', border: '1px solid grey' }}
                               id='myName' value={myName} placeholder='Enter name'
                               onChange={(e) => setMyName(e.target.value)} required
                             />
                             <Button sx={{ marginInline: 2, borderRadius: '14px' }} variant='contained' type='submit'>Save</Button>
-                            <Button sx={{ borderRadius: '14px' }} variant='outlined' onClick={() => { setNameId('') }}>Cancel</Button>
+                            <Button sx={mode?{ borderRadius: '14px',color:'white' }:{ borderRadius: '14px' }} 
+                            variant='outlined' onClick={() => { setNameId('') }}>Cancel</Button>
                           </form> :
                           <Typography my={1} sx={{ ml: '8px' }} variant={'h5'}>
                             {userData.name}
                             <Button onClick={editNameId} sx={{ padding: 0, margin: 0, ml: '20px', mt: '-4px' }}>
-                              <EditIcon /></Button>
+                              <EditIcon sx={mode&&{color:'white'}}/></Button>
                           </Typography>
                         }
 
@@ -619,13 +628,13 @@ export default function MyProfile() {
                               open={open}
                               onClose={handleClose}
                             >
-                              <MenuItem onClick={handleClose} disableRipple>
+                              <MenuItem sx={mode&&{color:'white',background:'black'}} onClick={handleClose} disableRipple>
                                 {/* <Typography  variant='h6'>Hiring</Typography> */}
                                 <Typography variant='p'>
                                   Share that you’re hiring and attract qualified candidates
                                 </Typography>
                               </MenuItem>
-                              <MenuItem onClick={handleClose} disableRipple>
+                              <MenuItem sx={mode&&{color:'white',background:'black'}} onClick={handleClose} disableRipple>
                                 {/* <Typography variant='h5'>Providing Services</Typography> */}
                                 <Typography variant='p'>
                                   Showcase services you offer so new clients can discover you
@@ -639,36 +648,40 @@ export default function MyProfile() {
                               id="demo-customized-button"
                               variant="outlined"
                               disableElevation
-                              sx={{ borderRadius: '20px' }}
+                              sx={mode?{borderRadius:'20px',color:'white'}:{ borderRadius: '20px' }}
                             >
                               more
                             </Button>
                           </div>
                         </Stack>
-                        <Box mx={3} mt={{xs:'16px',md:0}} style={{marginBlock:'14px'}}>
+                        <Box mx={3} mt={{xs:'16px',md:0}} style={{marginBlock:'16px'}}>
                           {userData.phone ? <Box
-                            sx={{ display: 'flex', alignItems: 'center', bgcolor: '#f3f6f9', px: '8px', borderRadius: '6px' }}>
-                            <Typography sx={{ fontWeight: 700 }}
+                            sx={mode?{ display: 'flex', alignItems: 'center', bgcolor: 'darkslategray', px: '8px', borderRadius: '6px' }:
+                            { display: 'flex', alignItems: 'center', bgcolor: '#f3f6f9', px: '8px', borderRadius: '6px' }}>
+                            <Typography sx={{ fontWeight: 700,mx:'2px',display:'inline' }}
                               variant="h6">
-                              Contact-
+                              Contact- &nbsp;
                               {isPhone ?
-                                <form onSubmit={handleEditPhone}>
-                                  <input type='tel' name='name' maxLength={10}
-                                    style={{ padding: '5px', borderRadius: '12px', border: '1px solid lightgrey' }}
+                                <form style={{display:'inline'}} onSubmit={handleEditPhone}>
+                                  <input type='tel' name='name' minLength={10}
+                                    style={mode?{ padding: '5px',color:'white' ,borderRadius: '12px', border: '1px solid lightgrey',background:'darkslategray' }:
+                                    { padding: '5px', borderRadius: '12px', border: '1px solid lightgrey' }}
                                     id='myName' value={myPhone} placeholder='Enter number'
                                     onChange={(e) => setMyPhone(e.target.value)} required
                                   />
+                                  <Box my={1}>
                                   <Button sx={{ marginInline: 1, borderRadius: '14px' }} variant='contained' type='submit'>Save</Button>
                                   <Button sx={{ borderRadius: '14px' }} variant='outlined' onClick={() => { setPhoneId('') }}>Cancel</Button>
+                                  </Box>
                                 </form>
                                 : (<Typography sx={{ fontWeight: 600, display: 'inline-block' }}
                                   variant="body2" >{userData.phone}
                                   <Button onClick={editPhoneId} sx={{ padding: 0, margin: 0 }}>
-                                    <EditIcon /></Button></Typography>)}
+                                    <EditIcon sx={mode&&{color:'white'}} /></Button></Typography>)}
 
                             </Typography>
                           </Box> : (isPhone ?
-                            <form onSubmit={handleEditPhone}>
+                            <form style={{display:'inline'}} onSubmit={handleEditPhone}>
                               <input type='tel' name='name' maxLength={10}
                                 style={{ padding: '5px', borderRadius: '12px', border: '1px solid lightgrey' }}
                                 id='myName' value={myPhone} placeholder='Enter number'
@@ -678,7 +691,7 @@ export default function MyProfile() {
                               <Button sx={{ borderRadius: '14px' }} variant='outlined' onClick={() => { setPhoneId('') }}>Cancel</Button>
                             </form> :
                             <Button onClick={editPhoneId}>
-                              <AddIcon />Add Contact Number
+                              <AddIcon sx={mode&&{color:'white'}} />Add Contact Number
                             </Button>
                           )
 
@@ -700,9 +713,10 @@ export default function MyProfile() {
 
                   {/* <================suggestion===================> */}
 
-                  <Box className='suggestion' style={{ marginBottom: '20px' }}>
-                    <Paper style={{ padding: 20 }}>
-                      <Typography variant="h5" component={'h4'} gutterBottom>
+                  <Box className='suggestion' style={mode?{ marginBottom: '20px',boxShadow:'0px 0px 4px grey' }
+                  :{ marginBottom: '20px' }}>
+                    <Paper style={mode?{color:'white',background:'black',padding: 20 }:{ padding: 20 }}>
+                      <Typography  variant="h5" component={'h4'} gutterBottom>
                         Suggestions for you
                       </Typography>
                       <Grid container spacing={2}>
@@ -718,14 +732,16 @@ export default function MyProfile() {
 
                   {/* <================Experience===================> */}
 
-                  <Box className='experience' style={{ marginBottom: '20px' }}>
-                    <Paper elevation={3} className="experience-section" style={{ padding: '20px', borderRadius: '8px' }}>
+                  <Box className='experience' style={mode?{ marginBottom: '20px',boxShadow:'0px 0px 4px grey' }:{ marginBottom: '20px' }}>
+                    <Paper elevation={3} className="experience-section"
+                     style={mode?{ padding: '20px', borderRadius: '8px',background:'black',color:'white' }
+                     :{ padding: '20px', borderRadius: '8px' }}>
                       <Stack direction="row" alignItems="center" justifyContent={'space-between'} >
-                        <Typography sx={{ textDecoration: 'underline' }} variant="h5" gutterBottom>
+                        <Typography variant="h5" gutterBottom>
                           Experience</Typography>
 
-                        <TriggerButton type="button" onClick={handleOpenExp}>
-                          {userData.experience ? <EditIcon /> : <AddIcon />}
+                        <TriggerButton sx={{background:'darkslategray'}} type="button" onClick={handleOpenExp}>
+                          {userData.experience ? <EditIcon sx={mode&&{color:'white'}} /> : <AddIcon sx={mode&&{color:'white'}}  />}
                         </TriggerButton>
 
                         <Modal
@@ -735,9 +751,10 @@ export default function MyProfile() {
                           onClose={handleCloseExp}
                           slots={{ backdrop: StyledBackdrop }}
                         >
-                          <ModalContent sx={{ width: 400 }}>
-                            <Paper style={{ padding: '16px', marginBottom: '16px' }}>
-                              <Typography variant="h6">Address Form</Typography>
+                          <ModalContent sx={mode?{ width: 400,background:'black',color:'white' }:{ width: 400 }}>
+                            <Paper style={mode?{ padding: '16px', marginBottom: '16px',color:'white',background:'black',boxShadow:'0px 0px 4px grey' }
+                            :{ padding: '16px', marginBottom: '16px' }}>
+                              <Typography variant="h6">Add Experience</Typography>
                               <form onSubmit={handleSubmitExperience}>
                                 <TextField
                                   required
@@ -747,6 +764,8 @@ export default function MyProfile() {
                                   onChange={handleChangeExperience}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -756,6 +775,8 @@ export default function MyProfile() {
                                   onChange={handleChangeExperience}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -765,6 +786,8 @@ export default function MyProfile() {
                                   onChange={handleChangeExperience}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -774,6 +797,8 @@ export default function MyProfile() {
                                   onChange={handleChangeExperience}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -783,6 +808,8 @@ export default function MyProfile() {
                                   onChange={handleChangeExperience}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -792,6 +819,8 @@ export default function MyProfile() {
                                   onChange={handleChangeExperience}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <Button onClose={handleCloseEdu} type="submit" variant="contained" color="primary">
                                   Submit
@@ -805,7 +834,8 @@ export default function MyProfile() {
                       <Grid container spacing={2}>
                         {userData.experiences ? userData.experiences.map((experience, index) => (
                           <Grid item xs={12} key={index}>
-                            <Paper elevation={1} style={{ padding: '15px', marginBottom: '15px' }}>
+                            <Paper elevation={1} style={mode?{ background:'darkslategray',color:'white',padding: '15px', marginBottom: '15px' }:
+                            { padding: '15px', marginBottom: '15px' }}>
                               <Paper style={{ background: '#f9f9f9', padding: '9px', borderRadius: '5px' }}>
                                 <Typography variant="h5">{experience.designation}</Typography>
                                 <Typography variant="body1">{experience.companyName}</Typography>
@@ -831,12 +861,13 @@ export default function MyProfile() {
 
                   {/* <================Education===================> */}
 
-                  <Box className='eduction' style={{ marginBottom: '20px' }}>
-                    <Paper style={{ padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
+                  <Box className='eduction' style={mode?{ background:'black',boxShadow:'0px 0px 4px grey',borderRadius:'8px', marginBottom: '20px' }:{ marginBottom: '20px' }}>
+                    <Paper style={mode?{ padding: '20px', marginBottom: '20px', borderRadius: '8px',background:'black',color:'white' }:
+                    { padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
                       <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
-                        <Typography sx={{ textDecoration: 'underline' }} variant="h5" gutterBottom>Education</Typography>
-                        <TriggerButton type="button" onClick={handleOpenEdu}>
-                          {userData.education ? <EditIcon /> : <AddIcon />}
+                        <Typography variant="h5" gutterBottom>Education</Typography>
+                        <TriggerButton sx={mode&&{color:'white',background:'darkslategray'}}  type="button" onClick={handleOpenEdu}>
+                          {userData.education ? <EditIcon sx={mode&&{color:'white'}} /> : <AddIcon sx={mode&&{color:'white'}} />}
                         </TriggerButton>
                         <Modal
                           aria-labelledby="unstyled-modal-title"
@@ -845,9 +876,9 @@ export default function MyProfile() {
                           onClose={handleCloseEdu}
                           slots={{ backdrop: StyledBackdrop }}
                         >
-                          <ModalContent sx={{ width: 400 }}>
-                            <Paper style={{ padding: '16px', marginBottom: '16px' }}>
-                              <Typography variant="h6">Address Form</Typography>
+                          <ModalContent sx={mode?{ width: 400,background:'black',color:'white' }:{ width: 400 }}>
+                            <Paper style={mode?{background:'black',color:'white',padding: '16px', marginBottom: '16px'}:{ padding: '16px', marginBottom: '16px' }}>
+                              <Typography variant="h6">Add Education</Typography>
                               <form onSubmit={handleSubmitEducation}>
                                 <TextField
                                   required
@@ -857,6 +888,8 @@ export default function MyProfile() {
                                   onChange={handleChangeEducation}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -866,6 +899,8 @@ export default function MyProfile() {
                                   onChange={handleChangeEducation}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -875,6 +910,8 @@ export default function MyProfile() {
                                   onChange={handleChangeEducation}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -884,6 +921,8 @@ export default function MyProfile() {
                                   onChange={handleChangeEducation}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -893,6 +932,8 @@ export default function MyProfile() {
                                   onChange={handleChangeEducation}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <Button onClose={handleCloseEdu} type="submit" variant="contained" color="primary">
                                   Submit
@@ -905,7 +946,8 @@ export default function MyProfile() {
                       <Grid container spacing={2}>
                         {userData.education ? userData.education.map((education, index) => (
                           <Grid item xs={12} key={index}>
-                            <Paper style={{ padding: '15px', backgroundColor: '#f9f9f9', borderRadius: '8px', boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.05)' }}>
+                            <Paper style={mode?{ padding: '15px',color:'white', background: 'darkslategray', borderRadius: '8px', boxShadow: '0px 0px 5px grey' }:
+                            { padding: '15px', backgroundColor: '#f9f9f9', borderRadius: '8px', boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.05)' }}>
                               <Typography variant="h5" gutterBottom>Degree- {education.degree}</Typography>
                               <Typography variant="subtitle1" gutterBottom>
                                 College- {education.schoolName}</Typography>
@@ -925,30 +967,34 @@ export default function MyProfile() {
 
                   {/* <================SkillsSkills===================> */}
 
-                  <Box className='skills'>
-                    <Paper style={{ padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
+                  <Box className='skills' sx={mode&&{ color:'white',background:'black',boxShadow:'0px 0px 4px grey' }}>
+                    <Paper style={mode?{ padding: '20px', marginBottom: '20px', borderRadius: '8px',background:'black' }
+                    :{ padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
                       <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
-                        <Typography sx={{ textDecoration: 'underline' }} variant="h5" gutterBottom>Skills</Typography>
-                        <Button type="button" sx={{ color: 'black' }} onClick={editSkillId}>
-                          {userData.education ? <EditIcon /> : <AddIcon />}
+                        <Typography sx={mode&&{ color:'white' }} variant="h5" gutterBottom>Skills</Typography>
+                        <Button type="button" sx={mode?{ color: 'white' }:{ color: 'black' }} onClick={editSkillId}>
+                          {userData.skills ? 
+                          <EditIcon sx={mode&&{color:'white',background:'darkslategray',p:'4px',border:'1px solid white',width:'30px',borderRadius:'10px'}} /> 
+                          : <AddIcon sx={mode&&{color:'white',background:'darkslategray',p:'4px',border:'1px solid white',width:'30px',borderRadius:'10px'}} />}
                         </Button>
                       </Stack>
 
                       {userData.skills ? (isSkills ? (
-                        <form onSubmit={handleEditSkills}>
-                          <Typography sx={{ color: 'grey', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700 }} variant='p'>
+                        <form style={mode&&{color:'white'}} onSubmit={handleEditSkills}>
+                          <Typography sx={mode?{color:'white', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700}:{ color: 'grey', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700 }} variant='p'>
                             Enter skills  separated by commas.
                           </Typography>
                           <input type='text' name='skills'
-                            style={{ padding: '8px', borderRadius: '12px', border: '1px solid grey', minWidth: '120px', width: '50%' }}
+                            style={mode?{ padding: '8px', borderRadius: '12px', border: '1px solid grey', minWidth: '120px', width: '50%',background:'darkslategray',color:'white' }
+                            :{ padding: '8px', borderRadius: '12px', border: '1px solid grey', minWidth: '120px', width: '50%' }}
                             id='skills' value={mySkills} placeholder='Add skills'
                             onChange={(e) => setMySkills(e.target.value)} required
                           />
-                          <Button sx={{ marginInline: 2, borderRadius: '14px' }} variant='contained' type='submit'>Save</Button>
-                          <Button sx={{ borderRadius: '14px' }} variant='outlined' onClick={() => { setSkillsId('') }}>Cancel</Button>
+                          <Button sx={mode?{ marginInline: 2, borderRadius: '14px',color:'white' }:{ marginInline: 2, borderRadius: '14px' }} variant='contained' type='submit'>Save</Button>
+                          <Button sx={mode?{ borderRadius: '14px',color:'white' }:{ borderRadius: '14px' }} variant='outlined' onClick={() => { setSkillsId('') }}>Cancel</Button>
                         </form>
                       )
-                        : <SkillsSection skills={userData.skills} />) :
+                        : <SkillsSection  skills={userData.skills} />) :
                         <Typography sx={{ margin: 'auto', my: 2, color: 'grey' }} variant="h5">
                           <i>Add Skills</i></Typography>}
 
@@ -956,14 +1002,15 @@ export default function MyProfile() {
                   </Box>
 
                   {/* <================Address===================> */}
-                  <Box className='address'>
-                    <Paper elevation={3} className="experience-section" style={{ padding: '20px', borderRadius: '8px' }}>
+                  <Box className='address' sx={mode&&{ color:'white',background:'black',boxShadow:'0px 0px 4px grey' }}>
+                    <Paper elevation={3} className="experience-section"
+                     style={mode?{ padding: '20px', borderRadius: '8px' ,background:'black',color:'white'}:{ padding: '20px', borderRadius: '8px' }}>
                       <Stack direction="row" mb={2} alignItems={'center'} justifyContent={'space-between'}>
-                        <Typography sx={{ textDecoration: 'underline' }} variant="h5" gutterBottom>
+                        <Typography sx={mode&&{ color:'white' }} variant="h5" gutterBottom>
                           Address Section
                         </Typography>
-                        <TriggerButton type="button" onClick={handleOpenAdd}>
-                          {userData.address ? <EditIcon /> : <AddIcon />}
+                        <TriggerButton sx={mode&&{ color:'white',background:'darkslategray' }} type="button" onClick={handleOpenAdd}>
+                          {userData.address ? <EditIcon sx={mode&&{ color:'white' }}  /> : <AddIcon sx={mode&&{ color:'white' }} />}
                         </TriggerButton>
                         <Modal
                           aria-labelledby="unstyled-modal-title"
@@ -972,8 +1019,9 @@ export default function MyProfile() {
                           onClose={handleCloseAdd}
                           slots={{ backdrop: StyledBackdrop }}
                         >
-                          <ModalContent sx={{ width: 400 }}>
-                            <Paper style={{ padding: '16px', marginBottom: '16px' }}>
+                          <ModalContent sx={mode?{ width: 400,background:'black',color:'white' }:{ width: 400 }}>
+                            <Paper style={mode?{ background:'black',color:'white',boxShadow:'0px 0px 4px grey', padding: '16px', marginBottom: '16px' }
+                            :{ padding: '16px', marginBottom: '16px' }}>
                               <Typography variant="h6">Address Form</Typography>
                               <form onSubmit={handleSubmitAddress}>
                                 <TextField
@@ -984,6 +1032,8 @@ export default function MyProfile() {
                                   onChange={handleChangeAddress}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -993,6 +1043,8 @@ export default function MyProfile() {
                                   onChange={handleChangeAddress}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -1002,6 +1054,8 @@ export default function MyProfile() {
                                   onChange={handleChangeAddress}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -1011,6 +1065,8 @@ export default function MyProfile() {
                                   onChange={handleChangeAddress}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -1020,6 +1076,8 @@ export default function MyProfile() {
                                   onChange={handleChangeAddress}
                                   fullWidth
                                   margin="normal"
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                 />
                                 <Button onClose={handleCloseAdd} type="submit" variant="contained" color="primary">
                                   Submit
@@ -1052,7 +1110,12 @@ export default function MyProfile() {
         <Container
           maxWidth="md"
           component="footer"
-          sx={{
+          sx={mode?
+            {
+              borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+              mt: 8,
+              py: [3, 6],borderRadius: '0px 28px',background:'black'
+            }:{
             borderTop: (theme) => `1px solid ${theme.palette.divider}`,
             mt: 8,
             py: [3, 6], bgcolor: 'white', borderRadius: '0px 28px'
@@ -1061,13 +1124,13 @@ export default function MyProfile() {
           <Grid container spacing={4} justifyContent="space-evenly">
             {footers.map((footer) => (
               <Grid item xs={6} sm={3} key={footer.title}>
-                <Typography variant="h6" color="text.primary" gutterBottom>
+                <Typography sx={mode&&{color:'white'}} variant="h6" color="text.primary" gutterBottom>
                   {footer.title}
                 </Typography>
                 <ul>
                   {footer.description.map((item) => (
                     <li key={item}>
-                      <Link href="#" variant="subtitle1" color="text.secondary">
+                      <Link href="#" sx={mode&&{color:'white'}} variant="subtitle1" color="text.secondary">
                         {item}
                       </Link>
                     </li>
@@ -1076,7 +1139,7 @@ export default function MyProfile() {
               </Grid>
             ))}
           </Grid>
-          <Copyright sx={{ mt: 5 }} />
+          <Copyright sx={mode?{color:'white',mt: 5 }:{ mt: 5 }} />
 
         </Container>
         {/* End footer */}

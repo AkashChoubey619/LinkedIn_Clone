@@ -36,5 +36,12 @@
     width: 100px;
     height: 100px;
 }
+.darkNormalIcon{
+    background: url(/src/Icons/person.gif);
+    background-repeat: no-repeat;
+    width: 48px;
+    height: 48px;
+    border-radius: 30px;
+}
 
 

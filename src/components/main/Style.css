@@ -13,6 +13,7 @@ darkMain{
 }
 #right{
     max-width: 250px;
+    margin-top: 16px;
 }
 
 .backImage{
@@ -401,4 +402,3 @@ darkMain{
   outline: 2px solid lightgray;
 
   }
- 

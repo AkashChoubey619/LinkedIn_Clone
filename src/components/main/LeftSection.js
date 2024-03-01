@@ -36,24 +36,30 @@ export default function LeftSection(prop) {
             
             <p>Add Description about yourself</p>
           </div>
-          <Divider sx={mode?{bgcolor:'white'}:{}}/>
+          <Divider sx={mode&&{bgcolor:'white'}}/>
           <div className='profileInfo'>
             <p>Who viewed your profile</p>
             <p>Impression on your post</p>
           </div>
           <Divider/>
+
+          <Link to='/notAvailable' className='bookmark'>
           <div className='bookmark'>
-            <BookmarkIcon/> <p>My Items</p>
+           <BookmarkIcon/> <p>My Items</p>
           </div>
+          </Link> 
+
         </section>
-        <section id='leftSide2' className={mode?'darkModeMain':''} >
+        <section id='leftSide2' className={mode?'darkModeMain':'modeMain'} >
           <div id='leftInfoHead'><h4 >Recent</h4></div>
           
           <div className='leftInfoData'><GroupsIcon/>JavaScript Developer</div>
           <div className='leftInfoData'><GroupsIcon/>Frontend Developer Group</div>
           <div className='leftInfoData'><GroupsIcon/>Web Design and Development</div>
-          <Divider sx={mode?{bgcolor:'white'}:{}}/>
+          <Divider sx={mode&&{bgcolor:'white'}}/>
+          <Link to='/notAvailable'>
           <button style={mode?{color:'white',background:'black'}:{}} id='leftMoreBtn'>Discover More</button>
+          </Link>
   
         </section>
       </section>

@@ -5,30 +5,44 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Link from '@mui/material/Link';
 import Nav from '../Header/Navigation';
+import Context from '../ContextApi/MainContext';
+import LoginHead from '../SignIn/LoginHead'
 
 
-function Copyright () {
-  return (
-    <Typography variant="body2" color="text.secondary">
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+
 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
 export default function NotAvailable() {
+  const { mode } = React.useContext(Context)
+  const token = localStorage.getItem("token");
+
+  function Copyright () {
+    return (
+      <Typography variant="body2" sx={mode&&{color:'white'}} color="text.secondary">
+        {'Copyright © '}
+        <Link color="inherit" href="https://mui.com/">
+          Your Website
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
+    );
+  }
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Nav/>
+      {
+        
+        localStorage.getItem("token") === null ? <Nav /> : <LoginHead/> 
+      }
       <Box
-        sx={{
+        sx={mode?{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: '100vh',
+          bgcolor:'black',color:'white'
+        }:{
           display: 'flex',
           flexDirection: 'column',
           minHeight: '100vh',
@@ -44,12 +58,18 @@ export default function NotAvailable() {
             {'This may add in future, So stay tuned'}
           </Typography>
           <Typography variant="body1">Be Patience.</Typography>
-          <div className='normalIcon'></div> 
+          <div className={mode?'darkNormalIcon':'normalIcon'}></div> 
           
         </Container>
         <Box
           component="footer"
-          sx={{
+          sx={mode?
+            {
+              py: 3,
+              px: 2,
+              mt: 'auto',
+              backgroundColor: 'black',color:'white',boxShadow:'0px -1px 4px white' 
+            }:{
             py: 3,
             px: 2,
             mt: 'auto',
@@ -59,12 +79,12 @@ export default function NotAvailable() {
                 : theme.palette.grey[800],
           }}
         >
-          <Container maxWidth="sm">
+          <Container sx={mode&&{background:'black'}} maxWidth="sm">
             <Typography variant="body1">
               My sticky footer can be found here.
             </Typography>
            
-            <Copyright />
+            <Copyright  />
           </Container>
         </Box>
       </Box>

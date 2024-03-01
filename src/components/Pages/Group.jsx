@@ -264,10 +264,10 @@ const handleFileChange = (event) => {
     };
 
     return (
-      <Paper elevation={3} sx={{ p: 2, borderRadius: '8px' }}>
+      <Paper elevation={3} sx={mode?{ p: 2, borderRadius: '8px',background:'black',color:'white',boxShadow:'0px 0px 4px white' }:{ p: 2, borderRadius: '8px' }}>
         <Avatar></Avatar>
         <Typography variant="h6">{suggestion.name}</Typography>
-        <Typography variant="body1" color="textSecondary">
+        <Typography variant="body1" sx={mode&&{color:'white'}} color="textSecondary">
           {suggestion.occupation}
         </Typography>
         <Button
@@ -301,7 +301,8 @@ const handleFileChange = (event) => {
 
               <Stack spacing={3}>
                 <Box >
-                  <Box sx={{ bgcolor: 'white', borderRadius: '8px', mb: '15px' }}>
+                  <Box sx={mode?{ bgcolor: 'black',color:'white', borderRadius: '8px', mb: '15px' }
+                  :{ bgcolor: 'white', borderRadius: '8px', mb: '15px' }}>
                     <div >
                       <img src='https://static.licdn.com/aero-v1/sc/h/55k1z8997gh8dwtihm11aajyq' alt='banner' />
                     </div>
@@ -318,9 +319,10 @@ const handleFileChange = (event) => {
                             }}>
                             A</Avatar>
                           {ownerId === myId && <TriggerButton
-                            sx={{ ml: '-28px', zIndex: '20', borderRadius: '50%' }}
+                            sx={mode?{ ml: '-28px', zIndex: '20', borderRadius: '50%' ,background:'darkslategray',color:'white'}:
+                            { ml: '-28px', zIndex: '20', borderRadius: '50%' }}darkslategray
                             type="button" onClick={handleOpenAddImg}>
-                            <AddImage />
+                            <AddImage sx={mode&&{color:'white'}} />
                           </TriggerButton>}
 
                           <Modal
@@ -330,8 +332,8 @@ const handleFileChange = (event) => {
                             onClose={handleCloseAddImg}
                             slots={{ backdrop: StyledBackdrop }}
                           >
-                            <ModalContent sx={{ width: 400 }}>
-                              <Paper style={{ padding: '16px', marginBottom: '16px' }}>
+                            <ModalContent sx={mode?{ width: 400,background:'black',color:'white' }:{ width: 400 }}>
+                              <Paper style={mode?{ padding: '16px', marginBottom: '16px',background:'black',color:'white' }:{ padding: '16px', marginBottom: '16px' }}>
                                 <Typography variant="h6">Add Profile Image</Typography>
                                 <form onSubmit={handleSubmitAddImg}>
                                   <input
@@ -342,7 +344,7 @@ const handleFileChange = (event) => {
                                     id="file-input"
                                   />
                                   <label htmlFor="file-input">
-                                    <Button component="span" color="primary">
+                                    <Button component="span" sx={mode&&{color:'white'}} color="primary">
                                       Upload File
                                     </Button>
                                   </label>
@@ -359,7 +361,7 @@ const handleFileChange = (event) => {
                                     color="primary" >
                                     Save
                                   </Button>
-                                  <Button sx={{ m: 1, height: '30px' }}
+                                  <Button sx={mode?{ m: 1, height: '30px',color:'white' }:{ m: 1, height: '30px' }}
                                     onClick={() => {
                                       setOpenAddImg(false)
                                       setPreviewUrl('')
@@ -376,8 +378,9 @@ const handleFileChange = (event) => {
                         <Typography my={1} sx={{ ml: { md: '16px' }, textAlign: 'left' }} variant={'h5'}>
                           {userData.name}
 
-                          {ownerId === myId && <TriggerButton onClick={handleOpenInfo} sx={{ padding: 0, margin: 0, ml: '20px', }}>
-                            <EditIcon />
+                          {ownerId === myId && <TriggerButton onClick={handleOpenInfo} 
+                          sx={mode?{ padding: 0, margin: 0, ml: '20px',background:'darkslategray',color:'white' }:{ padding: 0, margin: 0, ml: '20px', }}>
+                            <EditIcon sx={mode&&{color:'white'}} />
                           </TriggerButton>}
                         </Typography>
 
@@ -388,9 +391,9 @@ const handleFileChange = (event) => {
                           onClose={handleCloseInfo}
                           slots={{ backdrop: StyledBackdrop }}
                         >
-                          <ModalContent sx={{ width: 400 }}>
-                            <Paper style={{ padding: '16px', marginBottom: '16px' }}>
-                              <Typography variant="h6">Add Profile Image</Typography>
+                          <ModalContent sx={mode?{background:'black', width: 400 }:{ width: 400 }}>
+                            <Paper style={mode?{ padding: '16px', marginBottom: '16px',background:'black',color:'white' }:{ padding: '16px', marginBottom: '16px' }}>
+                              <Typography variant="h6">Add Details</Typography>
                               <form onSubmit={handleEditName}>
                                 <TextField
                                   required
@@ -401,6 +404,8 @@ const handleFileChange = (event) => {
                                   value={myName}
                                   onChange={(e) => setMyName(e.target.value)}
                                   fullWidth
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                   margin="normal"
                                 />
                                 <TextField
@@ -412,6 +417,8 @@ const handleFileChange = (event) => {
                                   value={description}
                                   onChange={(e) => setDescription(e.target.value)}
                                   fullWidth
+                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
+                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
                                   margin="normal"
                                 />
 
@@ -419,7 +426,7 @@ const handleFileChange = (event) => {
                                   type="submit" variant="contained" color="primary">
                                   Submit
                                 </Button>
-                                <Button sx={{ m: 1, height: '30px' }}
+                                <Button sx={mode?{color:'white',m: 1, height: '30px' }:{ m: 1, height: '30px' }}
                                   onClick={() => {
                                     setOpenInfo(false)
                                   }} variant="outlined" color="primary">
@@ -445,7 +452,7 @@ const handleFileChange = (event) => {
                               variant="outlined"
                               disableElevation
                               size='small'
-                              sx={{ borderRadius: '16px' }}
+                              sx={mode?{borderRadius:'16px',color:'white'}:{ borderRadius: '16px' }}
                             >
                               more
                             </Button>
@@ -458,8 +465,9 @@ const handleFileChange = (event) => {
 
                   {/* <================suggestion===================> */}
 
-                  <Box className='suggestion' style={{ marginBottom: '20px' }}>
-                    <Paper style={{ padding: 20 }}>
+                  <Box className='suggestion' style={mode?{bgcolor: 'black',color:'white',boxShadow:'0px 0px 4px white',marginBottom: '20px' }:
+                  { marginBottom: '20px' }}>
+                    <Paper style={mode?{ padding: 20,background:'black',color:'white' }:{ padding: 20 }}>
                       <Typography variant="h5" component={'h4'} gutterBottom>
                         Suggestions for you
                       </Typography>
@@ -476,20 +484,26 @@ const handleFileChange = (event) => {
 
                   {/* <================Posts===================> */}
                   <Paper
-                    style={{
+                    style={mode?
+                      {
+                        margin: 'auto',
+                        marginTop: 20, padding: 12,
+                        background: 'black',color:'white',boxShadow:'0px 0px 4px white', width: '100%', maxWidth: '735px'
+                      }:{
                       margin: 'auto',
                       marginTop: 20, padding: 12,
-                      bgcolor: '#f3f6f9', width: '100%', maxWidth: 800
+                      bgcolor: '#f3f6f9', width: '100%', maxWidth: '735px'
                     }}>
 
                     <Typography variant="h4" gutterBottom>Channel Posts</Typography>
 
                     <Grid spacing={2}>
                       {
-                        groupPostData ?
-                          groupPostData.map((post, index) => (
+                        groupPostData.length===0 ?
+                          <Typography sx={{ textAlign: 'center', my: 2, color: 'grey' }} variant="h5">
+                            <i>No Post</i></Typography>:  groupPostData.map((post, index) => (
                             <Grid key={post._id}>
-                              <Card sx={{ mb: 2 }}>
+                              <Card sx={mode?{ mb: 2,background:'black',color:'white' }:{ mb: 2 }}>
                                 <CardContent >
                                   <Stack direction={'row'} spacing={2} alignItems={'center'} mb={1}>
                                     <Avatar>S</Avatar>
@@ -498,7 +512,7 @@ const handleFileChange = (event) => {
                                   <Typography mb={1} variant="h6" component="h4">
                                     {post.title}
                                   </Typography>
-                                  <Typography mb={1} variant="body2" color="textSecondary" component="h6">
+                                  <Typography mb={1} variant="body2" sx={mode&&{color:'white'}} color="textSecondary" component="h6">
                                     {post.content}
                                   </Typography>
 
@@ -557,8 +571,7 @@ const handleFileChange = (event) => {
                                 </CardContent>
                               </Card>
                             </Grid>
-                          )) : <Typography sx={{ textAlign: 'center', my: 2, color: 'grey' }} variant="h5">
-                            <i>No Post</i></Typography>
+                          ))
                       }
                     </Grid>
                   </Paper>
@@ -580,7 +593,12 @@ const handleFileChange = (event) => {
         <Container
           maxWidth="md"
           component="footer"
-          sx={{
+          sx={mode?
+            {
+              borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+              mt: 8,
+              py: [3, 6], bgcolor: 'black', borderRadius: '0px 28px'
+            }:{
             borderTop: (theme) => `1px solid ${theme.palette.divider}`,
             mt: 8,
             py: [3, 6], bgcolor: 'white', borderRadius: '0px 28px'
@@ -589,13 +607,13 @@ const handleFileChange = (event) => {
           <Grid container spacing={4} justifyContent="space-evenly">
             {footers.map((footer) => (
               <Grid item xs={6} sm={3} key={footer.title}>
-                <Typography variant="h6" color="text.primary" gutterBottom>
+                <Typography variant="h6" sx={mode&&{ mt: 5 ,color:'white'}} color="text.primary" gutterBottom>
                   {footer.title}
                 </Typography>
                 <ul>
                   {footer.description.map((item) => (
                     <li key={item}>
-                      <Link href="#" variant="subtitle1" color="text.secondary">
+                      <Link href="#"sx={mode&&{ mt: 5 ,color:'white'}} variant="subtitle1" color="text.secondary">
                         {item}
                       </Link>
                     </li>
@@ -604,7 +622,7 @@ const handleFileChange = (event) => {
               </Grid>
             ))}
           </Grid>
-          <Copyright sx={{ mt: 5 }} />
+          <Copyright sx={mode?{ mt: 5 ,color:'white'}:{ mt: 5 }} />
         </Container>
         {/* End footer */}
       </ThemeProvider >

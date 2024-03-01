@@ -4,6 +4,7 @@ import ThreeDotsIcon from '@mui/icons-material/MoreHoriz';
 import Context from '../ContextApi/MainContext';
 
 import { Tooltip } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 export default function RightSection() {
   const {mode }= useContext(Context)
@@ -39,9 +40,9 @@ export default function RightSection() {
         </div>
         <div id='rightSection2Content'>
         <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita officiis rerum neque modi natus atque dolorem harum nam debitis quos itaque nemo vitae nesciunt accusamus, unde amet praesentium dolorum maiores?</div>
-        <button id='rightSideLearnMoreBtn' className={mode?'darkModeMain':''}>
+        <Link to='/premium'><button id='rightSideLearnMoreBtn' className={mode?'darkModeMain':''}>
           Learn More
-          </button>
+          </button></Link>
         </div>
       </div>
     </section>
