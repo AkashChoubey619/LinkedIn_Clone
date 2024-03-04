@@ -16,7 +16,7 @@ const defaultTheme = createTheme();
 
 export default function NotAvailable() {
   const { mode } = React.useContext(Context)
-  const token = localStorage.getItem("token");
+  const token = JSON.parse( localStorage.getItem("token"));
 
   function Copyright () {
     return (
@@ -30,11 +30,12 @@ export default function NotAvailable() {
       </Typography>
     );
   }
+  console.log(token === null ? "Rendering LoginHead" : "Rendering Nav",localStorage.getItem("token"));
   return (
     <ThemeProvider theme={defaultTheme}>
       {
         
-        localStorage.getItem("token") === null ? <Nav /> : <LoginHead/> 
+        token === null ?   <LoginHead/> : <Nav />
       }
       <Box
         sx={mode?{

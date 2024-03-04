@@ -231,8 +231,8 @@ export default function Network() {
               ))}
 
               <TriggerButton type='button' onClick={handleOpenGroup}
-                sx={mode ? { display: 'flex', justifyContent: 'center', width: '100%', bgcolor: 'darkslategray' }
-                  : { display: 'flex', justifyContent: 'center', width: '100%', color: 'white' }}>
+                sx={mode ? { display: 'flex', justifyContent: 'center', width: '100%', bgcolor: 'darkslategray', color: 'white' }
+                  : { display: 'flex', justifyContent: 'center', width: '100%' }}>
                 <AddIcon sx={mode && { color: 'white' }} />
               </TriggerButton>
               <Modal

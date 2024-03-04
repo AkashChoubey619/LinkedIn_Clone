@@ -74,6 +74,7 @@ export default function MyProfile() {
   const [myName, setMyName] = React.useState("")
   const [nameId, setNameId] = React.useState("")
   const isName = nameId === userData._id;
+  
 
   const [myPhone, setMyPhone] = React.useState("")
   const [phoneId, setPhoneId] = React.useState("")
@@ -127,6 +128,7 @@ export default function MyProfile() {
       if (res.ok) {
         const data = await res.json();
         setUserData(data.data);
+        
 
       }
     } catch (error) {
@@ -139,7 +141,7 @@ export default function MyProfile() {
   React.useEffect(() => {
     myInfo()
   }, [])
-
+console.log(userData);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -453,12 +455,13 @@ export default function MyProfile() {
   }
 
   const SkillsSection = ({ skills }) => {
-    const Skills = skills[0].split(',')
+    console.log(skills,'skills')
+    const Skills =  skills && skills.length >= 0 ? skills[0].split(',') : [];
     const listItemStyle = {
       backgroundColor: mode?'darkslategray':'#ffffff',
       borderRadius: '4px',
       marginBottom: '8px',
-      boxShadow: mode?'0px 0px 4px lightgrey': '0px 2px 4px rgba(0, 0, 0, 0.1)',
+      boxShadow: mode?'0px 0px 4px lightgrey': '0px 2px 4px rgba(0, 0, 0, 0.3)',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -740,8 +743,8 @@ export default function MyProfile() {
                         <Typography variant="h5" gutterBottom>
                           Experience</Typography>
 
-                        <TriggerButton sx={{background:'darkslategray'}} type="button" onClick={handleOpenExp}>
-                          {userData.experience ? <EditIcon sx={mode&&{color:'white'}} /> : <AddIcon sx={mode&&{color:'white'}}  />}
+                        <TriggerButton sx={mode&&{background:'darkslategray'}} type="button" onClick={handleOpenExp}>
+                          {userData.experience&&userData.experience.length>0 ? <EditIcon sx={mode&&{color:'white'}} /> : <AddIcon sx={mode&&{color:'white'}}  />}
                         </TriggerButton>
 
                         <Modal
@@ -765,7 +768,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -776,7 +779,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -787,7 +790,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -798,7 +801,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -809,7 +812,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -820,7 +823,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <Button onClose={handleCloseEdu} type="submit" variant="contained" color="primary">
                                   Submit
@@ -832,7 +835,8 @@ export default function MyProfile() {
 
                       </Stack>
                       <Grid container spacing={2}>
-                        {userData.experiences ? userData.experiences.map((experience, index) => (
+                        {userData.experiences&&userData.experiences.length > 0 ? 
+                        userData.experiences.map((experience, index) => (
                           <Grid item xs={12} key={index}>
                             <Paper elevation={1} style={mode?{ background:'darkslategray',color:'white',padding: '15px', marginBottom: '15px' }:
                             { padding: '15px', marginBottom: '15px' }}>
@@ -851,7 +855,7 @@ export default function MyProfile() {
                               </List>
                             </Paper>
                           </Grid>
-                        )) : <Typography sx={{ margin: 'auto', my: 2, color: 'grey' }} variant="h5">
+                        )) : <Typography sx={{ margin: 'auto',textAlign:'center', my: 2, color: 'grey' }} variant="h5">
                           <i>Add Experience</i></Typography>
                         }
                       </Grid>
@@ -867,7 +871,7 @@ export default function MyProfile() {
                       <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
                         <Typography variant="h5" gutterBottom>Education</Typography>
                         <TriggerButton sx={mode&&{color:'white',background:'darkslategray'}}  type="button" onClick={handleOpenEdu}>
-                          {userData.education ? <EditIcon sx={mode&&{color:'white'}} /> : <AddIcon sx={mode&&{color:'white'}} />}
+                          {userData.education&&userData.education.length>0 ? <EditIcon sx={mode&&{color:'white'}} /> : <AddIcon sx={mode&&{color:'white'}} />}
                         </TriggerButton>
                         <Modal
                           aria-labelledby="unstyled-modal-title"
@@ -889,7 +893,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -900,7 +904,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -911,7 +915,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -933,7 +937,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <Button onClose={handleCloseEdu} type="submit" variant="contained" color="primary">
                                   Submit
@@ -944,7 +948,7 @@ export default function MyProfile() {
                         </Modal>
                       </Stack>
                       <Grid container spacing={2}>
-                        {userData.education ? userData.education.map((education, index) => (
+                        {userData.education&&userData.education.length >0 ? userData.education.map((education, index) => (
                           <Grid item xs={12} key={index}>
                             <Paper style={mode?{ padding: '15px',color:'white', background: 'darkslategray', borderRadius: '8px', boxShadow: '0px 0px 5px grey' }:
                             { padding: '15px', backgroundColor: '#f9f9f9', borderRadius: '8px', boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.05)' }}>
@@ -958,7 +962,7 @@ export default function MyProfile() {
                               <Typography variant="body1">About- {education.description}</Typography>
                             </Paper>
                           </Grid>
-                        )) : <Typography sx={{ margin: 'auto', my: 2, color: 'grey' }} variant="h5">
+                        )) : <Typography sx={{ margin: 'auto',textAlign:'center', my: 2, color: 'grey' }} variant="h5">
                           <i>Add Education</i></Typography>
                         }
                       </Grid>
@@ -973,14 +977,14 @@ export default function MyProfile() {
                       <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
                         <Typography sx={mode&&{ color:'white' }} variant="h5" gutterBottom>Skills</Typography>
                         <Button type="button" sx={mode?{ color: 'white' }:{ color: 'black' }} onClick={editSkillId}>
-                          {userData.skills ? 
-                          <EditIcon sx={mode&&{color:'white',background:'darkslategray',p:'4px',border:'1px solid white',width:'30px',borderRadius:'10px'}} /> 
-                          : <AddIcon sx={mode&&{color:'white',background:'darkslategray',p:'4px',border:'1px solid white',width:'30px',borderRadius:'10px'}} />}
+                          {userData.skills&&userData.skills.length>0 ? 
+                          <EditIcon onClick={editSkillId} sx={mode&&{color:'white',background:'darkslategray',p:'4px',border:'1px solid white',width:'30px',borderRadius:'10px'}} /> 
+                          : <AddIcon onClick={editSkillId} sx={mode&&{color:'white',background:'darkslategray',p:'4px',border:'1px solid white',width:'30px',borderRadius:'10px'}} />}
                         </Button>
                       </Stack>
 
-                      {userData.skills ? (isSkills ? (
-                        <form style={mode&&{color:'white'}} onSubmit={handleEditSkills}>
+                      {userData.skills&&userData.skills.length>0 ? (isSkills ? (
+                        <form onSubmit={handleEditSkills}>
                           <Typography sx={mode?{color:'white', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700}:{ color: 'grey', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700 }} variant='p'>
                             Enter skills  separated by commas.
                           </Typography>
@@ -995,8 +999,22 @@ export default function MyProfile() {
                         </form>
                       )
                         : <SkillsSection  skills={userData.skills} />) :
-                        <Typography sx={{ margin: 'auto', my: 2, color: 'grey' }} variant="h5">
-                          <i>Add Skills</i></Typography>}
+                        (isSkills?(
+                          <form  onSubmit={handleEditSkills}>
+                            <Typography sx={mode?{color:'white', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700}:{ color: 'grey', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700 }} variant='p'>
+                              Enter skills  separated by commas.
+                            </Typography>
+                            <input type='text' name='skills'
+                              className={mode?'skills':'darkSkills'}
+                              id='skills' value={mySkills} placeholder='Add skills'
+                              onChange={(e) => setMySkills(e.target.value)} required
+                            />
+                            <Button sx={mode?{ marginInline: 2, borderRadius: '14px',color:'white' }:{ marginInline: 2, borderRadius: '14px' }} variant='contained' type='submit'>Save</Button>
+                            <Button sx={mode?{ borderRadius: '14px',color:'white' }:{ borderRadius: '14px' }} variant='outlined' onClick={() => { setSkillsId('') }}>Cancel</Button>
+                          </form>
+                        )
+                        :(<Typography sx={{ margin: 'auto',textAlign:'center', my: 2, color: 'grey' }} variant="h5">
+                          <i>Add Skills</i></Typography>))}
 
                     </Paper>
                   </Box>
@@ -1010,7 +1028,7 @@ export default function MyProfile() {
                           Address Section
                         </Typography>
                         <TriggerButton sx={mode&&{ color:'white',background:'darkslategray' }} type="button" onClick={handleOpenAdd}>
-                          {userData.address ? <EditIcon sx={mode&&{ color:'white' }}  /> : <AddIcon sx={mode&&{ color:'white' }} />}
+                          {userData.address&&userData.address.length>0 ? <EditIcon sx={mode&&{ color:'white' }}  /> : <AddIcon sx={mode&&{ color:'white' }} />}
                         </TriggerButton>
                         <Modal
                           aria-labelledby="unstyled-modal-title"
@@ -1033,7 +1051,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -1044,7 +1062,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -1055,7 +1073,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -1066,7 +1084,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <TextField
                                   required
@@ -1077,7 +1095,7 @@ export default function MyProfile() {
                                   fullWidth
                                   margin="normal"
                                   InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
                                 />
                                 <Button onClose={handleCloseAdd} type="submit" variant="contained" color="primary">
                                   Submit
@@ -1087,8 +1105,8 @@ export default function MyProfile() {
                           </ModalContent>
                         </Modal>
                       </Stack>
-                      {userData.address ? <AddressSection address={userData.address} />
-                        : <Typography sx={{ margin: 'auto', my: 2, color: 'grey' }} variant="h5">
+                      {userData.address&&userData.address.length>0 ? <AddressSection address={userData.address} />
+                        : <Typography sx={{ margin: 'auto',textAlign:'center', my: 2, color: 'grey' }} variant="h5">
                           <i>Add Address</i></Typography>}
                     </Paper>
                   </Box>

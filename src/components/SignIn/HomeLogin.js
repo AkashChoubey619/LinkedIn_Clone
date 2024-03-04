@@ -12,7 +12,7 @@ export default function HomeLogin() {
       localStorage.setItem('token',null)
       localStorage.setItem('userData',null)
       setMode(false)
-  })
+  },[])
      
 
   return  <div className='homeLogin'>

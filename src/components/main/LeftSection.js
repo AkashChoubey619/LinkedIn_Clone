@@ -23,7 +23,7 @@ export default function LeftSection(prop) {
           </div>
           <div className='userInfo'>
             <div id='profileIcon'>
-            <Link id='myId' to={'/myProfile'}>
+            <Link id='myId' to='/myProfile'>
             <Avatar
             src={prop}
               alt="Remy Sharp"
