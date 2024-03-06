@@ -4,6 +4,7 @@ import { Avatar, Box, Typography } from '@mui/material'
 import ThreeDotsIcon from '@mui/icons-material/MoreHoriz';
 import Tooltip from '@mui/material/Tooltip';
 import Context from '../ContextApi/MainContext';
+import { Link } from 'react-router-dom';
 
 
 function LeftSearchCard() {
@@ -13,8 +14,8 @@ function LeftSearchCard() {
             {
                 LeftSearchData.map((item, index) => {
                     return (
-                        <Box key={index} borderRadius={2} mb={1}
-                         sx={mode&&{background:'black',color:'white',boxShadow:'0px 0px 4px lightgrey'}} 
+                        <Link to='/jobs'><Box key={index} borderRadius={2} mb={1}
+                         sx={mode?{background:'black',color:'white',boxShadow:'0px 0px 4px lightgrey'}:{color:'black'}} 
                           p={2} bgcolor={'white'} width={'260px'}>
                             <div className='head-details card'>
                                 <div className='companies-Info'>
@@ -31,7 +32,7 @@ function LeftSearchCard() {
                                   Location :  {item.location}
                                 </Typography>
                             </Box>
-                        </Box>
+                        </Box></Link>
                         )
                     }
                     )

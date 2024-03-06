@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Context from '../ContextApi/MainContext';
 import { Box, Grid, Typography, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import CircularProgress from '@mui/material/CircularProgress';
 
 // import LoginHead from './LoginHead';
 
@@ -14,6 +15,7 @@ export default function LoginMain() {
     const [mail, setMail] = useState('');
     const [password, setPassword] = useState('');
     const [showPass, setShowPass] = useState('Show')
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
     const [loginFeed, setLoginFeed] = useState(true)
     const { setUserData, userData } = useContext(Context);
@@ -35,6 +37,7 @@ export default function LoginMain() {
         console.log(mail + " " + password)
         try {
             e.preventDefault();
+            setIsLoading(true)
             const res = await fetch("https://academics.newtonschool.co/api/v1/user/login", {
                 method: 'POST',
                 headers: {
@@ -64,6 +67,7 @@ export default function LoginMain() {
                     localStorage.setItem("userData", JSON.stringify(data.data));
 
                     navigate("/home");
+                    setIsLoading(false)
                 }
             }
             else {
@@ -106,7 +110,7 @@ export default function LoginMain() {
                                     }
                                 </button>
 
-                                <button className='form-element login-btn' type="submit">Sign In</button>
+                                <button className='form-element login-btn' type="submit">{isLoading?<CircularProgress style={{height:'16px',width:'16px',color:'white'}} />:'Sign In'}</button>
                             </form>
                         </div>
                         </Grid>

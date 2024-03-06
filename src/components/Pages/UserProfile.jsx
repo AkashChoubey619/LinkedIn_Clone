@@ -139,6 +139,7 @@ export default function MyProfile() {
   }
 
   React.useEffect(() => {
+    window.scrollTo(0, 0)
     myInfo()
   }, [])
 console.log(userData);

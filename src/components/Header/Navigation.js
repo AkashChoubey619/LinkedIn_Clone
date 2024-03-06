@@ -21,6 +21,7 @@ import Divider from '@mui/material/Divider';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useTheme, createTheme } from '@mui/material/styles';
 import Context from '../ContextApi/MainContext';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 export default function Nav() {
@@ -33,15 +34,16 @@ export default function Nav() {
   const customTheme = createTheme({
     breakpoints: {
       values: {
-        min: 450,
+        min: 700,
       }
     }
   })
   const theme = useTheme();
 
-  const isXsScreen = useMediaQuery(customTheme.breakpoints.down('min'));
+  const isXsScreen = useMediaQuery(customTheme.breakpoints.up('min'));
   const isMdScreen = useMediaQuery(theme.breakpoints.up('md'));
   const isSmScreen = useMediaQuery(theme.breakpoints.up('sm'));
+  const [isLoading, setIsLoading] = useState(false);
   mode ? color.style.backgroundColor = "rgb(14, 13, 13)" : color.style.backgroundColor = "#f2f2f2";
 
   // <=========================materialUi theme======================================>
@@ -73,7 +75,7 @@ export default function Nav() {
   const handelSearch = async () => {
     // console.log(searchData.length)
     try {
-
+      setIsLoading(true)
       if (search.length !== 0) {
         const searched = await fetch(`https://academics.newtonschool.co/api/v1/linkedin/post?search={"author.name":"${search}"}`, {
 
@@ -91,14 +93,19 @@ export default function Nav() {
           setSearchData('')
         }
         navigate('/search')
+        setIsLoading(false)
       }
     } catch (error) {
       console.log(error)
     }
 
 
-
   }
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+        handelSearch();
+    }
+};
 
 
   const handelSignOut = () => {
@@ -121,9 +128,10 @@ export default function Nav() {
                 <Link to='/home'><LinkedInIcon sx={{ width: "4rem", height: "45px", color: "#0a66c2" }} /></Link>
               </div>
 
-              <Box className='search'>
-                <input type='text' id='search' value={search} onChange={(e) => setSearch(e.target.value)}
-                  placeholder='Search' /><SearchIcon onClick={handelSearch} />
+              <Box className={mode?'searchBar':'search'}>
+                <input type='text' id={mode?'searchBar':'search'} value={search} onKeyDown={handleKeyPress} onChange={(e) => setSearch(e.target.value)}
+                  placeholder='Search' />{isLoading?
+                  <CircularProgress style={mode?{height:'22px',width:'22px',color:'white'}:{height:'22px',width:'22px',color:'black'}} />:<SearchIcon sx={{cursor:'pointer'}} onClick={handelSearch} />}
                 {/* <button>ok</button> */}
               </Box>
             </Stack>
@@ -132,37 +140,44 @@ export default function Nav() {
               {/* icon */}
 
               <Stack direction="row" alignItems='center' spacing={2} m={0.8}>
-                {isSmScreen && (
+                {isXsScreen && (
                   <Stack direction="row" alignItems='center' spacing={2} m={0.8}>
                     <div >
-                      <NavLink to='/home' className={mode ? 'navIcon' : 'icon'} ><HomeIcon sx={{ fontSize: '26px' }} />
+                      <NavLink to='/home' className={mode ? 'navIcon' : 'icon'} >
+                        <HomeIcon sx={{ fontSize: '26px' }} />
                         {isMdScreen && (
                           <div>Home</div>
                         )}
                       </NavLink></div>
-                    <div ><Link to='/network' className={mode ? 'navIcon' : 'icon'}><PeopleIcon sx={{ fontSize: '26px' }} />
+                    <div ><Link to='/network' className={mode ? 'navIcon' : 'icon'}>
+                      <PeopleIcon sx={{ fontSize: '26px' }} />
                       {isMdScreen && (
                         <div>My Network</div>
                       )}
                     </Link></div>
-                    <div ><Link to='/message' className={mode ? 'navIcon' : 'icon'}><MessageIcon sx={{ fontSize: '26px' }} />
+                    <div ><Link to='/message' className={mode ? 'navIcon' : 'icon'}>
+                      <MessageIcon sx={{ fontSize: '26px' }} />
                       {isMdScreen && (
                         <div>Message</div>
                       )}
                     </Link></div>
-                    <div ><Link to='/jobs' className={mode ? 'navIcon' : 'icon'}><WorkIcon sx={{ fontSize: '26px' }} />
+                    <div >
+                      <Link to='/jobs' className={mode ? 'navIcon' : 'icon'}>
+                        <WorkIcon sx={{ fontSize: '26px' }} />
                       {isMdScreen && (
                         <div>Jobs</div>
                       )}
                     </Link></div>
-                    <div ><Link to='/notify' className={mode ? 'navIcon' : 'icon'}><NotificationsIcon sx={{ fontSize: '26px' }} />
+                    <div >
+                      <Link to='/notify' className={mode ? 'navIcon' : 'icon'}>
+                        <NotificationsIcon sx={{ fontSize: '26px' }} />
                       {isMdScreen && (
                         <div>Notifications</div>
                       )}
                     </Link>
                     </div>
                   </Stack>)}
-                <Divider orientation="vertical" flexItem />
+                <Divider sx={mode&&{background:'white'}} orientation="vertical" flexItem />
                 <div className='icon meIcon'>
                   {userData && <Avatar src={userData.profileImage} sx={{ width: 25, height: 25, ml: '-7px' }}>{userData.name.toUpperCase().charAt(0)}</Avatar>}
                   <div id='profile'>
@@ -189,27 +204,25 @@ export default function Nav() {
                             id='viewProfile-btn'>View Profile</button>
                         </Link>
                         <Typography ml={1}>Account</Typography>
-                        <MenuItem><Link className='menuText' to='/premium'>Try premium for free</Link></MenuItem>
-                        <MenuItem><Link className='menuText' to='/updatePassword'>Update password</Link></MenuItem>
-                        <MenuItem><Link className='menuText' to='/notAvailable'>Help</Link></MenuItem>
-                        <MenuItem><Link className='menuText' to='/notAvailable'>Language</Link></MenuItem>
+                        <Link  to='/premium'><MenuItem>Try premium for free</MenuItem></Link>
+                        <Link  to='/updatePassword'><MenuItem>Update password</MenuItem></Link>
+                        <Link  to='/notAvailable'><MenuItem>Help</MenuItem></Link>
+                        <Link  to='/notAvailable'><MenuItem>Language</MenuItem></Link>
 
-                        <MenuItem className='extraMsg'><Link className='menuText extraMsg' to='/network'>Network</Link></MenuItem>
-                        <MenuItem className='extraMsg'><Link className='menuText extraMsg' to='/message'>Message</Link></MenuItem>
-                        <MenuItem className='extraMsg'><Link className='menuText extraMsg' to='/jobs'>Jobs</Link></MenuItem>
-                        <MenuItem className='extraMsg'><Link className='menuText extraMsg' to='/notify'>Notifications</Link></MenuItem>
+                        <Link className='extraMsg' to='/network'><MenuItem className='extraMsg'>Network</MenuItem></Link>
+                        <Link className='extraMsg' to='/message'><MenuItem className='extraMsg'>Message</MenuItem></Link>
+                        <Link className='extraMsg' to='/jobs'><MenuItem className='extraMsg'>Jobs</MenuItem></Link>
+                        <Link className='extraMsg' to='/notify'><MenuItem className='extraMsg'>Notifications</MenuItem></Link>
                         <Divider />
                         <Typography ml={1}>Manage</Typography>
-                        <MenuItem><Link className='menuText' to='/notAvailable'>Post & Activity</Link></MenuItem>
-                        <MenuItem><Link className='menuText' onClick={() => setMode(!mode)}>
+                        <Link  to='/notAvailable'><MenuItem>Post & Activity</MenuItem></Link>
+                        <Link  onClick={() => setMode(!mode)}><MenuItem>
 
-                          {mode ? 'Light ' : 'Dark '}mode</Link></MenuItem>
+                          {mode ? 'Light ' : 'Dark '}mode</MenuItem></Link>
                         <Divider />
-                        <MenuItem>
-                          <button style={mode ? { background: 'black', color: 'white' } : {}}
-                            onClick={handelSignOut} id='signOut-btn'>
-                            Sign Out
-                          </button>
+                        <MenuItem onClick={handelSignOut}>
+                        Sign Out
+                          
                         </MenuItem>
                       </Menu>
                     </Dropdown>
@@ -256,6 +269,8 @@ const MenuItem = styled(BaseMenuItem)(
   list-style: none;
   padding: 8px;
   border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
   cursor: pointer;
   user-select: none;
 
@@ -265,6 +280,7 @@ const MenuItem = styled(BaseMenuItem)(
 
   &:hover {
     background: ${theme.palette.mode === 'dark' ? grey[800] : grey[50]};
+    color:black;
     border-color: ${theme.palette.mode === 'dark' ? grey[600] : grey[300]};
   }
 

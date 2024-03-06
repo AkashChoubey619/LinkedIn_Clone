@@ -13,6 +13,7 @@ import { Menu } from '@mui/base/Menu';
 import { MenuButton as BaseMenuButton } from '@mui/base/MenuButton';
 import ThreeDotsIcon from '@mui/icons-material/MoreHoriz';
 import { MenuItem as BaseMenuItem, menuItemClasses } from '@mui/base/MenuItem';
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function Network() {
   const myData = localStorage.getItem('userData')
@@ -20,7 +21,7 @@ export default function Network() {
   const { mode } = useContext(Context);
   const userData = JSON.parse(localStorage.getItem("userData"))
   const [groups, setGroups] = useState([]);
-
+  const [isLoading, setIsLoading]=useState(false)
   const token = localStorage.getItem("token");
   const [createGroupInfo, setCreateGroupInfo] = React.useState({
     name: '',
@@ -42,6 +43,7 @@ export default function Network() {
 
   const fetchGroups = async () => {
     try {
+      setIsLoading(true)
       const res = await fetch(`https://academics.newtonschool.co/api/v1/linkedin/channel/`, {
         method: 'GET',
         headers: {
@@ -55,6 +57,7 @@ export default function Network() {
         const filteredPosts = groupData.data.filter(post => post !== null);
         setGroups(filteredPosts);
       }
+      setIsLoading(false)
     } catch (error) {
       console.log('groupsError ', error)
     }
@@ -172,12 +175,14 @@ export default function Network() {
       <>
         <Nav />
         <Stack direction={isSmallScreen ? 'column' : 'row'} mx={isSmallScreen ? 1 : 3} mt={8}>
+          
           <Box width={isSmallScreen ? '100%' : '40%'} mr={isSmallScreen ? 0 : 1}>
             <Paper sx={mode ? { bgcolor: 'black', padding: 2, marginBottom: 2, boxShadow: '0px 0px 3px lightgrey' }
               : { padding: 2, marginBottom: 2 }} elevation={3} >
               <Typography sx={mode && { color: 'white' }} variant="h5" gutterBottom>
                 Groups
               </Typography>
+              {isLoading&&<Box sx={{display:'flex',justifyContent:'center',my:2}}><CircularProgress /></Box>}
               {groups && groups.map((group) => (
                 <Paper key={group._id} elevation={3} sx={mode ? { padding: 2, marginBottom: 2, bgcolor: 'darkslategray', color: 'white', boxShadow: '0px 0px 5px white' }
                   : { padding: 2, marginBottom: 2 }}>

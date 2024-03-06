@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from "react-router-dom";
 import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
 import './Style.css'
 
 export default function SignupMain() {
@@ -12,10 +13,12 @@ export default function SignupMain() {
     const [uname, setUname] = useState('');
     const [uPass, setUPass] = useState('');
     const [uMail, setUMail] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [alterVisible, setAlertVisible] = useState(false);
 
     const handleSignUp = (e) => {
         e.preventDefault();
+        setIsLoading(true)
         fetch("https://academics.newtonschool.co/api/v1/user/signup",
             {
                 method: "POST",
@@ -33,59 +36,62 @@ export default function SignupMain() {
                 )
             }).then(res => res.json()).then(json => {
                 // console.log(json.message)
-                if (json.status === 'fail') {
-                    const alt=document.getElementById('alertSignup');
-                    alt.innerHTML = `${json.message}`;
-                        
-                    setAlertVisible(true)
-                    setTimeout(()=>setAlertVisible(false),1200)
-                    clearTimeout();
 
+                if (json.status === 'fail') {
+                    const alt = document.getElementById('alertSignup');
+                    alt.innerHTML = `${json.message}`;
+
+                    setAlertVisible(true)
+                    setTimeout(() => setAlertVisible(false), 1200)
+                    clearTimeout();
+                    setIsLoading(false)
                 }
-                else{
-                   navigate('/')
-                   
-                    
+                else {
+                    navigate('/')
+                    setIsLoading(false)
+
                 }
             }).catch(error => console.log(error))
     }
-    const style={visible:{ visibility:'visible',transition: 'all ease 1s'},hide:{ visibility:'hidden'}}
+    const style = { visible: { visibility: 'visible', transition: 'all ease 1s' }, hide: { visibility: 'hidden' } }
     return (
         <>
             <Container >
                 <div id='alert-container'>
-                    <div style={alterVisible?style.visible:style.hide} id='alert'>
-                    < Alert id='alertSignup' severity="error"></Alert>
+                    <div style={alterVisible ? style.visible : style.hide} id='alert'>
+                        < Alert id='alertSignup' severity="error"></Alert>
                     </div>
-                
-            </div>
-            <div id='signUP'>
 
-                <div className="signup-main">
-                    <h1>Sign Up</h1>
-                    <p id='para'>Stay updated on your professional world</p>
-                    <Box
-                        component="form"
-                        sx={{
-                            '& > :not(style)': { m: 1, width: '25ch' },
-                        }}
-                        noValidate
-                        autoComplete="off"
-                    >
-                        <TextField type='text' className='signup-input' name='userName' id="outlined-basic"
-                            onChange={(e) => setUname(e.target.value)} value={uname} label="Username" variant="outlined" />
-
-                        <TextField type='email' className='signup-input' name='userMail' id="outlined-basic"
-                            onChange={(e) => setUMail(e.target.value)} value={uMail} label="Email" variant="outlined" />
-
-                        <TextField type='password' className='signup-input' name='userPassword' id="outlined-basic"
-                            onChange={(e) => setUPass(e.target.value)} value={uPass} label="Password" variant="outlined" />
-                        <Button variant="contained" onClick={handleSignUp} id='signUp'>Sign Up</Button>
-                    </Box>
                 </div>
+                <div id='signUP'>
 
-            </div>
-        </Container >
+                    <div className="signup-main">
+                        <h1>Sign Up</h1>
+                        <p id='para'>Stay updated on your professional world</p>
+                        <Box
+                            component="form"
+                            sx={{
+                                '& > :not(style)': { m: 1, width: '25ch' },
+                            }}
+                            noValidate
+                            autoComplete="off"
+                        >
+                            <TextField type='text' className='signup-input' name='userName' id="outlined-basic"
+                                onChange={(e) => setUname(e.target.value)} value={uname} label="Username" variant="outlined" />
+
+                            <TextField type='email' className='signup-input' name='userMail' id="outlined-basic"
+                                onChange={(e) => setUMail(e.target.value)} value={uMail} label="Email" variant="outlined" />
+
+                            <TextField type='password' className='signup-input' name='userPassword' id="outlined-basic"
+                                onChange={(e) => setUPass(e.target.value)} value={uPass} label="Password" variant="outlined" />
+                            <Button variant="contained" onClick={handleSignUp} id='signUp'>
+                                {isLoading ? <CircularProgress style={{ height: '20px', width: '20px', color: 'white' }} /> : 'Sign Up'}
+                            </Button>
+                        </Box>
+                    </div>
+
+                </div>
+            </Container >
         </>
     )
 }

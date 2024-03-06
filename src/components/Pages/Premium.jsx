@@ -98,6 +98,10 @@ const defaultTheme = createTheme();
 
 export default function Premium() {
   const { mode } = React.useContext(Context)
+  React.useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
   
   return (
      <>

@@ -30,6 +30,11 @@ export default function Message() {
   const theme = useTheme();
     const isSmScreen = useMediaQuery(theme.breakpoints.up('sm'))
 
+    React.useEffect(() => {
+      // Scroll to the top of the page when the component mounts
+      window.scrollTo(0, 0);
+    }, []);
+
   React.useEffect(() => {
     setMessages(refreshMessages());
   }, [value, setMessages]);
@@ -79,7 +84,7 @@ export default function Message() {
           </List>
           }
         </Box>
-        {isSmScreen && <RightSection />}
+        {isSmScreen && <RightSection prop={{ marginTop: '16px' }} />}
       </Stack>
     </>
   )

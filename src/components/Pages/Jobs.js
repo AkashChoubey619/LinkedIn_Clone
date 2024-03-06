@@ -20,6 +20,11 @@ export default function Jobs() {
     const theme = useTheme();
     const isSmScreen = useMediaQuery(theme.breakpoints.up('sm'))
 
+    React.useEffect(() => {
+        // Scroll to the top of the page when the component mounts
+        window.scrollTo(0, 0);
+      }, []);
+
     return (
         <>
             <Nav />
@@ -101,7 +106,7 @@ export default function Jobs() {
 
                     }
                 </Box>
-                {isSmScreen && <RightSection />}
+                {isSmScreen && <RightSection prop={{ marginTop: '16px' }} />}
             </Stack>
         </>
     )

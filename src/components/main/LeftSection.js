@@ -45,7 +45,7 @@ export default function LeftSection(prop) {
 
           <Link to='/notAvailable' className='bookmark'>
           <div className='bookmark'>
-           <BookmarkIcon/> <p>My Items</p>
+           <BookmarkIcon /> <p >My Items</p>
           </div>
           </Link> 
 

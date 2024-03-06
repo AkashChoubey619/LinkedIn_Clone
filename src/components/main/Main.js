@@ -403,7 +403,7 @@ export default function Main() {
     }
   };
 
-
+  const [isFirstMount, setIsFirstMount] = useState(true);
   // <=======================peopleData=======================>
   const url = `https://academics.newtonschool.co/api/v1/linkedin/post?limit=10&page=${page}`;
 
@@ -422,10 +422,20 @@ export default function Main() {
       if (response.ok) {
 
         const data = await response.json();
-        setCard((prev) => [...prev, ...data.data]);
-        setPage((prev) => prev + 1)
-
-        // fetching comment
+        // if (isMounted) {
+        // setCard((prev) => [...prev, ...data.data]);
+        // setPage((prev) => prev + 1)
+        // } else {
+        //   setCard(data.data);
+        //   setIsMounted(true); // Set isMounted to true after initial data fetch
+        // }
+        if (page === 1 || isFirstMount) {
+          setCard(data.data);
+          setIsFirstMount(false);
+        } else {
+          setCard((prev) => [...prev, ...data.data]);
+        }
+        setPage((prev) => prev + 1);
 
         data.data.forEach((post) => {
           handleRenderComment(post._id);
@@ -462,6 +472,7 @@ export default function Main() {
     try {
       if (scrollTop + clientHeight >= scrollHeight - 100) {
         contentApi();
+        console.log('page reloads')
       }
     }
     catch (error) {
@@ -473,7 +484,12 @@ export default function Main() {
   // console.log(page)
 
   useEffect(() => {
+    setPage(1)
     contentApi()
+    console.log('page reloads one time')
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [])
 
 
@@ -962,7 +978,7 @@ export default function Main() {
         </section>
       </div>
 
-      {isSmScreen && (<RightSection />)}
+      {isSmScreen && (<RightSection prop={{ marginTop: '4px' }} />)}
 
     </Stack>
   )
@@ -1092,7 +1108,8 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  maxWidth: 400,
+  minWidth: 290,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
@@ -1104,7 +1121,8 @@ const darkStyle = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  maxWidth: 400,
+  minWidth: 290,
   bgcolor: 'black',
   color:'white',
   border: '2px solid #000',
