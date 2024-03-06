@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Container from '@mui/material/Container';
 import './Style.css'
 import { useNavigate } from 'react-router-dom';
@@ -71,6 +71,7 @@ export default function LoginMain() {
                 }
             }
             else {
+                setIsLoading(false)
                 setLoginFeed(false);
             }
 
@@ -79,6 +80,7 @@ export default function LoginMain() {
         }
 
     }
+    
 
 
     return (

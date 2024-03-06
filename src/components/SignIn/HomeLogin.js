@@ -6,12 +6,13 @@ import Context from '../ContextApi/MainContext';
 
 
 export default function HomeLogin() {
-  const { setMode } = useContext(Context)
+  const { setMode,mode } = useContext(Context)
 
   useEffect(()=>{
       localStorage.setItem('token',null)
       localStorage.setItem('userData',null)
       setMode(false)
+      console.log(mode,'login')
   },[])
      
 

@@ -42,7 +42,6 @@ export default function Nav() {
 
   const isXsScreen = useMediaQuery(customTheme.breakpoints.up('min'));
   const isMdScreen = useMediaQuery(theme.breakpoints.up('md'));
-  const isSmScreen = useMediaQuery(theme.breakpoints.up('sm'));
   const [isLoading, setIsLoading] = useState(false);
   mode ? color.style.backgroundColor = "rgb(14, 13, 13)" : color.style.backgroundColor = "#f2f2f2";
 
@@ -111,7 +110,8 @@ export default function Nav() {
   const handelSignOut = () => {
     localStorage.removeItem("token")
     localStorage.removeItem("userData")
-    setMode(!mode)
+    setMode(false);
+    console.log(mode);
     navigate('/')
 
   }
@@ -222,7 +222,6 @@ export default function Nav() {
                         <Divider />
                         <MenuItem onClick={handelSignOut}>
                         Sign Out
-                          
                         </MenuItem>
                       </Menu>
                     </Dropdown>

@@ -29,11 +29,10 @@ export default function LoginHead() {
   });
   const [signToggle, setSignToggle] = useState(true);
   const [open, setOpen] = React.useState(false);
-  const { mode } = useContext(Context)
+  const { setMode } = useContext(Context)
   const isSmScreen = useMediaQuery(theme.breakpoints.up('sm'));
   const forIcon = useMediaQuery(theme.breakpoints.up('forIcon'));
   const forIconMOb = useMediaQuery(theme.breakpoints.down('forIcon'));
-  const isMdScreen = useMediaQuery(theme.breakpoints.up('md'))
 
 
   const [transition, setTransition] = React.useState(undefined);
@@ -50,17 +49,14 @@ export default function LoginHead() {
   function TransitionUp(props) {
     return <Slide {...props} direction="down" />;
   }
-  //  setTimeout(()=>setOpen(false),3000)
-  // const SignIn=()=>{
-  //   const navigate=useNavigate();
-  //   setSignToggle(false);
-  //    navigate('/home')
-  // }
+
+  
 useEffect(()=>{
+  setMode(false)
 },[signToggle])
 
   return (
-    <Container sx={{ my: '10px' }} >
+    <Container sx={{ mt: '10px',pb:'10px' }} >
       <Container className='login-nav' id='login-head'>
         <div className='login-nav' id='logo-name'>
           <Link className='login-nav link-txt' to='/' onClick={() => setSignToggle(true)}>
@@ -122,7 +118,7 @@ useEffect(()=>{
           </h4>
         </div>
       </Container>
-      {forIconMOb&&<Stack justifyContent={'center'} direction="row" alignItems='center' spacing={2} my={1} m={0.8}>
+      {forIconMOb&&<Stack justifyContent={'center'} direction="row" alignItems='center' pb={'10px'} spacing={2}>
               <div >
                 <Link to='/notAvailable' className={'icon'} ><Article sx={{ fontSize: '26px' }} />
                     <div className='iconFont'>Articles</div>

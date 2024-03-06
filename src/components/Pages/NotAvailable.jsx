@@ -18,6 +18,11 @@ export default function NotAvailable() {
   const { mode } = React.useContext(Context)
   const token =  localStorage.getItem("token");
 
+  React.useEffect(() => {
+    // Scroll to the top of the page when the component mounts
+    window.scrollTo(0, 0);
+  }, []);
+
   function Copyright () {
     return (
       <Typography variant="body2" sx={mode&&{color:'white'}} color="text.secondary">
@@ -30,12 +35,12 @@ export default function NotAvailable() {
       </Typography>
     );
   }
-  console.log(token === null ? "Rendering LoginHead" : "Rendering Nav",localStorage.getItem("token"));
+  console.log(token === null ? "Rendering LoginHead" : "Rendering Nav",mode);
   return (
     <ThemeProvider theme={defaultTheme}>
       {
         
-        token === 'null' ?   <LoginHead/> : <Nav />
+        token === 'null' ?   <Box sx={{background:'white'}}><LoginHead  /> </Box>: <Nav />
       }
       <Box
         sx={mode?{

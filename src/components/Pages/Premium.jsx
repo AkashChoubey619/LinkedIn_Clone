@@ -9,11 +9,11 @@ import CardHeader from '@mui/material/CardHeader';
 import Grid from '@mui/material/Grid';
 import StarIcon from '@mui/icons-material/StarBorder';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import Container from '@mui/material/Container';
 import Nav from '../Header/Navigation';
 import Context from '../ContextApi/MainContext';
+import { Link } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -33,9 +33,9 @@ const tiers = [
     title: 'Free',
     price: '0',
     description: [
-      '10 users included',
-      '2 GB of storage',
-      'Help center access',
+      'Connect with professionals worldwide',
+      'Access to basic analytics',
+      'Limited messaging features',
       'Email support',
     ],
     buttonText: 'Sign up for free',
@@ -44,23 +44,23 @@ const tiers = [
   {
     title: 'Pro',
     subheader: 'Most popular',
-    price: '15',
+    price: '19.99',
     description: [
-      '20 users included',
-      '10 GB of storage',
-      'Help center access',
+      'Enhanced networking tools',
+      'Advanced analytics dashboard',
+      'Priority support',
       'Priority email support',
     ],
     buttonText: 'Get started',
     buttonVariant: 'contained',
   },
   {
-    title: 'Enterprise',
-    price: '30',
+    title: 'Business',
+    price: '29.99',
     description: [
-      '50 users included',
-      '30 GB of storage',
-      'Help center access',
+      'Team collaboration features',
+      'Customizable branding',
+      'Dedicated account manager',
       'Phone & email support',
     ],
     buttonText: 'Contact us',
@@ -122,9 +122,7 @@ export default function Premium() {
           Pricing
         </Typography>
         <Typography variant="h5" sx={mode&&{color:'white'}} align="center" color="text.secondary" component="p">
-          Quickly build an effective pricing table for your potential customers with
-          this layout. It&apos;s built with default MUI components with little
-          customization.
+        Get started today with our premium plans and supercharge your professional networking!
         </Typography>
       </Container>
       {/* End hero unit */}
@@ -194,11 +192,11 @@ export default function Premium() {
                     ))}
                   </ul>
                 </CardContent>
-                <CardActions>
+                <Link fullWidth to='/buyPremium'><CardActions>
                   <Button sx={mode&&{color:'white'}} fullWidth variant={tier.buttonVariant}>
                     {tier.buttonText}
                   </Button>
-                </CardActions>
+                </CardActions></Link>
               </Card>
             </Grid>
           ))}
