@@ -21,6 +21,7 @@ export default function Network() {
   const { mode } = useContext(Context);
   const userData = JSON.parse(localStorage.getItem("userData"))
   const [groups, setGroups] = useState([]);
+  const [createGroupError, setCreateGroupError] = useState(false);
   const [isLoading, setIsLoading]=useState(false)
   const token = localStorage.getItem("token");
   const [createGroupInfo, setCreateGroupInfo] = React.useState({
@@ -71,7 +72,7 @@ export default function Network() {
     })
 
     try {
-      const res = await fetch(`https://academics.newtonschool.co/api/v1/linkedin/channel/`, {
+      const res = await fetch('https://academics.newtonschool.co/api/v1/linkedin/channel/', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -83,7 +84,14 @@ export default function Network() {
       if (res.ok) {
         const createGroupData = await res.json();
         console.log(createGroupData);
+        setCreateGroupInfo({});
+        handleCloseGroup()
+        setCreateGroupError(false)
         fetchGroups()
+      }
+      else{
+        console.log('createGroup Error',event.target.name.value,event.target.description.value,event.target.image.value)
+        setCreateGroupError(true)
       }
     } catch (error) {
       console.log('groupsError ', error)
@@ -121,6 +129,7 @@ export default function Network() {
 
 
   useEffect(() => {
+    window.scrollTo(0,0)
     fetchGroups();
   }, []);
 
@@ -195,8 +204,8 @@ export default function Network() {
 
                       <Box id={group._id}>
                         {userData._id === group.owner._id && (
-                          <Dropdown sx={mode ? { bgcolor: 'darkslategray', color: 'white' } :
-                            { bgcolor: 'white' }} id={group._id}>
+                          <Dropdown style={mode ? { background: 'darkslategray', color: 'white' } :
+                            { background: 'white' }} id={group._id}>
                             <MenuButton id={group._id} sx={mode ? { bgcolor: 'darkslategray', color: 'white' } :
                               { bgcolor: 'white' }}>
                               <ThreeDotsIcon sx={mode ? {
@@ -250,7 +259,7 @@ export default function Network() {
                 <ModalContent sx={mode ? { width: 400, bgcolor: 'black' } : { width: 400 }}>
                   <Paper style={mode ? { padding: '16px', marginBottom: '16px', background: 'darkslategray', color: 'white', boxShadow: '0px 0px 5px white' }
                     : { padding: '16px', marginBottom: '16px' }}>
-                    <Typography variant="h6">Add Profile Image</Typography>
+                    <Typography variant="h6">Create group</Typography>
                     <form onSubmit={createGroup}>
                       <TextField
                         InputProps={{
@@ -305,16 +314,18 @@ export default function Network() {
                         name="image"
                         value={createGroupInfo.image}
                         onChange={handleCreateGroupInfo}
-                        // inputProps={{ accept: 'image/*' }}
+                        accept=".jpg,.jpeg,.png"
                         fullWidth
                         margin="normal"
                       />
 
-                      <Button onClick={handleCloseGroup} type="submit" variant="contained" color="primary">
+                      <Button type='submit' sx={{marginBlock:'7px'}} variant="contained" color="primary">
                         Submit
                       </Button>
 
                     </form>
+                    {createGroupError&&<Typography variant='body2' color={'error'} component={'h5'}>
+                      Name is Already used/server issue.</Typography>}
                   </Paper>
                 </ModalContent>
               </Modal>
@@ -337,7 +348,7 @@ export default function Network() {
                           {person.name}
                         </Typography>
                         <FollowGroup />
-                        <Typography variant="body2" sx={mode?{ color: 'white', marginTop: 1, }:{ color: 'text.secondary', marginTop: 1 }}>
+                        <Typography variant="body2" sx={mode?{ color: 'white', marginTop: 1,textAlign:'center' }:{ color: 'text.secondary', marginTop: 1,textAlign:'center' }}>
                           Mutual Connections: {person.mutualConnections}
                         </Typography>
                       </Box>

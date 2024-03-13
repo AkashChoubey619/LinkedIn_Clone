@@ -6,14 +6,16 @@ import Link from '@mui/material/Link';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import Container from '@mui/material/Container';
 import { Avatar, Box, List, ListItem, ListItemText, Paper, Stack, useMediaQuery } from '@mui/material';
-import { styled, alpha } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
+import { css } from '@mui/system';
+import { Modal as BaseModal } from '@mui/base/Modal';
 import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
 import LeftSearchCard from './LeftSearchCard';
 import Nav from '../Header/Navigation';
 import Context from '../ContextApi/MainContext';
 import { footers } from './Store';
 import { useContext } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
 import { useTheme } from '@mui/material/styles';
 
 
@@ -39,6 +41,9 @@ export default function MyProfile() {
   const {mode}=useContext(Context);
   const theme = useTheme();
   const isMdScreen = useMediaQuery(theme.breakpoints.up('md'));
+  const [openMore, setOpenMore] = React.useState(false);
+  const handleMore = () => setOpenMore(true);
+  const handleCloseMore = () => setOpenMore(false);
 
 
   const myInfo = async function () {
@@ -238,27 +243,49 @@ export default function MyProfile() {
                         {userData.isFollowed? <Button
                           onClick={handleClickFollow}
                           variant='outlined'
-                          sx={mode?{ borderRadius: '22px',color:'white' }:{ borderRadius: '22px' }}>
+                          sx={mode?{ borderRadius: '22px',color:'white',textTransform:'none' }
+                          :{ borderRadius: '22px',textTransform:'none' }}>
                           Following
                         </Button> :<Button
                           onClick={handleClickFollow}
                           variant='contained'
-                          sx={mode?{ borderRadius: '22px',color:'white' }:{ borderRadius: '22px' }}>
+                          sx={mode?{ borderRadius: '22px',color:'white',textTransform:'none' }
+                          :{ borderRadius: '22px',textTransform:'none' }}>
                           Follow
                         </Button>}
-                        
                         
                       </div>
 
                       <div style={{ marginLeft: '8px',marginTop:{xs:'8px',md:0} }}>
-                        <Button
-                          id="demo-customized-button"
-                          variant="outlined"
-                          disableElevation
-                          sx={mode?{ borderRadius: '20px',color:'white' }:{ borderRadius: '20px' }}
-                        >
-                          more
-                        </Button>
+                      <TriggerButton type="button" 
+                            sx={mode?{ borderRadius: '30px', p: 1, border: '1px solid white',paddingInline:'15px'
+                            ,background:'black',color:'white', flex: 'start', width: '100%','&:hover':{background:'#221e1e'} }:
+                            { borderRadius: '30px', p: 1, border: '1px solid #36c',paddingInline:'15px',
+                            background:'white',color:'#36c', flex: 'start', width: '100%','&:hover':{background:'#f9f2f2'} }}
+                              onClick={handleMore}>More
+                            </TriggerButton>
+                            <Modal
+                            open={openMore}
+                            onClose={handleCloseMore}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <Box sx={mode ? darkStyle : style} >
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                                <h2 id="unstyled-modal-title" className="modal-title">
+                                  Can't find the content you are looking for?
+                                </h2>
+                                <CloseIcon sx={mode && { color: 'white' }} onClick={handleCloseMore} />
+                              </Box>
+                              <Typography id="modal-modal-title" variant="body2" component="h2">
+                                No Options to display
+                              </Typography>
+                              <Typography id="modal-modal-description" variant="body1" sx={{ mt: 2 }}>
+                                Sorry for the issue
+                              </Typography>
+                            </Box>
+                          </Modal>
+                        
                       </div>
                     </Stack>
                     <Box mx={3} mt={{xs:'12px',md:0}} style={{marginBlock:'14px'}}>
@@ -277,9 +304,9 @@ export default function MyProfile() {
                     </Box>
 
                   </Stack>
-                  <Typography sx={{ marginLeft: '9px', color: 'gray', fontWeight: 700, textDecoration: 'underline' }}
+                  <Typography sx={{ marginLeft: '9px', color: 'gray', fontWeight: 700, fontSize:'16px' }}
                     variant="p" gutterBottom>
-                    Following 0
+                     {userData.isFollowed?'Followers 1':'No followers'}
                   </Typography>
                   <Box>
                     <div></div>
@@ -479,47 +506,95 @@ export default function MyProfile() {
 }
 
 
+const blue = {
+  200: '#99CCFF',
+  300: '#66B2FF',
+  400: '#3399FF',
+  500: '#007FFF',
+  600: '#0072E5',
+  700: '#0066CC',
+};
 
+const grey = {
+  50: '#F3F6F9',
+  100: '#E5EAF2',
+  200: '#DAE2ED',
+  300: '#C7D0DD',
+  400: '#B0B8C4',
+  500: '#9DA8B7',
+  600: '#6B7A90',
+  700: '#434D5B',
+  800: '#303740',
+  900: '#1C2025',
+};
 
+const Modal = styled(BaseModal)(`
+  position: fixed;
+  z-index: 1300;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
+  &.base-Modal-hidden {
+    visibility: hidden;
+  }
+`);
 
-const StyledMenu = styled((props) => (
-  <Menu
-    elevation={0}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'right',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'right',
-    }}
-    {...props}
-  />
-))(({ theme }) => ({
-  '& .MuiPaper-root': {
-    borderRadius: 6,
-    marginTop: theme.spacing(1),
-    minWidth: 180,
-    color:
-      theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
-    boxShadow:
-      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
-    '& .MuiMenu-list': {
-      padding: '4px 0',
-    },
-    '& .MuiMenuItem-root': {
-      '& .MuiSvgIcon-root': {
-        fontSize: 18,
-        color: theme.palette.text.secondary,
-        marginRight: theme.spacing(1.5),
-      },
-      '&:active': {
-        backgroundColor: alpha(
-          theme.palette.primary.main,
-          theme.palette.action.selectedOpacity,
-        ),
-      },
-    },
-  },
-}));
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  maxWidth: 400,
+  minWidth: 290,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '8px'
+};
+const darkStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  maxWidth: 400,
+  minWidth: 290,
+  bgcolor: 'black',
+  color: 'white',
+  border: '2px solid #000',
+  boxShadow: '0px 0px 14px white',
+  p: 4,
+  borderRadius: '8px'
+}
+const TriggerButton = styled('button')(
+  ({ theme }) => css`
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.875rem;
+    border-radius: 8px;
+    transition: all 150ms ease;
+    cursor: pointer;
+    background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+    border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+    color: ${theme.palette.mode === 'dark' ? grey[200] : grey[900]};
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+    &:hover {
+      background: ${theme.palette.mode === 'dark' ? grey[800] : grey[50]};
+      border-color: ${theme.palette.mode === 'dark' ? grey[600] : grey[300]};
+    }
+
+    &:active {
+      background: ${theme.palette.mode === 'dark' ? grey[700] : grey[100]};
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 4px ${theme.palette.mode === 'dark' ? blue[300] : blue[200]};
+      outline: none;
+    }
+  `,
+);

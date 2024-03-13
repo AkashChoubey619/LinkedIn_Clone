@@ -107,7 +107,7 @@ export default function UpdatePassword() {
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
                                     InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx: { color: 'black',outline:'white' } }}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -121,7 +121,7 @@ export default function UpdatePassword() {
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx: { color: 'black',outline:'white' } }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -134,7 +134,7 @@ export default function UpdatePassword() {
                                     value={currPass}
                                     onChange={(e) => setCurrPass(e.target.value)}
                                     InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx: { color: 'black',outline:'white' } }}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -149,7 +149,7 @@ export default function UpdatePassword() {
                                     value={newPass}
                                     onChange={(e) => setNewPass(e.target.value)}
                                     InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputLabelProps={{ sx: { color: 'black',outline:'white' } }}
                                 />
                                 {
                                 message.length !==0?

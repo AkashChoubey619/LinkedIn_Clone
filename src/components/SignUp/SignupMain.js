@@ -71,18 +71,19 @@ export default function SignupMain() {
                         <Box
                             component="form"
                             sx={{
-                                '& > :not(style)': { m: 1, width: '25ch' },
+                                '& > :not(style)': { m: 1, width: '100%' },display:'grid',
+                                placeItems: 'center'
                             }}
                             noValidate
                             autoComplete="off"
                         >
-                            <TextField type='text' className='signup-input' name='userName' id="outlined-basic"
+                            <TextField type='text' fullWidth className='signup-inputBox' name='userName' id="outlined-basic"
                                 onChange={(e) => setUname(e.target.value)} value={uname} label="Username" variant="outlined" />
 
-                            <TextField type='email' className='signup-input' name='userMail' id="outlined-basic"
+                            <TextField type='email' className='signup-inputBox' name='userMail' id="outlined-basic"
                                 onChange={(e) => setUMail(e.target.value)} value={uMail} label="Email" variant="outlined" />
 
-                            <TextField type='password' className='signup-input' name='userPassword' id="outlined-basic"
+                            <TextField type='password' className='signup-inputBox' name='userPassword' id="outlined-basic"
                                 onChange={(e) => setUPass(e.target.value)} value={uPass} label="Password" variant="outlined" />
                             <Button variant="contained" onClick={handleSignUp} id='signUp'>
                                 {isLoading ? <CircularProgress style={{ height: '20px', width: '20px', color: 'white' }} /> : 'Sign Up'}

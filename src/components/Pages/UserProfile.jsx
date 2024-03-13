@@ -6,12 +6,10 @@ import Link from '@mui/material/Link';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import Container from '@mui/material/Container';
 import { Avatar, Box, List, ListItem, ListItemText, Paper, Stack, TextField, useMediaQuery } from '@mui/material';
-import { styled, alpha } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import AddImage from '@mui/icons-material/AddPhotoAlternateOutlined';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import LeftSearchCard from './LeftSearchCard';
 import PropTypes from 'prop-types';
 import Context from '../ContextApi/MainContext';
@@ -21,6 +19,7 @@ import Nav from '../Header/Navigation';
 import clsx from 'clsx';
 import { footers } from './Store';
 import AddIcon from '@mui/icons-material/Add';
+import CloseIcon from '@mui/icons-material/Close';
 import { useTheme } from '@mui/material/styles';
 
 
@@ -45,7 +44,13 @@ export default function MyProfile() {
   const myData = localStorage.getItem('userData');
   const id = JSON.parse(myData)._id
   const [previewUrl, setPreviewUrl] = React.useState('');
-  const {mode}=React.useContext(Context);
+  const [openTo, setOpenTo] = React.useState(false);
+  const handleOpenTo = () => setOpenTo(true);
+  const handleCloseOpenTo = () => setOpenTo(false);
+  const [openMore, setOpenMore] = React.useState(false);
+  const handleMore = () => setOpenMore(true);
+  const handleCloseMore = () => setOpenMore(false);
+  const { mode } = React.useContext(Context);
   const theme = useTheme();
   const isMdScreen = useMediaQuery(theme.breakpoints.up('md'));
   const [userData, setUserData] = React.useState([])
@@ -74,7 +79,7 @@ export default function MyProfile() {
   const [myName, setMyName] = React.useState("")
   const [nameId, setNameId] = React.useState("")
   const isName = nameId === userData._id;
-  
+
 
   const [myPhone, setMyPhone] = React.useState("")
   const [phoneId, setPhoneId] = React.useState("")
@@ -128,7 +133,7 @@ export default function MyProfile() {
       if (res.ok) {
         const data = await res.json();
         setUserData(data.data);
-        
+
 
       }
     } catch (error) {
@@ -142,7 +147,7 @@ export default function MyProfile() {
     window.scrollTo(0, 0)
     myInfo()
   }, [])
-console.log(userData);
+  console.log(userData);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -423,10 +428,10 @@ console.log(userData);
     };
 
     return (
-      <Paper elevation={3} sx={mode?{background:'darkslategray',color:'white',p: 2, borderRadius: '8px' }:{ p: 2, borderRadius: '8px' }}>
+      <Paper elevation={3} sx={mode ? { background: 'darkslategray', color: 'white', p: 2, borderRadius: '8px' } : { p: 2, borderRadius: '8px' }}>
         <Avatar></Avatar>
         <Typography variant="h6">{suggestion.name}</Typography>
-        <Typography sx={mode&&{color:'whiite'}} variant="body1" color="textSecondary">
+        <Typography sx={mode && { color: 'whiite' }} variant="body1" color="textSecondary">
           {suggestion.occupation}
         </Typography>
         <Button
@@ -456,13 +461,13 @@ console.log(userData);
   }
 
   const SkillsSection = ({ skills }) => {
-    console.log(skills,'skills')
-    const Skills =  skills && skills.length >= 0 ? skills[0].split(',') : [];
+    console.log(skills, 'skills')
+    const Skills = skills && skills.length >= 0 ? skills[0].split(',') : [];
     const listItemStyle = {
-      backgroundColor: mode?'darkslategray':'#ffffff',
+      backgroundColor: mode ? 'darkslategray' : '#ffffff',
       borderRadius: '4px',
       marginBottom: '8px',
-      boxShadow: mode?'0px 0px 4px lightgrey': '0px 2px 4px rgba(0, 0, 0, 0.3)',
+      boxShadow: mode ? '0px 0px 4px lightgrey' : '0px 2px 4px rgba(0, 0, 0, 0.3)',
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
@@ -473,8 +478,8 @@ console.log(userData);
 
       <Stack direction={'row'} flexWrap={'wrap'}>
         {Skills.map((skill, index) => (
-          <Box sx={mode?{ p: '10px', bgcolor: 'darkslategray', color: 'white', margin: '8px' }:{ p: '10px', bgcolor: 'lightpink', color: 'grey', margin: '8px' }}
-           key={index} style={listItemStyle}>
+          <Box sx={mode ? { p: '10px', bgcolor: 'darkslategray', color: 'white', margin: '8px' } : { p: '10px', bgcolor: 'lightpink', color: 'grey', margin: '8px' }}
+            key={index} style={listItemStyle}>
             <Box sx={{ padding: '3px', fontWeight: 700 }} >{skill}</Box>
           </Box>
         ))}
@@ -487,8 +492,8 @@ console.log(userData);
     return (
       <>
         {address && address.map((address, index) => (
-          <Paper key={index} sx={mode?{ mb: 2, p: 2, boxShadow: '0px 0px 5px lightgrey',color:'white',background:'darkslategray' }
-          :{ mb: 2, p: 2, boxShadow: '0px 0px 5px grey' }}>
+          <Paper key={index} sx={mode ? { mb: 2, p: 2, boxShadow: '0px 0px 5px lightgrey', color: 'white', background: 'darkslategray' }
+            : { mb: 2, p: 2, boxShadow: '0px 0px 5px grey' }}>
             <Typography variant="h6">Address-</Typography>
             <Typography variant="body1"><strong>Street:</strong> {address.street}</Typography>
             <Typography variant="body1"><strong>City:</strong> {address.city}</Typography>
@@ -514,25 +519,25 @@ console.log(userData);
             <Grid item xs={12} md={8}>
               <Stack spacing={3}>
                 <Box >
-                  <Box sx={mode?{ bgcolor: 'black', borderRadius: '8px', mb: '15px',color:'white' }:{ bgcolor: 'white', borderRadius: '8px', mb: '15px' }}>
+                  <Box sx={mode ? { bgcolor: 'black', borderRadius: '8px', mb: '15px', color: 'white' } : { bgcolor: 'white', borderRadius: '8px', mb: '15px' }}>
                     <div >
                       <img src='https://static.licdn.com/aero-v1/sc/h/55k1z8997gh8dwtihm11aajyq' alt='banner' />
                     </div>
                     <Box p={'19px'} sx={{ display: 'grid', placeItems: 'left' }} >
                       <Box sx={{ ml: '15px' }}>
-                        <Box sx={mode?{ display: 'flex', alignItems: 'center',bgcolor:'black',color:'white' }:{ display: 'flex', alignItems: 'center' }}>
+                        <Box sx={mode ? { display: 'flex', alignItems: 'center', bgcolor: 'black', color: 'white' } : { display: 'flex', alignItems: 'center' }}>
                           <Avatar alt="Remy Sharp"
                             src={userData.profileImage}
                             sx={{
-                              width: { xs: 80, sm: 125, md: 156 }, height: { xs: 80, sm: 110, md: 156 },
+                              width: { xs: 80, sm: 115, md: 156 }, height: { xs: 80, sm: 110, md: 156 },
                               border: '2px solid white', fontSize: '80px',
                               mt: { xs: '-50px', sm: '-75px', md: '-100px' }, bgcolor: '#f3f6f9'
                             }}>
                             A</Avatar>
-                          <TriggerButton sx={mode?{ ml: '-28px', zIndex: '20', borderRadius: '50%',background:'darkslategray',color:'white' }:
-                          { ml: '-28px', zIndex: '20', borderRadius: '50%' }} 
-                          type="button" onClick={handleOpenAddImg}>
-                            <AddImage />
+                          <TriggerButton sx={mode ? { ml: '-28px',height:'35px',width:'35px', zIndex: '20', borderRadius: '50%', background: 'darkslategray', color: 'white' } :
+                            { ml: '-28px', zIndex: '20', borderRadius: '50%',height:'35px',width:'35px' }}
+                            type="button" onClick={handleOpenAddImg}>
+                            <AddImage sx={{height:'30px',width:'20px'}} />
                           </TriggerButton>
 
                           <Modal
@@ -542,9 +547,9 @@ console.log(userData);
                             onClose={handleCloseAddImg}
                             slots={{ backdrop: StyledBackdrop }}
                           >
-                            <ModalContent sx={mode?{ width: 400,background:'black',color:'white' }:{ width: 400 }}>
-                              <Paper style={mode?{ padding: '16px', marginBottom: '16px',background:'black',color:'white',boxShadow:'0px 0px 4px grey' }
-                              :{ padding: '16px', marginBottom: '16px' }}>
+                            <ModalContent sx={mode ? { width: 400, background: 'black', color: 'white' } : { width: 400 }}>
+                              <Paper style={mode ? { padding: '16px', marginBottom: '16px', background: 'black', color: 'white', boxShadow: '0px 0px 4px grey' }
+                                : { padding: '16px', marginBottom: '16px' }}>
                                 <Typography variant="h6">Add Profile Image</Typography>
                                 <form onSubmit={handleSubmitAddImg}>
                                   <input
@@ -572,7 +577,7 @@ console.log(userData);
                                     color="primary" >
                                     Save
                                   </Button>
-                                  <Button sx={mode?{ m: 1, height: '30px',color:'white' }:{ m: 1, height: '30px' }}
+                                  <Button sx={mode ? { m: 1, height: '30px', color: 'white' } : { m: 1, height: '30px' }}
                                     onClick={() => {
                                       setOpenAddImg(false)
                                       setPreviewUrl('')
@@ -584,108 +589,122 @@ console.log(userData);
                               </Paper>
                             </ModalContent>
                           </Modal>
+                          <Modal
+                            open={openTo}
+                            onClose={handleCloseOpenTo}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <Box sx={mode ? darkStyle : style} >
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                                <h2 id="unstyled-modal-title" className="modal-title">
+                                  Error from backend
+                                </h2>
+                                <CloseIcon sx={mode && { color: 'white' }} onClick={handleCloseOpenTo} />
+                              </Box>
+                              <Typography id="modal-modal-title" variant="body2" component="h2">
+                                There might be some issue we'll fix  it as soon as possible.
+                              </Typography>
+                              <Typography id="modal-modal-description" variant="body1" sx={{ mt: 2 }}>
+                                Sorry for the issue
+                              </Typography>
+                            </Box>
+                          </Modal>
+                          <Modal
+                            open={openMore}
+                            onClose={handleCloseMore}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                          >
+                            <Box sx={mode ? darkStyle : style} >
+                              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
+                                <h2 id="unstyled-modal-title" className="modal-title">
+                                  Can't find the content you are looking for?
+                                </h2>
+                                <CloseIcon sx={mode && { color: 'white' }} onClick={handleCloseMore} />
+                              </Box>
+                              <Typography id="modal-modal-title" variant="body2" component="h2">
+                                No Options to display
+                              </Typography>
+                              <Typography id="modal-modal-description" variant="body1" sx={{ mt: 2 }}>
+                                Sorry for the issue
+                              </Typography>
+                            </Box>
+                          </Modal>
                         </Box>
                         {isName ?
                           <form onSubmit={handleEditName}>
-                            <input type='text' name='name' style={mode?{ padding: '5px', borderRadius: '12px',background:'darkslategray',color:'white', border: '1px solid grey' }
-                            :{ padding: '5px', borderRadius: '12px', border: '1px solid grey' }}
+                            <input type='text' name='name' style={mode ? { padding: '5px', borderRadius: '12px', background: 'darkslategray', color: 'white', border: '1px solid grey' }
+                              : { padding: '5px', borderRadius: '12px', border: '1px solid grey' }}
                               id='myName' value={myName} placeholder='Enter name'
                               onChange={(e) => setMyName(e.target.value)} required
                             />
                             <Button sx={{ marginInline: 2, borderRadius: '14px' }} variant='contained' type='submit'>Save</Button>
-                            <Button sx={mode?{ borderRadius: '14px',color:'white' }:{ borderRadius: '14px' }} 
-                            variant='outlined' onClick={() => { setNameId('') }}>Cancel</Button>
+                            <Button sx={mode ? { borderRadius: '14px', color: 'white' } : { borderRadius: '14px' }}
+                              variant='outlined' onClick={() => { setNameId('') }}>Cancel</Button>
                           </form> :
                           <Typography my={1} sx={{ ml: '8px' }} variant={'h5'}>
                             {userData.name}
                             <Button onClick={editNameId} sx={{ padding: 0, margin: 0, ml: '20px', mt: '-4px' }}>
-                              <EditIcon sx={mode&&{color:'white'}}/></Button>
+                              <EditIcon sx={mode && { color: 'white' }} /></Button>
                           </Typography>
                         }
 
                         <Typography sx={{ fontWeight: 700, color: "grey" }} variant={'p'}>{userData.email}</Typography>
                       </Box>
                       <Stack alignItems={{ xs: 'flex-start', md: 'center' }}
-                       justifyContent={{ xs: 'flex-start', md: 'space-between' }}
-                       spacing={2}
-                       direction={{ xs: 'column', md: 'row' }}>
-                        <Stack direction="row" alignItems="center"  style={{marginBlock:'16px'}}>
+                        justifyContent={{ xs: 'flex-start', md: 'space-between' }}
+                        spacing={2}
+                        direction={{ xs: 'column', md: 'row' }}>
+                        <Stack direction="row" alignItems="center" style={{ marginBlock: '16px' }}>
                           <div>
-                            <Button
-                              id="demo-customized-button"
-                              aria-controls={open ? 'demo-customized-menu' : undefined}
-                              aria-haspopup="true"
-                              aria-expanded={open ? 'true' : undefined}
-                              variant="contained"
-                              disableElevation
-                              onClick={handleClick}
-                              sx={{ borderRadius: '22px' }}
-                            >
-                              Open to
-                            </Button>
-                            <StyledMenu
-                              id="demo-customized-menu"
-                              MenuListProps={{
-                                'aria-labelledby': 'demo-customized-button',
-                              }}
-                              anchorEl={anchorEl}
-                              open={open}
-                              onClose={handleClose}
-                            >
-                              <MenuItem sx={mode&&{color:'white',background:'black'}} onClick={handleClose} disableRipple>
-                                {/* <Typography  variant='h6'>Hiring</Typography> */}
-                                <Typography variant='p'>
-                                  Share that you’re hiring and attract qualified candidates
-                                </Typography>
-                              </MenuItem>
-                              <MenuItem sx={mode&&{color:'white',background:'black'}} onClick={handleClose} disableRipple>
-                                {/* <Typography variant='h5'>Providing Services</Typography> */}
-                                <Typography variant='p'>
-                                  Showcase services you offer so new clients can discover you
-                                </Typography>
-                              </MenuItem>
-                            </StyledMenu>
+                            <TriggerButton type="button" 
+                            sx={mode?{ borderRadius: '30px', p: 1, border: '1px solid white'
+                            ,background:'black',color:'white', flex: 'start', width: '100%','&:hover':{background:'#221e1e'} }:
+                            { borderRadius: '30px', p: 1, border: '1px solid #36c',
+                            background:'#36c',color:'white', flex: 'start', width: '100%','&:hover':{background:'#2653ad'} }}
+                              onClick={handleOpenTo}>Open to
+                            </TriggerButton>
                           </div>
 
-                          <div style={{ marginLeft: '8px',marginTop:{xs:'8px',md:0} }}>
-                            <Button
-                              id="demo-customized-button"
-                              variant="outlined"
-                              disableElevation
-                              sx={mode?{borderRadius:'20px',color:'white'}:{ borderRadius: '20px' }}
-                            >
-                              more
-                            </Button>
+                          <div style={{ marginLeft: '8px', marginTop: { xs: '8px', md: 0 } }}>
+                          <TriggerButton type="button" 
+                            sx={mode?{ borderRadius: '30px', p: 1, border: '1px solid white',paddingInline:'15px'
+                            ,background:'black',color:'white', flex: 'start', width: '100%','&:hover':{background:'#221e1e'} }:
+                            { borderRadius: '30px', p: 1, border: '1px solid #36c',paddingInline:'15px',
+                            background:'white',color:'#36c', flex: 'start', width: '100%','&:hover':{background:'#f9f2f2'} }}
+                              onClick={handleMore}>More
+                            </TriggerButton>
                           </div>
                         </Stack>
-                        <Box mx={3} mt={{xs:'16px',md:0}} style={{marginBlock:'16px'}}>
+                        <Box mx={3} mt={{ xs: '16px', md: 0 }} style={{ marginBlock: '16px' }}>
                           {userData.phone ? <Box
-                            sx={mode?{ display: 'flex', alignItems: 'center', bgcolor: 'darkslategray', px: '8px', borderRadius: '6px' }:
-                            { display: 'flex', alignItems: 'center', bgcolor: '#f3f6f9', px: '8px', borderRadius: '6px' }}>
-                            <Typography sx={{ fontWeight: 700,mx:'2px',display:'inline' }}
+                            sx={mode ? { display: 'flex', alignItems: 'center', bgcolor: 'darkslategray', px: '8px', borderRadius: '6px' } :
+                              { display: 'flex', alignItems: 'center', bgcolor: '#f3f6f9', px: '8px', borderRadius: '6px' }}>
+                            <Typography sx={{ fontWeight: 700, mx: '2px', display: 'inline' }}
                               variant="h6">
                               Contact- &nbsp;
                               {isPhone ?
-                                <form style={{display:'inline'}} onSubmit={handleEditPhone}>
+                                <form style={{ display: 'inline' }} onSubmit={handleEditPhone}>
                                   <input type='tel' name='name' minLength={10}
-                                    style={mode?{ padding: '5px',color:'white' ,borderRadius: '12px', border: '1px solid lightgrey',background:'darkslategray' }:
-                                    { padding: '5px', borderRadius: '12px', border: '1px solid lightgrey' }}
+                                    style={mode ? { padding: '5px', color: 'white', borderRadius: '12px', border: '1px solid lightgrey', background: 'darkslategray' } :
+                                      { padding: '5px', borderRadius: '12px', border: '1px solid lightgrey' }}
                                     id='myName' value={myPhone} placeholder='Enter number'
                                     onChange={(e) => setMyPhone(e.target.value)} required
                                   />
                                   <Box my={1}>
-                                  <Button sx={{ marginInline: 1, borderRadius: '14px' }} variant='contained' type='submit'>Save</Button>
-                                  <Button sx={{ borderRadius: '14px' }} variant='outlined' onClick={() => { setPhoneId('') }}>Cancel</Button>
+                                    <Button sx={{ marginInline: 1, borderRadius: '14px' }} variant='contained' type='submit'>Save</Button>
+                                    <Button sx={{ borderRadius: '14px' }} variant='outlined' onClick={() => { setPhoneId('') }}>Cancel</Button>
                                   </Box>
                                 </form>
                                 : (<Typography sx={{ fontWeight: 600, display: 'inline-block' }}
                                   variant="body2" >{userData.phone}
                                   <Button onClick={editPhoneId} sx={{ padding: 0, margin: 0 }}>
-                                    <EditIcon sx={mode&&{color:'white'}} /></Button></Typography>)}
+                                    <EditIcon sx={mode && { color: 'white' }} /></Button></Typography>)}
 
                             </Typography>
                           </Box> : (isPhone ?
-                            <form style={{display:'inline'}} onSubmit={handleEditPhone}>
+                            <form style={{ display: 'inline' }} onSubmit={handleEditPhone}>
                               <input type='tel' name='name' maxLength={10}
                                 style={{ padding: '5px', borderRadius: '12px', border: '1px solid lightgrey' }}
                                 id='myName' value={myPhone} placeholder='Enter number'
@@ -695,7 +714,7 @@ console.log(userData);
                               <Button sx={{ borderRadius: '14px' }} variant='outlined' onClick={() => { setPhoneId('') }}>Cancel</Button>
                             </form> :
                             <Button onClick={editPhoneId}>
-                              <AddIcon sx={mode&&{color:'white'}} />Add Contact Number
+                              <AddIcon sx={mode && { color: 'white' }} />Add Contact Number
                             </Button>
                           )
 
@@ -704,9 +723,9 @@ console.log(userData);
                         </Box>
 
                       </Stack>
-                      <Typography sx={{ marginLeft: '9px', color: 'gray', fontWeight: 700, textDecoration: 'underline' }}
+                      <Typography sx={{ marginLeft: '9px', color: 'gray', fontWeight: 700,fontSize:'16px' }}
                         variant="p" gutterBottom>
-                        Following 0
+                         {userData.isFollowed?'Followers 1':'No followers'}
                       </Typography>
                       <Box>
                         <div></div>
@@ -717,10 +736,10 @@ console.log(userData);
 
                   {/* <================suggestion===================> */}
 
-                  <Box className='suggestion' style={mode?{ marginBottom: '20px',boxShadow:'0px 0px 4px grey' }
-                  :{ marginBottom: '20px' }}>
-                    <Paper style={mode?{color:'white',background:'black',padding: 20 }:{ padding: 20 }}>
-                      <Typography  variant="h5" component={'h4'} gutterBottom>
+                  <Box className='suggestion' style={mode ? { marginBottom: '20px', boxShadow: '0px 0px 4px grey' }
+                    : { marginBottom: '20px' }}>
+                    <Paper style={mode ? { color: 'white', background: 'black', padding: 20 } : { padding: 20 }}>
+                      <Typography variant="h5" component={'h4'} gutterBottom>
                         Suggestions for you
                       </Typography>
                       <Grid container spacing={2}>
@@ -736,16 +755,16 @@ console.log(userData);
 
                   {/* <================Experience===================> */}
 
-                  <Box className='experience' style={mode?{ marginBottom: '20px',boxShadow:'0px 0px 4px grey' }:{ marginBottom: '20px' }}>
+                  <Box className='experience' style={mode ? { marginBottom: '20px', boxShadow: '0px 0px 4px grey' } : { marginBottom: '20px' }}>
                     <Paper elevation={3} className="experience-section"
-                     style={mode?{ padding: '20px', borderRadius: '8px',background:'black',color:'white' }
-                     :{ padding: '20px', borderRadius: '8px' }}>
+                      style={mode ? { padding: '20px', borderRadius: '8px', background: 'black', color: 'white' }
+                        : { padding: '20px', borderRadius: '8px' }}>
                       <Stack direction="row" alignItems="center" justifyContent={'space-between'} >
                         <Typography variant="h5" gutterBottom>
                           Experience</Typography>
 
-                        <TriggerButton sx={mode&&{background:'darkslategray'}} type="button" onClick={handleOpenExp}>
-                          {userData.experience&&userData.experience.length>0 ? <EditIcon sx={mode&&{color:'white'}} /> : <AddIcon sx={mode&&{color:'white'}}  />}
+                        <TriggerButton sx={mode && { background: 'darkslategray' }} type="button" onClick={handleOpenExp}>
+                          {userData.experience && userData.experience.length > 0 ? <EditIcon sx={mode && { color: 'white' }} /> : <AddIcon sx={mode && { color: 'white' }} />}
                         </TriggerButton>
 
                         <Modal
@@ -755,9 +774,9 @@ console.log(userData);
                           onClose={handleCloseExp}
                           slots={{ backdrop: StyledBackdrop }}
                         >
-                          <ModalContent sx={mode?{ width: 400,background:'black',color:'white' }:{ width: 400 }}>
-                            <Paper style={mode?{ padding: '16px', marginBottom: '16px',color:'white',background:'black',boxShadow:'0px 0px 4px grey' }
-                            :{ padding: '16px', marginBottom: '16px' }}>
+                          <ModalContent sx={mode ? { width: 400, background: 'black', color: 'white' } : { width: 400 }}>
+                            <Paper style={mode ? { padding: '16px', marginBottom: '16px', color: 'white', background: 'black', boxShadow: '0px 0px 4px grey' }
+                              : { padding: '16px', marginBottom: '16px' }}>
                               <Typography variant="h6">Add Experience</Typography>
                               <form onSubmit={handleSubmitExperience}>
                                 <TextField
@@ -768,8 +787,8 @@ console.log(userData);
                                   onChange={handleChangeExperience}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <TextField
                                   required
@@ -779,8 +798,8 @@ console.log(userData);
                                   onChange={handleChangeExperience}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <TextField
                                   required
@@ -790,8 +809,8 @@ console.log(userData);
                                   onChange={handleChangeExperience}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <TextField
                                   required
@@ -801,8 +820,8 @@ console.log(userData);
                                   onChange={handleChangeExperience}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <TextField
                                   required
@@ -812,8 +831,8 @@ console.log(userData);
                                   onChange={handleChangeExperience}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <TextField
                                   required
@@ -823,8 +842,8 @@ console.log(userData);
                                   onChange={handleChangeExperience}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <Button onClose={handleCloseEdu} type="submit" variant="contained" color="primary">
                                   Submit
@@ -836,28 +855,28 @@ console.log(userData);
 
                       </Stack>
                       <Grid container spacing={2}>
-                        {userData.experiences&&userData.experiences.length > 0 ? 
-                        userData.experiences.map((experience, index) => (
-                          <Grid item xs={12} key={index}>
-                            <Paper elevation={1} style={mode?{ background:'darkslategray',color:'white',padding: '15px', marginBottom: '15px' }:
-                            { padding: '15px', marginBottom: '15px' }}>
-                              <Paper style={{ background: '#f9f9f9', padding: '9px', borderRadius: '5px' }}>
-                                <Typography variant="h5">{experience.designation}</Typography>
-                                <Typography variant="body1">{experience.companyName}</Typography>
-                                <Typography variant="body1">{experience.location}</Typography>
+                        {userData.experiences && userData.experiences.length > 0 ?
+                          userData.experiences.map((experience, index) => (
+                            <Grid item xs={12} key={index}>
+                              <Paper elevation={1} style={mode ? { background: 'darkslategray', color: 'white', padding: '15px', marginBottom: '15px' } :
+                                { padding: '15px', marginBottom: '15px' }}>
+                                <Paper style={{ background: '#f9f9f9', padding: '9px', borderRadius: '5px' }}>
+                                  <Typography variant="h5">{experience.designation}</Typography>
+                                  <Typography variant="body1">{experience.companyName}</Typography>
+                                  <Typography variant="body1">{experience.location}</Typography>
 
-                                <Typography variant="body1">
-                                  {dateVisible(experience.startDate)} - {dateVisible(experience.endDate)}</Typography>
+                                  <Typography variant="body1">
+                                    {dateVisible(experience.startDate)} - {dateVisible(experience.endDate)}</Typography>
+                                </Paper>
+                                <List>
+                                  <ListItem>
+                                    <ListItemText primary={experience.description} />
+                                  </ListItem>
+                                </List>
                               </Paper>
-                              <List>
-                                <ListItem>
-                                  <ListItemText primary={experience.description} />
-                                </ListItem>
-                              </List>
-                            </Paper>
-                          </Grid>
-                        )) : <Typography sx={{ margin: 'auto',textAlign:'center', my: 2, color: 'grey' }} variant="h5">
-                          <i>Add Experience</i></Typography>
+                            </Grid>
+                          )) : <Typography sx={{ margin: 'auto', textAlign: 'center', my: 2, color: 'grey' }} variant="h5">
+                            <i>Add Experience</i></Typography>
                         }
                       </Grid>
                     </Paper>
@@ -866,13 +885,13 @@ console.log(userData);
 
                   {/* <================Education===================> */}
 
-                  <Box className='eduction' style={mode?{ background:'black',boxShadow:'0px 0px 4px grey',borderRadius:'8px', marginBottom: '20px' }:{ marginBottom: '20px' }}>
-                    <Paper style={mode?{ padding: '20px', marginBottom: '20px', borderRadius: '8px',background:'black',color:'white' }:
-                    { padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
+                  <Box className='eduction' style={mode ? { background: 'black', boxShadow: '0px 0px 4px grey', borderRadius: '8px', marginBottom: '20px' } : { marginBottom: '20px' }}>
+                    <Paper style={mode ? { padding: '20px', marginBottom: '20px', borderRadius: '8px', background: 'black', color: 'white' } :
+                      { padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
                       <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
                         <Typography variant="h5" gutterBottom>Education</Typography>
-                        <TriggerButton sx={mode&&{color:'white',background:'darkslategray'}}  type="button" onClick={handleOpenEdu}>
-                          {userData.education&&userData.education.length>0 ? <EditIcon sx={mode&&{color:'white'}} /> : <AddIcon sx={mode&&{color:'white'}} />}
+                        <TriggerButton sx={mode && { color: 'white', background: 'darkslategray' }} type="button" onClick={handleOpenEdu}>
+                          {userData.education && userData.education.length > 0 ? <EditIcon sx={mode && { color: 'white' }} /> : <AddIcon sx={mode && { color: 'white' }} />}
                         </TriggerButton>
                         <Modal
                           aria-labelledby="unstyled-modal-title"
@@ -881,8 +900,8 @@ console.log(userData);
                           onClose={handleCloseEdu}
                           slots={{ backdrop: StyledBackdrop }}
                         >
-                          <ModalContent sx={mode?{ width: 400,background:'black',color:'white' }:{ width: 400 }}>
-                            <Paper style={mode?{background:'black',color:'white',padding: '16px', marginBottom: '16px'}:{ padding: '16px', marginBottom: '16px' }}>
+                          <ModalContent sx={mode ? { width: 400, background: 'black', color: 'white' } : { width: 400 }}>
+                            <Paper style={mode ? { background: 'black', color: 'white', padding: '16px', marginBottom: '16px' } : { padding: '16px', marginBottom: '16px' }}>
                               <Typography variant="h6">Add Education</Typography>
                               <form onSubmit={handleSubmitEducation}>
                                 <TextField
@@ -893,8 +912,8 @@ console.log(userData);
                                   onChange={handleChangeEducation}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <TextField
                                   required
@@ -904,8 +923,8 @@ console.log(userData);
                                   onChange={handleChangeEducation}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <TextField
                                   required
@@ -915,8 +934,8 @@ console.log(userData);
                                   onChange={handleChangeEducation}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <TextField
                                   required
@@ -926,8 +945,8 @@ console.log(userData);
                                   onChange={handleChangeEducation}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx: { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: { color: 'white', outline: 'white' } }}
                                 />
                                 <TextField
                                   required
@@ -937,8 +956,8 @@ console.log(userData);
                                   onChange={handleChangeEducation}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <Button onClose={handleCloseEdu} type="submit" variant="contained" color="primary">
                                   Submit
@@ -949,10 +968,10 @@ console.log(userData);
                         </Modal>
                       </Stack>
                       <Grid container spacing={2}>
-                        {userData.education&&userData.education.length >0 ? userData.education.map((education, index) => (
+                        {userData.education && userData.education.length > 0 ? userData.education.map((education, index) => (
                           <Grid item xs={12} key={index}>
-                            <Paper style={mode?{ padding: '15px',color:'white', background: 'darkslategray', borderRadius: '8px', boxShadow: '0px 0px 5px grey' }:
-                            { padding: '15px', backgroundColor: '#f9f9f9', borderRadius: '8px', boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.05)' }}>
+                            <Paper style={mode ? { padding: '15px', color: 'white', background: 'darkslategray', borderRadius: '8px', boxShadow: '0px 0px 5px grey' } :
+                              { padding: '15px', backgroundColor: '#f9f9f9', borderRadius: '8px', boxShadow: '0px 2px 5px rgba(0, 0, 0, 0.05)' }}>
                               <Typography variant="h5" gutterBottom>Degree- {education.degree}</Typography>
                               <Typography variant="subtitle1" gutterBottom>
                                 College- {education.schoolName}</Typography>
@@ -963,7 +982,7 @@ console.log(userData);
                               <Typography variant="body1">About- {education.description}</Typography>
                             </Paper>
                           </Grid>
-                        )) : <Typography sx={{ margin: 'auto',textAlign:'center', my: 2, color: 'grey' }} variant="h5">
+                        )) : <Typography sx={{ margin: 'auto', textAlign: 'center', my: 2, color: 'grey' }} variant="h5">
                           <i>Add Education</i></Typography>
                         }
                       </Grid>
@@ -972,64 +991,64 @@ console.log(userData);
 
                   {/* <================SkillsSkills===================> */}
 
-                  <Box className='skills' sx={mode&&{ color:'white',background:'black',boxShadow:'0px 0px 4px grey' }}>
-                    <Paper style={mode?{ padding: '20px', marginBottom: '20px', borderRadius: '8px',background:'black' }
-                    :{ padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
+                  <Box className='skills' sx={mode && { color: 'white', background: 'black', boxShadow: '0px 0px 4px grey' }}>
+                    <Paper style={mode ? { padding: '20px', marginBottom: '20px', borderRadius: '8px', background: 'black' }
+                      : { padding: '20px', marginBottom: '20px', borderRadius: '8px' }}>
                       <Stack direction="row" alignItems={'center'} justifyContent={'space-between'}>
-                        <Typography sx={mode&&{ color:'white' }} variant="h5" gutterBottom>Skills</Typography>
-                        <Button type="button" sx={mode?{ color: 'white' }:{ color: 'black' }} onClick={editSkillId}>
-                          {userData.skills&&userData.skills.length>0 ? 
-                          <EditIcon onClick={editSkillId} sx={mode&&{color:'white',background:'darkslategray',p:'4px',border:'1px solid white',width:'30px',borderRadius:'10px'}} /> 
-                          : <AddIcon onClick={editSkillId} sx={mode&&{color:'white',background:'darkslategray',p:'4px',border:'1px solid white',width:'30px',borderRadius:'10px'}} />}
+                        <Typography sx={mode && { color: 'white' }} variant="h5" gutterBottom>Skills</Typography>
+                        <Button type="button" sx={mode ? { color: 'white' } : { color: 'black' }} onClick={editSkillId}>
+                          {userData.skills && userData.skills.length > 0 ?
+                            <EditIcon onClick={editSkillId} sx={mode && { color: 'white', background: 'darkslategray', p: '4px', border: '1px solid white', width: '30px', borderRadius: '10px' }} />
+                            : <AddIcon onClick={editSkillId} sx={mode && { color: 'white', background: 'darkslategray', p: '4px', border: '1px solid white', width: '30px', borderRadius: '10px' }} />}
                         </Button>
                       </Stack>
 
-                      {userData.skills&&userData.skills.length>0 ? (isSkills ? (
+                      {userData.skills && userData.skills.length > 0 ? (isSkills ? (
                         <form onSubmit={handleEditSkills}>
-                          <Typography sx={mode?{color:'white', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700}:{ color: 'grey', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700 }} variant='p'>
+                          <Typography sx={mode ? { color: 'white', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700 } : { color: 'grey', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700 }} variant='p'>
                             Enter skills  separated by commas.
                           </Typography>
                           <input type='text' name='skills'
-                            style={mode?{ padding: '8px', borderRadius: '12px', border: '1px solid grey', minWidth: '120px', width: '50%',background:'darkslategray',color:'white' }
-                            :{ padding: '8px', borderRadius: '12px', border: '1px solid grey', minWidth: '120px', width: '50%' }}
+                            style={mode ? { padding: '8px', borderRadius: '12px', border: '1px solid grey', minWidth: '120px', width: '50%', background: 'darkslategray', color: 'white' }
+                              : { padding: '8px', borderRadius: '12px', border: '1px solid grey', minWidth: '120px', width: '50%' }}
                             id='skills' value={mySkills} placeholder='Add skills'
                             onChange={(e) => setMySkills(e.target.value)} required
                           />
-                          <Button sx={mode?{ marginInline: 2, borderRadius: '14px',color:'white' }:{ marginInline: 2, borderRadius: '14px' }} variant='contained' type='submit'>Save</Button>
-                          <Button sx={mode?{ borderRadius: '14px',color:'white' }:{ borderRadius: '14px' }} variant='outlined' onClick={() => { setSkillsId('') }}>Cancel</Button>
+                          <Button sx={mode ? { marginInline: 2, borderRadius: '14px', color: 'white' } : { marginInline: 2, borderRadius: '14px' }} variant='contained' type='submit'>Save</Button>
+                          <Button sx={mode ? { borderRadius: '14px', color: 'white' } : { borderRadius: '14px' }} variant='outlined' onClick={() => { setSkillsId('') }}>Cancel</Button>
                         </form>
                       )
-                        : <SkillsSection  skills={userData.skills} />) :
-                        (isSkills?(
-                          <form  onSubmit={handleEditSkills}>
-                            <Typography sx={mode?{color:'white', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700}:{ color: 'grey', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700 }} variant='p'>
+                        : <SkillsSection skills={userData.skills} />) :
+                        (isSkills ? (
+                          <form onSubmit={handleEditSkills}>
+                            <Typography sx={mode ? { color: 'white', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700 } : { color: 'grey', display: 'block', fontStyle: 'italic', my: 1, fontWeight: 700 }} variant='p'>
                               Enter skills  separated by commas.
                             </Typography>
                             <input type='text' name='skills'
-                              className={mode?'skills':'darkSkills'}
+                              className={mode ? 'skills' : 'darkSkills'}
                               id='skills' value={mySkills} placeholder='Add skills'
                               onChange={(e) => setMySkills(e.target.value)} required
                             />
-                            <Button sx={mode?{ marginInline: 2, borderRadius: '14px',color:'white' }:{ marginInline: 2, borderRadius: '14px' }} variant='contained' type='submit'>Save</Button>
-                            <Button sx={mode?{ borderRadius: '14px',color:'white' }:{ borderRadius: '14px' }} variant='outlined' onClick={() => { setSkillsId('') }}>Cancel</Button>
+                            <Button sx={mode ? { marginInline: 2, borderRadius: '14px', color: 'white' } : { marginInline: 2, borderRadius: '14px' }} variant='contained' type='submit'>Save</Button>
+                            <Button sx={mode ? { borderRadius: '14px', color: 'white' } : { borderRadius: '14px' }} variant='outlined' onClick={() => { setSkillsId('') }}>Cancel</Button>
                           </form>
                         )
-                        :(<Typography sx={{ margin: 'auto',textAlign:'center', my: 2, color: 'grey' }} variant="h5">
-                          <i>Add Skills</i></Typography>))}
+                          : (<Typography sx={{ margin: 'auto', textAlign: 'center', my: 2, color: 'grey' }} variant="h5">
+                            <i>Add Skills</i></Typography>))}
 
                     </Paper>
                   </Box>
 
                   {/* <================Address===================> */}
-                  <Box className='address' sx={mode&&{ color:'white',background:'black',boxShadow:'0px 0px 4px grey' }}>
+                  <Box className='address' sx={mode && { color: 'white', background: 'black', boxShadow: '0px 0px 4px grey' }}>
                     <Paper elevation={3} className="experience-section"
-                     style={mode?{ padding: '20px', borderRadius: '8px' ,background:'black',color:'white'}:{ padding: '20px', borderRadius: '8px' }}>
+                      style={mode ? { padding: '20px', borderRadius: '8px', background: 'black', color: 'white' } : { padding: '20px', borderRadius: '8px' }}>
                       <Stack direction="row" mb={2} alignItems={'center'} justifyContent={'space-between'}>
-                        <Typography sx={mode&&{ color:'white' }} variant="h5" gutterBottom>
+                        <Typography sx={mode && { color: 'white' }} variant="h5" gutterBottom>
                           Address Section
                         </Typography>
-                        <TriggerButton sx={mode&&{ color:'white',background:'darkslategray' }} type="button" onClick={handleOpenAdd}>
-                          {userData.address&&userData.address.length>0 ? <EditIcon sx={mode&&{ color:'white' }}  /> : <AddIcon sx={mode&&{ color:'white' }} />}
+                        <TriggerButton sx={mode && { color: 'white', background: 'darkslategray' }} type="button" onClick={handleOpenAdd}>
+                          {userData.address && userData.address.length > 0 ? <EditIcon sx={mode && { color: 'white' }} /> : <AddIcon sx={mode && { color: 'white' }} />}
                         </TriggerButton>
                         <Modal
                           aria-labelledby="unstyled-modal-title"
@@ -1038,9 +1057,9 @@ console.log(userData);
                           onClose={handleCloseAdd}
                           slots={{ backdrop: StyledBackdrop }}
                         >
-                          <ModalContent sx={mode?{ width: 400,background:'black',color:'white' }:{ width: 400 }}>
-                            <Paper style={mode?{ background:'black',color:'white',boxShadow:'0px 0px 4px grey', padding: '16px', marginBottom: '16px' }
-                            :{ padding: '16px', marginBottom: '16px' }}>
+                          <ModalContent sx={mode ? { width: 400, background: 'black', color: 'white' } : { width: 400 }}>
+                            <Paper style={mode ? { background: 'black', color: 'white', boxShadow: '0px 0px 4px grey', padding: '16px', marginBottom: '16px' }
+                              : { padding: '16px', marginBottom: '16px' }}>
                               <Typography variant="h6">Address Form</Typography>
                               <form onSubmit={handleSubmitAddress}>
                                 <TextField
@@ -1051,8 +1070,8 @@ console.log(userData);
                                   onChange={handleChangeAddress}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <TextField
                                   required
@@ -1062,8 +1081,8 @@ console.log(userData);
                                   onChange={handleChangeAddress}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <TextField
                                   required
@@ -1073,8 +1092,8 @@ console.log(userData);
                                   onChange={handleChangeAddress}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <TextField
                                   required
@@ -1084,8 +1103,8 @@ console.log(userData);
                                   onChange={handleChangeAddress}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <TextField
                                   required
@@ -1095,8 +1114,8 @@ console.log(userData);
                                   onChange={handleChangeAddress}
                                   fullWidth
                                   margin="normal"
-                                  InputProps={{sx:mode&&{color:'white',background:'darkslategray'}}}
-                                  InputLabelProps={{ sx:mode&& { color: 'white',outline:'white' } }}
+                                  InputProps={{ sx: mode && { color: 'white', background: 'darkslategray' } }}
+                                  InputLabelProps={{ sx: mode && { color: 'white', outline: 'white' } }}
                                 />
                                 <Button onClose={handleCloseAdd} type="submit" variant="contained" color="primary">
                                   Submit
@@ -1106,14 +1125,14 @@ console.log(userData);
                           </ModalContent>
                         </Modal>
                       </Stack>
-                      {userData.address&&userData.address.length>0 ? <AddressSection address={userData.address} />
-                        : <Typography sx={{ margin: 'auto',textAlign:'center', my: 2, color: 'grey' }} variant="h5">
+                      {userData.address && userData.address.length > 0 ? <AddressSection address={userData.address} />
+                        : <Typography sx={{ margin: 'auto', textAlign: 'center', my: 2, color: 'grey' }} variant="h5">
                           <i>Add Address</i></Typography>}
                     </Paper>
                   </Box>
 
                 </Box>
-                
+
               </Stack>
             </Grid>
             {isMdScreen && (
@@ -1121,7 +1140,7 @@ console.log(userData);
                 <LeftSearchCard sx={{ top: 0, margin: 0 }} />
               </Grid>
             )}
-                
+
           </Grid>
 
         </Container>
@@ -1129,27 +1148,27 @@ console.log(userData);
         <Container
           maxWidth="md"
           component="footer"
-          sx={mode?
+          sx={mode ?
             {
               borderTop: (theme) => `1px solid ${theme.palette.divider}`,
               mt: 8,
-              py: [3, 6],borderRadius: '0px 28px',background:'black'
-            }:{
-            borderTop: (theme) => `1px solid ${theme.palette.divider}`,
-            mt: 8,
-            py: [3, 6], bgcolor: 'white', borderRadius: '0px 28px'
-          }}
+              py: [3, 6], borderRadius: '0px 28px', background: 'black'
+            } : {
+              borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+              mt: 8,
+              py: [3, 6], bgcolor: 'white', borderRadius: '0px 28px'
+            }}
         >
           <Grid container spacing={4} justifyContent="space-evenly">
             {footers.map((footer) => (
               <Grid item xs={6} sm={3} key={footer.title}>
-                <Typography sx={mode&&{color:'white'}} variant="h6" color="text.primary" gutterBottom>
+                <Typography sx={mode && { color: 'white' }} variant="h6" color="text.primary" gutterBottom>
                   {footer.title}
                 </Typography>
                 <ul>
                   {footer.description.map((item) => (
                     <li key={item}>
-                      <Link href="#" sx={mode&&{color:'white'}} variant="subtitle1" color="text.secondary">
+                      <Link href="#" sx={mode && { color: 'white' }} variant="subtitle1" color="text.secondary">
                         {item}
                       </Link>
                     </li>
@@ -1158,7 +1177,7 @@ console.log(userData);
               </Grid>
             ))}
           </Grid>
-          <Copyright sx={mode?{color:'white',mt: 5 }:{ mt: 5 }} />
+          <Copyright sx={mode ? { color: 'white', mt: 5 } : { mt: 5 }} />
 
         </Container>
         {/* End footer */}
@@ -1220,6 +1239,34 @@ const Modal = styled(BaseModal)(`
     visibility: hidden;
   }
 `);
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  maxWidth: 400,
+  minWidth: 290,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+  borderRadius: '8px'
+};
+const darkStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  maxWidth: 400,
+  minWidth: 290,
+  bgcolor: 'black',
+  color: 'white',
+  border: '2px solid #000',
+  boxShadow: '0px 0px 14px white',
+  p: 4,
+  borderRadius: '8px'
+}
 
 const StyledBackdrop = styled(Backdrop)`
   z-index: -1;
@@ -1290,48 +1337,3 @@ const TriggerButton = styled('button')(
     }
   `,
 );
-
-
-
-
-
-const StyledMenu = styled((props) => (
-  <Menu
-    elevation={0}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'right',
-    }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'right',
-    }}
-    {...props}
-  />
-))(({ theme }) => ({
-  '& .MuiPaper-root': {
-    borderRadius: 6,
-    marginTop: theme.spacing(1),
-    minWidth: 180,
-    color:
-      theme.palette.mode === 'light' ? 'rgb(55, 65, 81)' : theme.palette.grey[300],
-    boxShadow:
-      'rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
-    '& .MuiMenu-list': {
-      padding: '4px 0',
-    },
-    '& .MuiMenuItem-root': {
-      '& .MuiSvgIcon-root': {
-        fontSize: 18,
-        color: theme.palette.text.secondary,
-        marginRight: theme.spacing(1.5),
-      },
-      '&:active': {
-        backgroundColor: alpha(
-          theme.palette.primary.main,
-          theme.palette.action.selectedOpacity,
-        ),
-      },
-    },
-  },
-}));

@@ -10,8 +10,7 @@ import { Link } from 'react-router-dom';
 
 export default function LeftSection(prop) {
     const userData = JSON.parse(localStorage.getItem("userData"))
-    const {mode }= useContext(Context)
-    var randomColor ='#'+ Math.floor(Math.random()*16777215).toString(16);
+    const {mode ,randomColor}= useContext(Context)
    
   
     return (

@@ -26,6 +26,8 @@ import LoginHead from './components/SignIn/LoginHead.js'
 
 export default function Router() {
   const token = localStorage.getItem("token");
+  console.log(token)
+  console.log(typeof(token))
 
 
   return (

@@ -53,7 +53,7 @@ export default function Main() {
   const [editPostId, setEditPostId] = useState('');
   const [editComment, setEditComment] = useState('');
   const [editCommentId, setEditCommentId] = useState('');
-  const { card, setCard, mode } = useContext(Context);
+  const { card, setCard, mode ,randomColor } = useContext(Context);
   const [postContent, setPostContent] = useState('');
   const [likeCount, setLikeCount] = useState({})
   const [countComment, setCountComment] = useState({})
@@ -70,13 +70,19 @@ export default function Main() {
   const token = localStorage.getItem("token");
 
   const [page, setPage] = useState(1);
-  let randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
 
+  // const handleComment = (e) => {
+  //   setComment((prevComments) => ({
+  //     ...prevComments,
+  //     [e.target.id]: e.target.value,
+
+  //   }));
+  // };
   const handleComment = (e) => {
-    setComment((prevComments) => ({
+    const { id, value } = e.target;
+    setComment(prevComments => ({
       ...prevComments,
-      [e.target.id]: e.target.value,
-
+      [id]: value !== '' ? value : undefined, // Only update if value is not empty
     }));
   };
 
@@ -265,10 +271,11 @@ export default function Main() {
       if (comments.ok) {
         data = await comments.json();
         console.log(data)
-        setComment({});
+       
         setCountComment(prevCommentCount =>
           ({ ...prevCommentCount, [id]: prevCommentCount[id] + 1 })
-        )
+        ) 
+        setComment(prevComments => ({ ...prevComments, [id]: '' }));
       } else {
         console.log('comment rejected')
       }
@@ -507,7 +514,8 @@ export default function Main() {
   return (
     <Stack direction="row" id='mainContent'>
       {isMdScreen && (<div>
-        <LeftSection prop={userData.profileImage} />
+        <LeftSection prop={userData.profileImage
+} />
       </div>)}
 
       <div id='main'>
