@@ -64,7 +64,7 @@ export default function LoginMain() {
 
                     console.log(userData);
                     setUserData(data.data);
-                    localStorage.setItem("userData", JSON.stringify(data.data));
+                    localStorage.setItem("userData", JSON.stringify(data?.data?.user));
 
                     navigate("/home");
                     setIsLoading(false)

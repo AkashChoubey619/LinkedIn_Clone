@@ -523,7 +523,7 @@ export default function Main() {
           <section id='mainInfo' className={mode ? 'darkModeMain' : ''}>
             <div className='mainHead1'>
               {userData && <Avatar src={userData.profileImage} sx={{ bgcolor: randomColor }}>
-                {userData.name.toUpperCase().charAt(0)}</Avatar>}
+                {userData?.name ? userData.name.toUpperCase().charAt(0) : "L"}</Avatar>}
               <div id='mainSearch'>
                 <TriggerButton type="button" sx={{ borderRadius: '20px', p: 0, border: 'none', flex: 'start', width: '100%' }}
                   onClick={handleOpen}>

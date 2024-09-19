@@ -29,6 +29,7 @@ export default function Nav() {
   const { setSearchData, search, setSearch, mode, setMode } = useContext(Context);
   const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("userData"))
+  console.log(userData,userData.name)
   // const token = localStorage.getItem("token");
   const color = document.querySelector('body')
   const customTheme = createTheme({
@@ -179,7 +180,8 @@ export default function Nav() {
                   </Stack>)}
                 <Divider sx={mode&&{background:'white'}} orientation="vertical" flexItem />
                 <div className='icon meIcon'>
-                  {userData && <Avatar src={userData.profileImage} sx={{ width: 25, height: 25, ml: '-7px' }}>{userData.name.toUpperCase().charAt(0)}</Avatar>}
+                  {userData && <Avatar src={userData?.profileImage} sx={{ width: 25, height: 25, ml: '-7px' }}>
+                  {userData?.name ? userData.name.toUpperCase().charAt(0) : "L"}</Avatar>}
                   <div id='profile'>
                     <Dropdown>
 
@@ -191,8 +193,8 @@ export default function Nav() {
                       <Menu slots={{ listbox: Listbox }} >
                         <div id='menuProfileIcon' className={mode ? 'mode' : ''}>
 
-                          {userData && <Avatar src={userData.profileImage} sx={{ width: 28, height: 28, fontSize: '12px' }}>
-                            {userData.name.toUpperCase().charAt(0)}
+                          {userData && <Avatar src={userData?.profileImage} sx={{ width: 28, height: 28, fontSize: '12px' }}>
+                            {userData?.name ? userData.name.toUpperCase().charAt(0) : "L"}
                           </Avatar>}
                           <h3>
                             {userData && userData.name}
