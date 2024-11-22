@@ -28,8 +28,8 @@ export default function Nav() {
   const [isMenu, setIsMenu] = useState(false);
   const { setSearchData, search, setSearch, mode, setMode } = useContext(Context);
   const navigate = useNavigate();
-  const userData = JSON.parse(localStorage.getItem("userData"))
-  console.log(userData,userData.name)
+  const userData = JSON.parse(localStorage.getItem("userData")) || [];
+  // console.log(userData,userData.name)
   // const token = localStorage.getItem("token");
   const color = document.querySelector('body')
   const customTheme = createTheme({
